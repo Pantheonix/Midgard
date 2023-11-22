@@ -8,7 +8,7 @@
 PRODUCT_NAME = midgard
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.pantheonix.midgard
+PRODUCT_BUNDLE_IDENTIFIER = com.example.midgard
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.pantheonix. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
