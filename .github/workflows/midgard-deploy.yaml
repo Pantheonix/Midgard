@@ -35,9 +35,7 @@ jobs:
           flutter-version: 3.16.0
       - name: 📦 Install Dependencies
         run: |
-          flutter pub global activate very_good_cli
-          very_good --analytics false
-          very_good packages get --recursive
+          flutter pub get
       - name: 🛠️ Build the application
         run: flutter build web -t lib/main.dart
       - name: ⬇️ Archive Production Artifact
