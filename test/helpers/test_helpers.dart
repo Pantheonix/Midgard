@@ -1,7 +1,9 @@
+import 'package:midgard/app/app.locator.dart';
+import 'package:midgard/services/auth_service.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:midgard/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
+
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -10,13 +12,15 @@ import 'test_helpers.mocks.dart';
   MockSpec<RouterService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<BottomSheetService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
-  // @stacked-mock-spec
+  MockSpec<AuthService>(onMissingStub: OnMissingStub.returnDefault),
+// @stacked-mock-spec
 ])
 void registerServices() {
   getAndRegisterRouterService();
   getAndRegisterBottomSheetService();
   getAndRegisterDialogService();
-  // @stacked-mock-register
+  getAndRegisterAuthService();
+// @stacked-mock-register
 }
 
 MockRouterService getAndRegisterRouterService() {
@@ -69,7 +73,12 @@ MockDialogService getAndRegisterDialogService() {
   return service;
 }
 
-// @stacked-mock-create
+MockAuthService getAndRegisterAuthService() {
+  _removeRegistrationIfExists<AuthService>();
+  final service = MockAuthService();
+  locator.registerSingleton<AuthService>(service);
+  return service;
+}
 
 void _removeRegistrationIfExists<T extends Object>() {
   if (locator.isRegistered<T>()) {
