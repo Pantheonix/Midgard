@@ -37,7 +37,7 @@ jobs:
         run: |
           flutter pub get
       - name: 🛠️ Build the application
-        run: flutter build web -t lib/main.dart
+        run: flutter build web -t lib/main.dart --dart-define=API_BASE_URL=${{ env.API_BASE_URL }}
       - name: ⬇️ Archive Production Artifact
         uses: actions/upload-artifact@master
         with:

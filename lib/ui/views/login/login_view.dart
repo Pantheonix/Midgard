@@ -74,7 +74,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: RiveAnimation.asset(
-                        "rive/bear.riv",
+                        "assets/rive/bear.riv",
                         fit: BoxFit.contain,
                         stateMachines: const ["Login Machine"],
                         onInit: (artboard) {
