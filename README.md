@@ -1,6 +1,6 @@
 # Midgard
 
-The Pantheonix fronted, called Midgard as the Earth name in the Germanic cosmology, is implemented as a responsive Flutter web client.
+The Pantheonix fronted, called Midgard as the Earth name in the Germanic cosmology, is implemented as a responsive Flutter web client which mediates between the mundane user existence and the Asgard cloud realm through a both eye-candy and functional UI.
 
 ## Technologies
 - Flutter 3.16
