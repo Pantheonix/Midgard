@@ -1,3 +1,4 @@
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -242,11 +243,68 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             width: double.infinity,
                             height: 44,
                             child: ElevatedButton.icon(
-                              onPressed: () => {
-                                viewModel.login(),
+                              onPressed: () async {
+                                await viewModel.login();
+
+                                if (!context.mounted) return;
+
+                                if (viewModel.hasErrorForKey(kbLoginKey)) {
+                                  showFlash(
+                                    context: context,
+                                    duration: const Duration(seconds: 4),
+                                    builder: (context, controller) {
+                                      return FlashBar(
+                                        controller: controller,
+                                        primaryAction: TextButton(
+                                          onPressed: () {
+                                            controller.dismiss();
+                                          },
+                                          child: const Text(
+                                            "Dismiss",
+                                            style: TextStyle(
+                                              color: kcWhite,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                        position: FlashPosition.top,
+                                        behavior: FlashBehavior.fixed,
+                                        forwardAnimationCurve: Curves.easeIn,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        shadowColor: kcBlack,
+                                        titleTextStyle: const TextStyle(
+                                          color: kcWhite,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        contentTextStyle: const TextStyle(
+                                          color: kcWhite,
+                                          fontSize: 16,
+                                        ),
+                                        title: const Text(
+                                          "Error",
+                                        ),
+                                        content: Text(
+                                          viewModel.error(kbLoginKey).message,
+                                        ),
+                                        iconColor: kcWhite,
+                                        icon: const Icon(
+                                          Icons.error_outline,
+                                          color: kcWhite,
+                                        ),
+                                        showProgressIndicator: true,
+                                        indicatorColor: kcLightGrey,
+                                      );
+                                    },
+                                  );
+                                }
                               },
                               icon: Visibility(
-                                visible: viewModel.busy(viewModel),
+                                visible: viewModel.busy(kbLoginKey),
                                 child: Container(
                                   width: 24,
                                   height: 24,

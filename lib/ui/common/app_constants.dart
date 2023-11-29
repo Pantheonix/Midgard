@@ -9,3 +9,6 @@ const double kdDesktopTitleTextSize = 24;
 
 // subtitle text font size for desktop
 const double kdDesktopSubtitleTextSize = 14;
+
+// busy keys
+const String kbLoginKey = 'login';

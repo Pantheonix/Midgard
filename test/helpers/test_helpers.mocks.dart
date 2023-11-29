@@ -7,7 +7,6 @@ import 'dart:async' as _i4;
 import 'dart:ui' as _i8;
 
 import 'package:flutter/material.dart' as _i5;
-import 'package:midgard/services/auth_service.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked/stacked.dart' as _i2;
 import 'package:stacked_services/src/bottom_sheet/bottom_sheet_service.dart'
@@ -572,8 +571,3 @@ class MockDialogService extends _i1.Mock implements _i9.DialogService {
         returnValueForMissingStub: null,
       );
 }
-
-/// A class which mocks [AuthService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockAuthService extends _i1.Mock implements _i11.AuthService {}
