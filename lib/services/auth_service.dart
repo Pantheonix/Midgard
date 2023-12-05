@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/browser_client.dart';
+import 'package:http/http.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/models/auth/login_models.dart';
+import 'package:midgard/models/auth/register_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/api_constants.dart';
 
@@ -37,6 +39,38 @@ class AuthService {
       }
     } catch (e) {
       _logger.e('Error while login: $e');
+      return Left(Exception(e));
+    }
+  }
+
+  Future<Either<Exception, UserProfileResponse>> register(
+    RegisterRequest request,
+  ) async {
+    try {
+      final streamedResponse = await _httpClient.send(
+        MultipartRequest(
+          'POST',
+          Uri.http(
+            ApiConstants.baseUrl,
+            ApiConstants.registerUrl,
+          ),
+        )
+          ..fields['username'] = request.username
+          ..fields['email'] = request.email
+          ..fields['password'] = request.password,
+      );
+      final response = await Response.fromStream(streamedResponse);
+
+      if (response.statusCode == HttpStatus.created) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final registerResponse = UserProfileResponse.fromJson(data);
+        return Right(registerResponse);
+      } else {
+        _logger.e('Error while register: ${response.body}');
+        return Left(Exception(response.body));
+      }
+    } catch (e) {
+      _logger.e('Error while register: $e');
       return Left(Exception(e));
     }
   }

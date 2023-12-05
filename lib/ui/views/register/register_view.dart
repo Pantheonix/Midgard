@@ -4,25 +4,39 @@ import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:midgard/ui/views/login/login_view.form.dart';
-import 'package:midgard/ui/views/login/login_viewmodel.dart';
+import 'package:midgard/ui/views/login/login_view.dart';
+import 'package:midgard/ui/views/register/register_view.form.dart';
+import 'package:midgard/ui/views/register/register_viewmodel.dart';
 import 'package:rive/rive.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 @FormView(
   fields: [
-    FormTextField(name: 'email'),
-    FormTextField(name: 'password'),
+    FormTextField(
+      name: 'username',
+      validator: RegisterValidators.validateUsername,
+    ),
+    FormTextField(
+      name: 'email',
+      validator: RegisterValidators.validateEmail,
+    ),
+    FormTextField(
+      name: 'password',
+      validator: RegisterValidators.validatePassword,
+    ),
+    FormTextField(
+      name: 'confirmPassword',
+    ),
   ],
 )
-class LoginView extends StackedView<LoginViewModel> with $LoginView {
-  const LoginView({super.key});
+class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
+  const RegisterView({super.key});
 
   @override
   Widget builder(
     BuildContext context,
-    LoginViewModel viewModel,
+    RegisterViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
@@ -112,13 +126,64 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                       child: Column(
                         children: [
                           const Text(
-                            'Login',
+                            'Register',
                             style: TextStyle(
                               fontSize: 32,
                               color: kcDarkBlue,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          verticalSpaceSmall,
+                          // Username
+                          TextFormField(
+                            controller: usernameController,
+                            onChanged: (value) => viewModel.moveEyes(value),
+                            focusNode: usernameFocusNode,
+                            cursorColor: kcBlack,
+                            style: const TextStyle(
+                              color: kcBlack,
+                              fontSize: 14,
+                            ),
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(12),
+                              floatingLabelBehavior: FloatingLabelBehavior.auto,
+                              focusedBorder: const UnderlineInputBorder(),
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: kcLightGrey),
+                              ),
+                              label: RichText(
+                                text: const TextSpan(
+                                  text: 'Username',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: kcMediumGrey,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                        color: kcRed,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            textInputAction: TextInputAction.next,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                          ),
+                          if (viewModel.hasUsernameValidationMessage) ...[
+                            verticalSpaceTiny,
+                            Text(
+                              viewModel.usernameValidationMessage!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                           verticalSpaceSmall,
                           // Email
                           TextFormField(
@@ -160,6 +225,17 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                           ),
+                          if (viewModel.hasEmailValidationMessage) ...[
+                            verticalSpaceTiny,
+                            Text(
+                              viewModel.emailValidationMessage!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                           verticalSpaceSmall,
                           // Password
                           TextFormField(
@@ -231,17 +307,111 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                           ),
+                          if (viewModel.hasPasswordValidationMessage) ...[
+                            verticalSpaceTiny,
+                            Text(
+                              viewModel.passwordValidationMessage!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                          verticalSpaceSmall,
+                          // Confirm Password
+                          TextFormField(
+                            controller: confirmPasswordController,
+                            onChanged: (value) {
+                              if (viewModel.isConfirmPasswordObscured) return;
+                              viewModel.moveEyes(value);
+                            },
+                            focusNode: confirmPasswordFocusNode,
+                            obscureText: viewModel.isConfirmPasswordObscured,
+                            cursorColor: kcBlack,
+                            style: const TextStyle(
+                              color: kcBlack,
+                              fontSize: 14,
+                            ),
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(12),
+                              floatingLabelBehavior: FloatingLabelBehavior.auto,
+                              focusedBorder: const UnderlineInputBorder(),
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: kcLightGrey,
+                                ),
+                              ),
+                              label: RichText(
+                                text: const TextSpan(
+                                  text: 'Confirm Password',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: kcMediumGrey,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                        color: kcRed,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  viewModel.toggleConfirmPasswordVisibility();
+                                  if (confirmPasswordFocusNode.hasFocus) {
+                                    viewModel.isConfirmPasswordObscured
+                                        ? viewModel.handsUpOnEyes()
+                                        : viewModel.lookAround();
+                                  } else {
+                                    viewModel.idle();
+                                  }
+                                },
+                                icon: Icon(
+                                  viewModel.isConfirmPasswordObscured
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: kcBlack,
+                                ),
+                              ),
+                              suffixStyle: const TextStyle(
+                                fontSize: 14,
+                                color: kcBlack,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            textInputAction: TextInputAction.done,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                          ),
+                          if (viewModel
+                              .hasConfirmPasswordValidationMessage) ...[
+                            verticalSpaceTiny,
+                            Text(
+                              viewModel.confirmPasswordValidationMessage!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                           verticalSpaceMedium,
                           SizedBox(
                             width: double.infinity,
                             height: 44,
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                await viewModel.login();
+                                await viewModel.register();
 
                                 if (!context.mounted) return;
 
-                                if (viewModel.hasErrorForKey(kbLoginKey)) {
+                                if (viewModel.hasErrorForKey(kbRegisterKey)) {
                                   await showFlash(
                                     context: context,
                                     duration: const Duration(seconds: 4),
@@ -281,7 +451,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                           'Error',
                                         ),
                                         content: Text(
-                                          viewModel.error(kbLoginKey).message
+                                          viewModel.error(kbRegisterKey).message
                                               as String,
                                         ),
                                         iconColor: kcWhite,
@@ -297,7 +467,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 }
                               },
                               icon: Visibility(
-                                visible: viewModel.busy(kbLoginKey),
+                                visible: viewModel.busy(kbRegisterKey),
                                 child: Container(
                                   width: 24,
                                   height: 24,
@@ -309,7 +479,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 ),
                               ),
                               label: const Text(
-                                'Log in',
+                                'Register',
                                 style: TextStyle(
                                   color: kcWhite,
                                 ),
@@ -329,21 +499,21 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                           verticalSpaceSmall,
                           RichText(
                             text: TextSpan(
-                              text: "Don't have account?",
+                              text: 'Already have an account?',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: kcMediumGrey,
                               ),
                               children: [
                                 TextSpan(
-                                  text: ' Register now',
+                                  text: ' Login now',
                                   style: const TextStyle(
                                     color: kcBlack,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      viewModel.navigateToRegister();
+                                      viewModel.navigateToLogin();
                                     },
                                 ),
                               ],
@@ -363,9 +533,12 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
   }
 
   @override
-  void onViewModelReady(LoginViewModel viewModel) {
+  void onViewModelReady(RegisterViewModel viewModel) {
     syncFormWithViewModel(viewModel);
 
+    usernameFocusNode.addListener(() {
+      usernameFocusNode.hasFocus ? viewModel.lookAround() : viewModel.idle();
+    });
     emailFocusNode.addListener(() {
       emailFocusNode.hasFocus ? viewModel.lookAround() : viewModel.idle();
     });
@@ -378,39 +551,26 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
         viewModel.idle();
       }
     });
+    confirmPasswordFocusNode.addListener(() {
+      if (confirmPasswordFocusNode.hasFocus) {
+        viewModel.isConfirmPasswordObscured
+            ? viewModel.handsUpOnEyes()
+            : viewModel.lookAround();
+      } else {
+        viewModel.idle();
+      }
+    });
   }
 
   @override
-  LoginViewModel viewModelBuilder(
+  RegisterViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      LoginViewModel();
+      RegisterViewModel();
 
   @override
-  void onDispose(LoginViewModel viewModel) {
+  void onDispose(RegisterViewModel viewModel) {
     super.onDispose(viewModel);
     disposeForm();
-  }
-}
-
-class CurvedClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path()
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width, size.height * 0.75)
-      ..quadraticBezierTo(
-        size.width * 0.5,
-        size.height * 0.5,
-        0,
-        size.height * 0.75,
-      )
-      ..close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return true;
   }
 }

@@ -72,4 +72,8 @@ class LoginViewModel extends FormViewModel with RiveBear {
     isPasswordObscured = !isPasswordObscured;
     rebuildUi();
   }
+
+  void navigateToRegister() {
+    _routerService.navigateTo(const RegisterViewRoute());
+  }
 }
