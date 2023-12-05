@@ -1,9 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:flutter/material.dart';
+import 'package:midgard/ui/views/home/home_viewmodel.dart';
 import 'package:stacked/stacked.dart';
-
-import 'home_viewmodel.dart';
 
 class HomeViewTablet extends ViewModelWidget<HomeViewModel> {
   const HomeViewTablet({super.key});
@@ -13,10 +12,9 @@ class HomeViewTablet extends ViewModelWidget<HomeViewModel> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Center(
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 verticalSpaceLarge,
@@ -64,7 +62,7 @@ class HomeViewTablet extends ViewModelWidget<HomeViewModel> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

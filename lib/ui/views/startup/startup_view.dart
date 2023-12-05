@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
+import 'package:midgard/ui/views/startup/startup_viewmodel.dart';
 import 'package:stacked/stacked.dart';
-
-import 'startup_viewmodel.dart';
 
 class StartupView extends StackedView<StartupViewModel> {
   const StartupView({super.key});
@@ -35,7 +34,7 @@ class StartupView extends StackedView<StartupViewModel> {
                     color: Colors.black,
                     strokeWidth: 6,
                   ),
-                )
+                ),
               ],
             ),
           ],

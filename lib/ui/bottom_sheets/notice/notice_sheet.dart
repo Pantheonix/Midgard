@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:midgard/ui/bottom_sheets/notice/notice_sheet_model.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import 'notice_sheet_model.dart';
-
 class NoticeSheet extends StackedView<NoticeSheetModel> {
-  final Function(SheetResponse)? completer;
-  final SheetRequest request;
   const NoticeSheet({
-    super.key,
     required this.completer,
     required this.request,
+    super.key,
   });
+
+  final Function(SheetResponse)? completer;
+  final SheetRequest request;
 
   @override
   Widget builder(

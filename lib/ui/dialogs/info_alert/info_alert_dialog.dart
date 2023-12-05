@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
+import 'package:midgard/ui/dialogs/info_alert/info_alert_dialog_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-
-import 'info_alert_dialog_model.dart';
 
 const double _graphicSize = 60;
 
 class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
-  final DialogRequest request;
-  final Function(DialogResponse) completer;
-
   const InfoAlertDialog({
-    super.key,
     required this.request,
     required this.completer,
+    super.key,
   });
+
+  final DialogRequest request;
+  final Function(DialogResponse) completer;
 
   @override
   Widget builder(
@@ -43,7 +42,9 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                       Text(
                         request.title!,
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w900),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                       verticalSpaceTiny,
                       Text(
@@ -70,14 +71,16 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                     '⭐️',
                     style: TextStyle(fontSize: 30),
                   ),
-                )
+                ),
               ],
             ),
             verticalSpaceMedium,
             GestureDetector(
-              onTap: () => completer(DialogResponse(
-                confirmed: true,
-              )),
+              onTap: () => completer(
+                DialogResponse(
+                  confirmed: true,
+                ),
+              ),
               child: Container(
                 height: 50,
                 width: double.infinity,
@@ -95,7 +98,7 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

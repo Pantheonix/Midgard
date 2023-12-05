@@ -22,10 +22,10 @@ import 'package:stacked_services/stacked_services.dart';
     RedirectRoute(path: '*', redirectTo: '/404'),
   ],
   dependencies: [
-    LazySingleton(classType: BottomSheetService),
-    LazySingleton(classType: DialogService),
-    LazySingleton(classType: RouterService),
-    LazySingleton(classType: AuthService),
+    LazySingleton<BottomSheetService>(classType: BottomSheetService),
+    LazySingleton<DialogService>(classType: DialogService),
+    LazySingleton<RouterService>(classType: RouterService),
+    LazySingleton<AuthService>(classType: AuthService),
 // @stacked-service
   ],
   bottomsheets: [

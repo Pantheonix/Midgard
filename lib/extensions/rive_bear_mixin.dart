@@ -2,10 +2,12 @@ import 'package:rive/rive.dart';
 
 mixin RiveBear {
   //* State Machine Input -> SMI Input bool to trigger actions
-  late final SMITrigger? successTrigger, failTrigger;
+  late final SMITrigger? successTrigger;
+  late final SMITrigger? failTrigger;
 
   //* SMI Bool for eyes
-  late final SMIBool? isChecking, isHandsUp;
+  late final SMIBool? isChecking;
+  late final SMIBool? isHandsUp;
 
   //* SMI for numbers of chars in text field
   late final SMINumber? lookNum;
@@ -30,7 +32,7 @@ mixin RiveBear {
   }
 
   //to roll eyes according to the text
-  void moveEyes(value) {
+  void moveEyes(String value) {
     lookNum?.change(value.length.toDouble());
   }
 

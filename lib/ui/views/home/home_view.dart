@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:midgard/ui/views/home/home_view.desktop.dart';
+import 'package:midgard/ui/views/home/home_view.mobile.dart';
+import 'package:midgard/ui/views/home/home_view.tablet.dart';
+import 'package:midgard/ui/views/home/home_viewmodel.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:stacked/stacked.dart';
-
-import 'home_view.desktop.dart';
-import 'home_view.tablet.dart';
-import 'home_view.mobile.dart';
-import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
   const HomeView({super.key});

@@ -1,9 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:flutter/material.dart';
+import 'package:midgard/ui/views/unknown/unknown_viewmodel.dart';
 import 'package:stacked/stacked.dart';
-
-import 'unknown_viewmodel.dart';
 
 class UnknownViewDesktop extends ViewModelWidget<UnknownViewModel> {
   const UnknownViewDesktop({super.key});
@@ -23,7 +22,7 @@ class UnknownViewDesktop extends ViewModelWidget<UnknownViewModel> {
                 fontSize: 80,
                 fontWeight: FontWeight.w800,
                 height: 0.95,
-                letterSpacing: 20.0,
+                letterSpacing: 20,
               ),
             ),
             verticalSpaceSmall,
@@ -32,8 +31,8 @@ class UnknownViewDesktop extends ViewModelWidget<UnknownViewModel> {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
-                letterSpacing: 20.0,
-                wordSpacing: 10.0,
+                letterSpacing: 20,
+                wordSpacing: 10,
               ),
             ),
           ],

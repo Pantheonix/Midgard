@@ -1,1 +1,20 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.5.1.0.yaml
+
+analyzer:
+  exclude:
+    - "**/*.form.dart"
+    - "**/*.dialogs.dart"
+    - "**/*.locator.dart"
+    - "**/*.bottomsheets.dart"
+    - "**/*.logger.dart"
+    - "**/*.router.dart"
+    - "test/**"
+    - "lib/ui/bottom_sheets/**"
+    - "lib/ui/dialogs/**"
+    - "lib/ui/common/**"
+
+linter:
+  rules:
+    flutter_style_todos: false
+    avoid_print: false
+    public_member_api_docs: false

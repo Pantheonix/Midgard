@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
+import 'package:midgard/ui/views/login/login_view.form.dart';
+import 'package:midgard/ui/views/login/login_viewmodel.dart';
 import 'package:rive/rive.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-
-import 'login_view.form.dart';
-import 'login_viewmodel.dart';
 
 @FormView(
   fields: [
@@ -44,14 +43,11 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     verticalSpaceSmall,
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Pantheonix",
+                              'Pantheonix',
                               style: TextStyle(
                                 fontSize: kdDesktopTitleTextSize,
                                 color: kcBlack,
@@ -60,7 +56,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             ),
                             verticalSpaceTiny,
                             Text(
-                              "Start your journey to the world of programming myths",
+                              'Start your journey to the world of programming myths',
                               style: TextStyle(
                                 fontSize: kdDesktopSubtitleTextSize,
                                 color: kcBlack,
@@ -75,14 +71,14 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: RiveAnimation.asset(
-                        "assets/rive/bear.riv",
+                        'assets/rive/bear.riv',
                         fit: BoxFit.contain,
-                        stateMachines: const ["Login Machine"],
+                        stateMachines: const ['Login Machine'],
                         onInit: (artboard) {
                           viewModel.stateMachineController =
                               StateMachineController.fromArtboard(
                             artboard,
-                            "Login Machine",
+                            'Login Machine',
                           );
 
                           if (viewModel.stateMachineController == null) return;
@@ -90,19 +86,19 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                           artboard
                               .addController(viewModel.stateMachineController!);
 
-                          for (var element
+                          for (final element
                               in viewModel.stateMachineController!.inputs) {
                             switch (element.name) {
-                              case "isChecking":
+                              case 'isChecking':
                                 viewModel.isChecking = element as SMIBool;
-                              case "isHandsUp":
+                              case 'isHandsUp':
                                 viewModel.isHandsUp = element as SMIBool;
-                              case "trigSuccess":
+                              case 'trigSuccess':
                                 viewModel.successTrigger =
                                     element as SMITrigger;
-                              case "trigFail":
+                              case 'trigFail':
                                 viewModel.failTrigger = element as SMITrigger;
-                              case "numLook":
+                              case 'numLook':
                                 viewModel.lookNum = element as SMINumber;
                             }
                           }
@@ -115,7 +111,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                       child: Column(
                         children: [
                           const Text(
-                            "Login",
+                            'Login',
                             style: TextStyle(
                               fontSize: 32,
                               color: kcDarkBlue,
@@ -137,15 +133,13 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.all(12),
                               floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: kcBlack),
-                              ),
+                              focusedBorder: const UnderlineInputBorder(),
                               enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: kcLightGrey),
                               ),
                               label: RichText(
                                 text: const TextSpan(
-                                  text: "Email",
+                                  text: 'Email',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: kcMediumGrey,
@@ -185,9 +179,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.all(12),
                               floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: kcBlack),
-                              ),
+                              focusedBorder: const UnderlineInputBorder(),
                               enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: kcLightGrey,
@@ -195,7 +187,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                               ),
                               label: RichText(
                                 text: const TextSpan(
-                                  text: "Password",
+                                  text: 'Password',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: kcMediumGrey,
@@ -249,7 +241,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 if (!context.mounted) return;
 
                                 if (viewModel.hasErrorForKey(kbLoginKey)) {
-                                  showFlash(
+                                  await showFlash(
                                     context: context,
                                     duration: const Duration(seconds: 4),
                                     builder: (context, controller) {
@@ -260,7 +252,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                             controller.dismiss();
                                           },
                                           child: const Text(
-                                            "Dismiss",
+                                            'Dismiss',
                                             style: TextStyle(
                                               color: kcWhite,
                                               fontSize: 10,
@@ -269,7 +261,6 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                         ),
                                         backgroundColor: Colors.redAccent,
                                         position: FlashPosition.top,
-                                        behavior: FlashBehavior.fixed,
                                         forwardAnimationCurve: Curves.easeIn,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -286,10 +277,11 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                           fontSize: 16,
                                         ),
                                         title: const Text(
-                                          "Error",
+                                          'Error',
                                         ),
                                         content: Text(
-                                          viewModel.error(kbLoginKey).message,
+                                          viewModel.error(kbLoginKey).message
+                                              as String,
                                         ),
                                         iconColor: kcWhite,
                                         icon: const Icon(
@@ -308,7 +300,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 child: Container(
                                   width: 24,
                                   height: 24,
-                                  padding: const EdgeInsets.all(2.0),
+                                  padding: const EdgeInsets.all(2),
                                   child: const CircularProgressIndicator(
                                     color: Colors.white,
                                     strokeWidth: 3,
@@ -316,7 +308,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 ),
                               ),
                               label: const Text(
-                                "Log in",
+                                'Log in',
                                 style: TextStyle(
                                   color: kcWhite,
                                 ),
@@ -343,7 +335,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                               ),
                               children: [
                                 TextSpan(
-                                  text: " Create now",
+                                  text: ' Create now',
                                   style: TextStyle(
                                     color: kcBlack,
                                     fontWeight: FontWeight.bold,
@@ -399,16 +391,16 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
 class CurvedClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height * 0.75);
-    path.quadraticBezierTo(
-      size.width * 0.5,
-      size.height * 0.5,
-      0,
-      size.height * 0.75,
-    );
-    path.close();
+    final path = Path()
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width, size.height * 0.75)
+      ..quadraticBezierTo(
+        size.width * 0.5,
+        size.height * 0.5,
+        0,
+        size.height * 0.75,
+      )
+      ..close();
     return path;
   }
 

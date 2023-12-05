@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:flutter/material.dart';
+import 'package:midgard/ui/views/home/home_viewmodel.dart';
 import 'package:stacked/stacked.dart';
-
-import 'home_viewmodel.dart';
 
 class HomeViewDesktop extends ViewModelWidget<HomeViewModel> {
   const HomeViewDesktop({super.key});
@@ -17,7 +16,6 @@ class HomeViewDesktop extends ViewModelWidget<HomeViewModel> {
           width: kdDesktopMaxContentWidth,
           height: kdDesktopMaxContentHeight,
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               verticalSpaceLarge,
@@ -65,7 +63,7 @@ class HomeViewDesktop extends ViewModelWidget<HomeViewModel> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

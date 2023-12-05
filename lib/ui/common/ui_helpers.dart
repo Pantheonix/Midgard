@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-const double _tinySize = 5.0;
-const double _smallSize = 10.0;
-const double _mediumSize = 25.0;
-const double _largeSize = 50.0;
-const double _massiveSize = 120.0;
+const double _tinySize = 5;
+const double _smallSize = 10;
+const double _mediumSize = 25;
+const double _largeSize = 50;
+const double _massiveSize = 120;
 
 const Widget horizontalSpaceTiny = SizedBox(width: _tinySize);
 const Widget horizontalSpaceSmall = SizedBox(width: _smallSize);
@@ -22,7 +22,7 @@ const Widget verticalSpaceMassive = SizedBox(height: _massiveSize);
 Widget spacedDivider = const Column(
   children: <Widget>[
     verticalSpaceMedium,
-    Divider(color: Colors.blueGrey, height: 5.0),
+    Divider(color: Colors.blueGrey, height: 5),
     verticalSpaceMedium,
   ],
 );
@@ -32,12 +32,20 @@ Widget verticalSpace(double height) => SizedBox(height: height);
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
-double screenHeightFraction(BuildContext context,
-        {int dividedBy = 1, double offsetBy = 0, double max = 3000}) =>
+double screenHeightFraction(
+  BuildContext context, {
+  int dividedBy = 1,
+  double offsetBy = 0,
+  double max = 3000,
+}) =>
     min((screenHeight(context) - offsetBy) / dividedBy, max);
 
-double screenWidthFraction(BuildContext context,
-        {int dividedBy = 1, double offsetBy = 0, double max = 3000}) =>
+double screenWidthFraction(
+  BuildContext context, {
+  int dividedBy = 1,
+  double offsetBy = 0,
+  double max = 3000,
+}) =>
     min((screenWidth(context) - offsetBy) / dividedBy, max);
 
 double halfScreenWidth(BuildContext context) =>
@@ -66,13 +74,17 @@ double getResponsiveExtraLargeFontSize(BuildContext context) =>
 double getResponsiveMassiveFontSize(BuildContext context) =>
     getResponsiveFontSize(context, fontSize: 30);
 
-double getResponsiveFontSize(BuildContext context,
-    {double? fontSize, double? max}) {
+double getResponsiveFontSize(
+  BuildContext context, {
+  double? fontSize,
+  double? max,
+}) {
   max ??= 100;
 
-  var responsiveSize = min(
-      screenWidthFraction(context, dividedBy: 10) * ((fontSize ?? 100) / 100),
-      max);
+  final responsiveSize = min(
+    screenWidthFraction(context, dividedBy: 10) * ((fontSize ?? 100) / 100),
+    max,
+  );
 
   return responsiveSize;
 }
