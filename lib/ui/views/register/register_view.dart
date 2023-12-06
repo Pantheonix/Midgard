@@ -120,7 +120,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                         },
                       ),
                     ),
-                    verticalSpaceMassive,
+                    verticalSpaceLarge,
                     Container(
                       padding: const EdgeInsets.all(24),
                       child: Column(
@@ -134,273 +134,342 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                             ),
                           ),
                           verticalSpaceSmall,
-                          // Username
-                          TextFormField(
-                            controller: usernameController,
-                            onChanged: (value) => viewModel.moveEyes(value),
-                            focusNode: usernameFocusNode,
-                            cursorColor: kcBlack,
-                            style: const TextStyle(
-                              color: kcBlack,
-                              fontSize: 14,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(12),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: kcLightGrey),
-                              ),
-                              label: RichText(
-                                text: const TextSpan(
-                                  text: 'Username',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: kcMediumGrey,
-                                  ),
+                          Row(
+                            children: [
+                              // Username
+                              Expanded(
+                                child: Column(
                                   children: [
-                                    TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: kcRed,
+                                    TextFormField(
+                                      controller: usernameController,
+                                      onChanged: (value) =>
+                                          viewModel.moveEyes(value),
+                                      focusNode: usernameFocusNode,
+                                      cursorColor: kcBlack,
+                                      style: const TextStyle(
+                                        color: kcBlack,
+                                        fontSize: 14,
                                       ),
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.auto,
+                                        focusedBorder:
+                                            const UnderlineInputBorder(),
+                                        enabledBorder:
+                                            const UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: kcLightGrey),
+                                        ),
+                                        label: RichText(
+                                          text: const TextSpan(
+                                            text: 'Username',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: kcMediumGrey,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: kcRed,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      textInputAction: TextInputAction.next,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
+                                    if (viewModel
+                                        .hasUsernameValidationMessage) ...[
+                                      verticalSpaceTiny,
+                                      Text(
+                                        viewModel.usernameValidationMessage!,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          if (viewModel.hasUsernameValidationMessage) ...[
-                            verticalSpaceTiny,
-                            Text(
-                              viewModel.usernameValidationMessage!,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
+                              horizontalSpaceMedium,
+                              // Email
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      controller: emailController,
+                                      onChanged: (value) => viewModel.moveEyes(
+                                        value + kRiveMoveEyesPadding,
+                                      ),
+                                      focusNode: emailFocusNode,
+                                      cursorColor: kcBlack,
+                                      keyboardType: TextInputType.emailAddress,
+                                      style: const TextStyle(
+                                        color: kcBlack,
+                                        fontSize: 14,
+                                      ),
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.auto,
+                                        focusedBorder:
+                                            const UnderlineInputBorder(),
+                                        enabledBorder:
+                                            const UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: kcLightGrey),
+                                        ),
+                                        label: RichText(
+                                          text: const TextSpan(
+                                            text: 'Email',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: kcMediumGrey,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: kcRed,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      textInputAction: TextInputAction.next,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                    ),
+                                    if (viewModel
+                                        .hasEmailValidationMessage) ...[
+                                      verticalSpaceTiny,
+                                      Text(
+                                        viewModel.emailValidationMessage!,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                           verticalSpaceSmall,
-                          // Email
-                          TextFormField(
-                            controller: emailController,
-                            onChanged: (value) => viewModel.moveEyes(value),
-                            focusNode: emailFocusNode,
-                            cursorColor: kcBlack,
-                            keyboardType: TextInputType.emailAddress,
-                            style: const TextStyle(
-                              color: kcBlack,
-                              fontSize: 14,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(12),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: kcLightGrey),
-                              ),
-                              label: RichText(
-                                text: const TextSpan(
-                                  text: 'Email',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: kcMediumGrey,
-                                  ),
+                          Row(
+                            children: [
+                              // Password
+                              Expanded(
+                                child: Column(
                                   children: [
-                                    TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: kcRed,
+                                    TextFormField(
+                                      controller: passwordController,
+                                      onChanged: (value) {
+                                        if (viewModel.isPasswordObscured) {
+                                          return;
+                                        }
+                                        viewModel.moveEyes(value);
+                                      },
+                                      focusNode: passwordFocusNode,
+                                      obscureText: viewModel.isPasswordObscured,
+                                      cursorColor: kcBlack,
+                                      style: const TextStyle(
+                                        color: kcBlack,
+                                        fontSize: 14,
                                       ),
+                                      enableSuggestions: false,
+                                      autocorrect: false,
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.auto,
+                                        focusedBorder:
+                                            const UnderlineInputBorder(),
+                                        enabledBorder:
+                                            const UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: kcLightGrey,
+                                          ),
+                                        ),
+                                        label: RichText(
+                                          text: const TextSpan(
+                                            text: 'Password',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: kcMediumGrey,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: kcRed,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            viewModel
+                                                .togglePasswordVisibility();
+                                            if (passwordFocusNode.hasFocus) {
+                                              viewModel.isPasswordObscured
+                                                  ? viewModel.handsUpOnEyes()
+                                                  : viewModel.lookAround();
+                                            } else {
+                                              viewModel.idle();
+                                            }
+                                          },
+                                          icon: Icon(
+                                            viewModel.isPasswordObscured
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: kcBlack,
+                                          ),
+                                        ),
+                                        suffixStyle: const TextStyle(
+                                          fontSize: 14,
+                                          color: kcBlack,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      textInputAction: TextInputAction.next,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
+                                    if (viewModel
+                                        .hasPasswordValidationMessage) ...[
+                                      verticalSpaceTiny,
+                                      Text(
+                                        viewModel.passwordValidationMessage!,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          if (viewModel.hasEmailValidationMessage) ...[
-                            verticalSpaceTiny,
-                            Text(
-                              viewModel.emailValidationMessage!,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                          verticalSpaceSmall,
-                          // Password
-                          TextFormField(
-                            controller: passwordController,
-                            onChanged: (value) {
-                              if (viewModel.isPasswordObscured) return;
-                              viewModel.moveEyes(value);
-                            },
-                            focusNode: passwordFocusNode,
-                            obscureText: viewModel.isPasswordObscured,
-                            cursorColor: kcBlack,
-                            style: const TextStyle(
-                              color: kcBlack,
-                              fontSize: 14,
-                            ),
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(12),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: kcLightGrey,
-                                ),
-                              ),
-                              label: RichText(
-                                text: const TextSpan(
-                                  text: 'Password',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: kcMediumGrey,
-                                  ),
+                              horizontalSpaceMedium,
+                              // Confirm Password
+                              Expanded(
+                                child: Column(
                                   children: [
-                                    TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: kcRed,
+                                    TextFormField(
+                                      controller: confirmPasswordController,
+                                      onChanged: (value) {
+                                        if (viewModel
+                                            .isConfirmPasswordObscured) {
+                                          return;
+                                        }
+                                        viewModel.moveEyes(
+                                          value + kRiveMoveEyesPadding,
+                                        );
+                                      },
+                                      focusNode: confirmPasswordFocusNode,
+                                      obscureText:
+                                          viewModel.isConfirmPasswordObscured,
+                                      cursorColor: kcBlack,
+                                      style: const TextStyle(
+                                        color: kcBlack,
+                                        fontSize: 14,
                                       ),
+                                      enableSuggestions: false,
+                                      autocorrect: false,
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.auto,
+                                        focusedBorder:
+                                            const UnderlineInputBorder(),
+                                        enabledBorder:
+                                            const UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: kcLightGrey,
+                                          ),
+                                        ),
+                                        label: RichText(
+                                          text: const TextSpan(
+                                            text: 'Confirm Password',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: kcMediumGrey,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: ' *',
+                                                style: TextStyle(
+                                                  color: kcRed,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            viewModel
+                                                .toggleConfirmPasswordVisibility();
+                                            if (confirmPasswordFocusNode
+                                                .hasFocus) {
+                                              viewModel
+                                                      .isConfirmPasswordObscured
+                                                  ? viewModel.handsUpOnEyes()
+                                                  : viewModel.lookAround();
+                                            } else {
+                                              viewModel.idle();
+                                            }
+                                          },
+                                          icon: Icon(
+                                            viewModel.isConfirmPasswordObscured
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: kcBlack,
+                                          ),
+                                        ),
+                                        suffixStyle: const TextStyle(
+                                          fontSize: 14,
+                                          color: kcBlack,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      textInputAction: TextInputAction.done,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                     ),
+                                    if (viewModel
+                                        .hasConfirmPasswordValidationMessage) ...[
+                                      verticalSpaceTiny,
+                                      Text(
+                                        viewModel
+                                            .confirmPasswordValidationMessage!,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  viewModel.togglePasswordVisibility();
-                                  if (passwordFocusNode.hasFocus) {
-                                    viewModel.isPasswordObscured
-                                        ? viewModel.handsUpOnEyes()
-                                        : viewModel.lookAround();
-                                  } else {
-                                    viewModel.idle();
-                                  }
-                                },
-                                icon: Icon(
-                                  viewModel.isPasswordObscured
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: kcBlack,
-                                ),
-                              ),
-                              suffixStyle: const TextStyle(
-                                fontSize: 14,
-                                color: kcBlack,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                            ],
                           ),
-                          if (viewModel.hasPasswordValidationMessage) ...[
-                            verticalSpaceTiny,
-                            Text(
-                              viewModel.passwordValidationMessage!,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                          verticalSpaceSmall,
-                          // Confirm Password
-                          TextFormField(
-                            controller: confirmPasswordController,
-                            onChanged: (value) {
-                              if (viewModel.isConfirmPasswordObscured) return;
-                              viewModel.moveEyes(value);
-                            },
-                            focusNode: confirmPasswordFocusNode,
-                            obscureText: viewModel.isConfirmPasswordObscured,
-                            cursorColor: kcBlack,
-                            style: const TextStyle(
-                              color: kcBlack,
-                              fontSize: 14,
-                            ),
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(12),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: kcLightGrey,
-                                ),
-                              ),
-                              label: RichText(
-                                text: const TextSpan(
-                                  text: 'Confirm Password',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: kcMediumGrey,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: kcRed,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  viewModel.toggleConfirmPasswordVisibility();
-                                  if (confirmPasswordFocusNode.hasFocus) {
-                                    viewModel.isConfirmPasswordObscured
-                                        ? viewModel.handsUpOnEyes()
-                                        : viewModel.lookAround();
-                                  } else {
-                                    viewModel.idle();
-                                  }
-                                },
-                                icon: Icon(
-                                  viewModel.isConfirmPasswordObscured
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: kcBlack,
-                                ),
-                              ),
-                              suffixStyle: const TextStyle(
-                                fontSize: 14,
-                                color: kcBlack,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            textInputAction: TextInputAction.done,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          if (viewModel
-                              .hasConfirmPasswordValidationMessage) ...[
-                            verticalSpaceTiny,
-                            Text(
-                              viewModel.confirmPasswordValidationMessage!,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
                           verticalSpaceMedium,
                           SizedBox(
                             width: double.infinity,

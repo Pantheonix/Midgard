@@ -21,3 +21,6 @@ const int kMinPasswordLength = 6;
 const int kMaxPasswordLength = 20;
 const kPasswordRegex =
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,20}$';
+
+// placeholders
+const String kRiveMoveEyesPadding = '--------------------------';

@@ -26,6 +26,16 @@ class RegisterViewModel extends FormViewModel with RiveBear {
     isChecking?.change(false);
     isHandsUp?.change(false);
 
+    // check client validation rules
+    await runBusyFuture(
+      _validate(),
+      busyObject: kbRegisterKey,
+    );
+
+    if (_hasAnyValidationMessage) {
+      return;
+    }
+
     final res = await runBusyFuture(
       _authService.register(
         RegisterRequest(
@@ -83,6 +93,37 @@ class RegisterViewModel extends FormViewModel with RiveBear {
   void navigateToLogin() {
     _routerService.replaceWith(const LoginViewRoute());
   }
+
+  Future<void> _validate() async {
+    if (hasUsernameValidationMessage) {
+      throw Exception(usernameValidationMessage);
+    }
+
+    if (hasEmailValidationMessage) {
+      throw Exception(emailValidationMessage);
+    }
+
+    if (hasPasswordValidationMessage) {
+      throw Exception(passwordValidationMessage);
+    }
+
+    final confirmPasswordValidationMessage =
+        RegisterValidators.validateConfirmPassword(
+      confirmPasswordValue,
+      passwordValue,
+    );
+    if (confirmPasswordValidationMessage != null) {
+      throw Exception(confirmPasswordValidationMessage);
+    }
+  }
+
+  bool get _hasAnyValidationMessage =>
+      hasAnyValidationMessage ||
+      RegisterValidators.validateConfirmPassword(
+            confirmPasswordValue,
+            passwordValue,
+          ) !=
+          null;
 }
 
 class RegisterValidators {

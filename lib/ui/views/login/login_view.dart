@@ -106,7 +106,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                         },
                       ),
                     ),
-                    verticalSpaceMassive,
+                    verticalSpaceLarge,
                     Container(
                       padding: const EdgeInsets.all(24),
                       child: Column(
