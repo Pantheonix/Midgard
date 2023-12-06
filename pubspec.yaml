@@ -15,6 +15,7 @@ dependencies:
   flutter_hooks: ^0.20.3
   hive: ^2.0.4
   http: ^1.1.0
+  json_annotation: ^4.0.1
   logger: ^1.1.0
   responsive_builder: ^0.7.0
   rive: ^0.12.3

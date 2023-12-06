@@ -4,6 +4,7 @@ import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/extensions/rive_bear_mixin.dart';
 import 'package:midgard/models/auth/register_models.dart';
+import 'package:midgard/models/exceptions/auth_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -33,6 +34,7 @@ class RegisterViewModel extends FormViewModel with RiveBear {
     );
 
     if (_hasAnyValidationMessage) {
+      failTrigger?.fire();
       return;
     }
 
@@ -59,14 +61,14 @@ class RegisterViewModel extends FormViewModel with RiveBear {
   }
 
   Future<void> navigateToHomeIfSuccess(
-    Either<Exception, UserProfileResponse> response,
+    Either<AuthException, UserProfileResponse> response,
   ) async {
     await response.fold(
-      (error) {
-        _logger.e('Error while register: $error');
+      (AuthException error) {
+        _logger.e('Error while register: ${error.toJson()}');
 
         failTrigger?.fire();
-        throw Exception('Invalid credentials!');
+        throw Exception(error.errors.asString);
       },
       (UserProfileResponse data) async {
         _logger.i('Register success: ${data.toJson()}');

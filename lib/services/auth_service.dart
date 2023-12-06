@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/models/auth/login_models.dart';
 import 'package:midgard/models/auth/register_models.dart';
+import 'package:midgard/models/exceptions/auth_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/api_constants.dart';
 
@@ -43,7 +44,7 @@ class AuthService {
     }
   }
 
-  Future<Either<Exception, UserProfileResponse>> register(
+  Future<Either<AuthException, UserProfileResponse>> register(
     RegisterRequest request,
   ) async {
     try {
@@ -67,11 +68,21 @@ class AuthService {
         return Right(registerResponse);
       } else {
         _logger.e('Error while register: ${response.body}');
-        return Left(Exception(response.body));
+        return Left(
+          AuthException.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
+          ),
+        );
       }
     } catch (e) {
       _logger.e('Error while register: $e');
-      return Left(Exception(e));
+      return Left(
+        AuthException(
+          500,
+          e.toString(),
+          Errors([]),
+        ),
+      );
     }
   }
 }
