@@ -3,6 +3,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'package:midgard/services/hive_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -11,12 +12,14 @@ import 'test_helpers.mocks.dart';
   MockSpec<RouterService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<BottomSheetService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<HiveService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
   getAndRegisterRouterService();
   getAndRegisterBottomSheetService();
   getAndRegisterDialogService();
+  getAndRegisterHiveService();
 // @stacked-mock-register
 }
 

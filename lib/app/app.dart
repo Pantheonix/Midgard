@@ -1,4 +1,5 @@
 import 'package:midgard/services/auth_service.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:midgard/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:midgard/ui/views/home/home_view.dart';
@@ -28,6 +29,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton<DialogService>(classType: DialogService),
     LazySingleton<RouterService>(classType: RouterService),
     LazySingleton<AuthService>(classType: AuthService),
+    LazySingleton<HiveService>(classType: HiveService),
 // @stacked-service
   ],
   bottomsheets: [

@@ -6,8 +6,10 @@ import 'package:midgard/extensions/rive_bear_mixin.dart';
 import 'package:midgard/models/auth/login_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/login/login_view.form.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -15,6 +17,19 @@ class LoginViewModel extends FormViewModel with RiveBear {
   final _logger = getLogger('LoginViewModel');
   final _routerService = locator<RouterService>();
   final _authService = locator<AuthService>();
+  final _hiveService = locator<HiveService>();
+
+  final _sidebarController = SidebarXController(
+    selectedIndex: 2,
+    extended: true,
+  );
+
+  Option<UserProfileModel> get currentUser =>
+      _hiveService.getCurrentUserProfile();
+
+  HiveService get hiveService => _hiveService;
+  RouterService get routerService => _routerService;
+  SidebarXController get sidebarController => _sidebarController;
 
   bool isPasswordObscured = true;
 
@@ -47,7 +62,7 @@ class LoginViewModel extends FormViewModel with RiveBear {
   }
 
   Future<void> navigateToHomeIfSuccess(
-    Either<Exception, UserProfileResponse> response,
+    Either<Exception, UserProfileModel> response,
   ) async {
     await response.fold(
       (error) {
@@ -56,14 +71,18 @@ class LoginViewModel extends FormViewModel with RiveBear {
         failTrigger?.fire();
         throw Exception('Invalid credentials!');
       },
-      (UserProfileResponse data) async {
+      (UserProfileModel data) async {
         _logger.i('Login success: ${data.toJson()}');
+
+        // save user data to hive
+        await _hiveService.saveUserProfile(data);
 
         successTrigger?.fire();
 
-        await Future.delayed(const Duration(seconds: 1), () {
-          _routerService.replaceWith(const HomeViewRoute());
-        });
+        await Future.delayed(
+          const Duration(seconds: 1),
+          _routerService.replaceWithHomeView,
+        );
       },
     );
   }
@@ -73,7 +92,11 @@ class LoginViewModel extends FormViewModel with RiveBear {
     rebuildUi();
   }
 
-  void navigateToRegister() {
-    _routerService.navigateTo(const RegisterViewRoute());
+  Future<void> navigateToRegister() async {
+    await _routerService.replaceWithRegisterView();
+  }
+
+  Future<void> navigateToHome() async {
+    await _routerService.replaceWithHomeView();
   }
 }

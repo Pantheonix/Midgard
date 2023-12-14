@@ -9,13 +9,13 @@ import 'package:midgard/models/auth/login_models.dart';
 import 'package:midgard/models/auth/register_models.dart';
 import 'package:midgard/models/exceptions/auth_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
-import 'package:midgard/services/api_constants.dart';
+import 'package:midgard/services/services_constants.dart';
 
 class AuthService {
   final _logger = getLogger('AuthService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
-  Future<Either<Exception, UserProfileResponse>> login(
+  Future<Either<Exception, UserProfileModel>> login(
     LoginRequest request,
   ) async {
     try {
@@ -32,7 +32,7 @@ class AuthService {
 
       if (response.statusCode == HttpStatus.ok) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final loginResponse = UserProfileResponse.fromJson(data);
+        final loginResponse = UserProfileModel.fromJson(data);
         return Right(loginResponse);
       } else {
         _logger.e('Error while login: ${response.body}');
@@ -44,7 +44,7 @@ class AuthService {
     }
   }
 
-  Future<Either<AuthException, UserProfileResponse>> register(
+  Future<Either<AuthException, UserProfileModel>> register(
     RegisterRequest request,
   ) async {
     try {
@@ -64,7 +64,7 @@ class AuthService {
 
       if (response.statusCode == HttpStatus.created) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final registerResponse = UserProfileResponse.fromJson(data);
+        final registerResponse = UserProfileModel.fromJson(data);
         return Right(registerResponse);
       } else {
         _logger.e('Error while register: ${response.body}');

@@ -7,8 +7,10 @@ import 'package:midgard/models/auth/register_models.dart';
 import 'package:midgard/models/exceptions/auth_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/register/register_view.form.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -16,6 +18,19 @@ class RegisterViewModel extends FormViewModel with RiveBear {
   final _logger = getLogger('RegisterViewModel');
   final _routerService = locator<RouterService>();
   final _authService = locator<AuthService>();
+  final _hiveService = locator<HiveService>();
+
+  final _sidebarController = SidebarXController(
+    selectedIndex: 3,
+    extended: true,
+  );
+
+  Option<UserProfileModel> get currentUser =>
+      _hiveService.getCurrentUserProfile();
+
+  HiveService get hiveService => _hiveService;
+  RouterService get routerService => _routerService;
+  SidebarXController get sidebarController => _sidebarController;
 
   bool isPasswordObscured = true;
   bool isConfirmPasswordObscured = true;
@@ -61,7 +76,7 @@ class RegisterViewModel extends FormViewModel with RiveBear {
   }
 
   Future<void> navigateToHomeIfSuccess(
-    Either<AuthException, UserProfileResponse> response,
+    Either<AuthException, UserProfileModel> response,
   ) async {
     await response.fold(
       (AuthException error) {
@@ -70,14 +85,18 @@ class RegisterViewModel extends FormViewModel with RiveBear {
         failTrigger?.fire();
         throw Exception(error.errors.asString);
       },
-      (UserProfileResponse data) async {
+      (UserProfileModel data) async {
         _logger.i('Register success: ${data.toJson()}');
+
+        // save user data to hive
+        await _hiveService.saveUserProfile(data);
 
         successTrigger?.fire();
 
-        await Future.delayed(const Duration(seconds: 1), () {
-          _routerService.replaceWith(const HomeViewRoute());
-        });
+        await Future.delayed(
+          const Duration(seconds: 1),
+          _routerService.replaceWithHomeView,
+        );
       },
     );
   }
@@ -126,6 +145,10 @@ class RegisterViewModel extends FormViewModel with RiveBear {
             passwordValue,
           ) !=
           null;
+
+  Future<void> navigateToHome() async {
+    await _routerService.replaceWithHomeView();
+  }
 }
 
 class RegisterValidators {

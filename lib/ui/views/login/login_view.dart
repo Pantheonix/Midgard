@@ -1,11 +1,15 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
+import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/login/login_view.form.dart';
 import 'package:midgard/ui/views/login/login_viewmodel.dart';
+import 'package:midgard/ui/widgets/app_primitives/app_sidebar.dart';
 import 'package:rive/rive.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -26,344 +30,376 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     Widget? child,
   ) {
     return Scaffold(
+      drawer: AppSidebar(
+        controller: viewModel.sidebarController,
+        routerService: viewModel.routerService,
+        hiveService: viewModel.hiveService,
+      ),
       backgroundColor: kcWhite,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                ClipPath(
-                  clipper: CurvedClipper(),
-                  child: Container(
-                    color: kcBearBackgroundColor,
-                    height: 550,
-                  ),
-                ),
-                Column(
-                  children: [
-                    verticalSpaceSmall,
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Pantheonix',
-                              style: TextStyle(
-                                fontSize: kdDesktopTitleTextSize,
-                                color: kcBlack,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            verticalSpaceTiny,
-                            Text(
-                              'Start your journey to the world of programming myths',
-                              style: TextStyle(
-                                fontSize: kdDesktopSubtitleTextSize,
-                                color: kcBlack,
-                              ),
-                            ),
-                          ],
+      body: Row(
+        children: [
+          AppSidebar(
+            controller: viewModel.sidebarController,
+            routerService: viewModel.routerService,
+            hiveService: viewModel.hiveService,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      ClipPath(
+                        clipper: CurvedClipper(),
+                        child: Container(
+                          color: kcBearBackgroundColor,
+                          height: 550,
                         ),
-                      ],
-                    ),
-                    verticalSpaceSmall,
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: RiveAnimation.asset(
-                        'assets/rive/bear.riv',
-                        fit: BoxFit.contain,
-                        stateMachines: const ['Login Machine'],
-                        onInit: (artboard) {
-                          viewModel.stateMachineController =
-                              StateMachineController.fromArtboard(
-                            artboard,
-                            'Login Machine',
-                          );
-
-                          if (viewModel.stateMachineController == null) return;
-
-                          artboard
-                              .addController(viewModel.stateMachineController!);
-
-                          for (final element
-                              in viewModel.stateMachineController!.inputs) {
-                            switch (element.name) {
-                              case 'isChecking':
-                                viewModel.isChecking = element as SMIBool;
-                              case 'isHandsUp':
-                                viewModel.isHandsUp = element as SMIBool;
-                              case 'trigSuccess':
-                                viewModel.successTrigger =
-                                    element as SMITrigger;
-                              case 'trigFail':
-                                viewModel.failTrigger = element as SMITrigger;
-                              case 'numLook':
-                                viewModel.lookNum = element as SMINumber;
-                            }
-                          }
-                        },
                       ),
-                    ),
-                    verticalSpaceLarge,
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
+                      Column(
                         children: [
-                          const Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 32,
-                              color: kcDarkBlue,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          verticalSpaceSmall,
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    ksAppTitle,
+                                    style: TextStyle(
+                                      fontSize: kdDesktopTitleTextSize,
+                                      color: kcBlack,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  verticalSpaceTiny,
+                                  Text(
+                                    ksAppMotto1,
+                                    style: TextStyle(
+                                      fontSize: kdDesktopSubtitleTextSize,
+                                      color: kcBlack,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                           verticalSpaceSmall,
-                          // Email
-                          TextFormField(
-                            controller: emailController,
-                            onChanged: (value) => viewModel.moveEyes(value),
-                            focusNode: emailFocusNode,
-                            cursorColor: kcBlack,
-                            keyboardType: TextInputType.emailAddress,
-                            style: const TextStyle(
-                              color: kcBlack,
-                              fontSize: 14,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(12),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: kcLightGrey),
-                              ),
-                              label: RichText(
-                                text: const TextSpan(
-                                  text: 'Email',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: kcMediumGrey,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: kcRed,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          verticalSpaceSmall,
-                          // Password
-                          TextFormField(
-                            controller: passwordController,
-                            onChanged: (value) {
-                              if (viewModel.isPasswordObscured) return;
-                              viewModel.moveEyes(value);
-                            },
-                            focusNode: passwordFocusNode,
-                            obscureText: viewModel.isPasswordObscured,
-                            cursorColor: kcBlack,
-                            style: const TextStyle(
-                              color: kcBlack,
-                              fontSize: 14,
-                            ),
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(12),
-                              floatingLabelBehavior: FloatingLabelBehavior.auto,
-                              focusedBorder: const UnderlineInputBorder(),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: kcLightGrey,
-                                ),
-                              ),
-                              label: RichText(
-                                text: const TextSpan(
-                                  text: 'Password',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: kcMediumGrey,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: ' *',
-                                      style: TextStyle(
-                                        color: kcRed,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  viewModel.togglePasswordVisibility();
-                                  if (passwordFocusNode.hasFocus) {
-                                    viewModel.isPasswordObscured
-                                        ? viewModel.handsUpOnEyes()
-                                        : viewModel.lookAround();
-                                  } else {
-                                    viewModel.idle();
-                                  }
-                                },
-                                icon: Icon(
-                                  viewModel.isPasswordObscured
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: kcBlack,
-                                ),
-                              ),
-                              suffixStyle: const TextStyle(
-                                fontSize: 14,
-                                color: kcBlack,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                          ),
-                          verticalSpaceMedium,
                           SizedBox(
-                            width: double.infinity,
-                            height: 44,
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                await viewModel.login();
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            child: RiveAnimation.asset(
+                              'assets/rive/bear.riv',
+                              fit: BoxFit.contain,
+                              stateMachines: const ['Login Machine'],
+                              onInit: (artboard) {
+                                viewModel.stateMachineController =
+                                    StateMachineController.fromArtboard(
+                                  artboard,
+                                  'Login Machine',
+                                );
 
-                                if (!context.mounted) return;
+                                if (viewModel.stateMachineController == null) {
+                                  return;
+                                }
 
-                                if (viewModel.hasErrorForKey(kbLoginKey)) {
-                                  await showFlash(
-                                    context: context,
-                                    duration: const Duration(seconds: 4),
-                                    builder: (context, controller) {
-                                      return FlashBar(
-                                        controller: controller,
-                                        primaryAction: TextButton(
-                                          onPressed: () {
-                                            controller.dismiss();
-                                          },
-                                          child: const Text(
-                                            'Dismiss',
-                                            style: TextStyle(
-                                              color: kcWhite,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                        ),
-                                        backgroundColor: Colors.redAccent,
-                                        position: FlashPosition.top,
-                                        forwardAnimationCurve: Curves.easeIn,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        shadowColor: kcBlack,
-                                        titleTextStyle: const TextStyle(
-                                          color: kcWhite,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        contentTextStyle: const TextStyle(
-                                          color: kcWhite,
-                                          fontSize: 16,
-                                        ),
-                                        title: const Text(
-                                          'Error',
-                                        ),
-                                        content: Text(
-                                          viewModel.error(kbLoginKey).message
-                                              as String,
-                                        ),
-                                        iconColor: kcWhite,
-                                        icon: const Icon(
-                                          Icons.error_outline,
-                                          color: kcWhite,
-                                        ),
-                                        showProgressIndicator: true,
-                                        indicatorColor: kcLightGrey,
-                                      );
-                                    },
-                                  );
+                                artboard.addController(
+                                    viewModel.stateMachineController!);
+
+                                for (final element in viewModel
+                                    .stateMachineController!.inputs) {
+                                  switch (element.name) {
+                                    case 'isChecking':
+                                      viewModel.isChecking = element as SMIBool;
+                                    case 'isHandsUp':
+                                      viewModel.isHandsUp = element as SMIBool;
+                                    case 'trigSuccess':
+                                      viewModel.successTrigger =
+                                          element as SMITrigger;
+                                    case 'trigFail':
+                                      viewModel.failTrigger =
+                                          element as SMITrigger;
+                                    case 'numLook':
+                                      viewModel.lookNum = element as SMINumber;
+                                  }
                                 }
                               },
-                              icon: Visibility(
-                                visible: viewModel.busy(kbLoginKey),
-                                child: Container(
-                                  width: 24,
-                                  height: 24,
-                                  padding: const EdgeInsets.all(2),
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 3,
-                                  ),
-                                ),
-                              ),
-                              label: const Text(
-                                'Log in',
-                                style: TextStyle(
-                                  color: kcWhite,
-                                ),
-                              ),
-                              style: TextButton.styleFrom(
-                                textStyle: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: kcBlack,
-                              ),
                             ),
                           ),
-                          verticalSpaceSmall,
-                          RichText(
-                            text: TextSpan(
-                              text: "Don't have account?",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: kcMediumGrey,
-                              ),
+                          verticalSpaceLarge,
+                          Container(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
                               children: [
-                                TextSpan(
-                                  text: ' Register now',
-                                  style: const TextStyle(
-                                    color: kcBlack,
+                                const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    fontSize: 32,
+                                    color: kcDarkBlue,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      viewModel.navigateToRegister();
+                                ),
+                                verticalSpaceSmall,
+                                // Email
+                                TextFormField(
+                                  controller: emailController,
+                                  onChanged: (value) =>
+                                      viewModel.moveEyes(value),
+                                  focusNode: emailFocusNode,
+                                  cursorColor: kcBlack,
+                                  keyboardType: TextInputType.emailAddress,
+                                  style: const TextStyle(
+                                    color: kcBlack,
+                                    fontSize: 14,
+                                  ),
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(12),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.auto,
+                                    focusedBorder: const UnderlineInputBorder(),
+                                    enabledBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: kcLightGrey),
+                                    ),
+                                    label: RichText(
+                                      text: const TextSpan(
+                                        text: 'Email',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: kcMediumGrey,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: ' *',
+                                            style: TextStyle(
+                                              color: kcRed,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  textInputAction: TextInputAction.next,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                ),
+                                verticalSpaceSmall,
+                                // Password
+                                TextFormField(
+                                  controller: passwordController,
+                                  onChanged: (value) {
+                                    if (viewModel.isPasswordObscured) return;
+                                    viewModel.moveEyes(value);
+                                  },
+                                  focusNode: passwordFocusNode,
+                                  obscureText: viewModel.isPasswordObscured,
+                                  cursorColor: kcBlack,
+                                  style: const TextStyle(
+                                    color: kcBlack,
+                                    fontSize: 14,
+                                  ),
+                                  enableSuggestions: false,
+                                  autocorrect: false,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(12),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.auto,
+                                    focusedBorder: const UnderlineInputBorder(),
+                                    enabledBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: kcLightGrey,
+                                      ),
+                                    ),
+                                    label: RichText(
+                                      text: const TextSpan(
+                                        text: 'Password',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: kcMediumGrey,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: ' *',
+                                            style: TextStyle(
+                                              color: kcRed,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        viewModel.togglePasswordVisibility();
+                                        if (passwordFocusNode.hasFocus) {
+                                          viewModel.isPasswordObscured
+                                              ? viewModel.handsUpOnEyes()
+                                              : viewModel.lookAround();
+                                        } else {
+                                          viewModel.idle();
+                                        }
+                                      },
+                                      icon: Icon(
+                                        viewModel.isPasswordObscured
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: kcBlack,
+                                      ),
+                                    ),
+                                    suffixStyle: const TextStyle(
+                                      fontSize: 14,
+                                      color: kcBlack,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  textInputAction: TextInputAction.next,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                ),
+                                verticalSpaceMedium,
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 44,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      await viewModel.login();
+
+                                      if (!context.mounted) return;
+
+                                      if (viewModel
+                                          .hasErrorForKey(kbLoginKey)) {
+                                        await showFlash(
+                                          context: context,
+                                          duration: const Duration(seconds: 4),
+                                          builder: (context, controller) {
+                                            return FlashBar(
+                                              controller: controller,
+                                              primaryAction: TextButton(
+                                                onPressed: () {
+                                                  controller.dismiss();
+                                                },
+                                                child: const Text(
+                                                  'Dismiss',
+                                                  style: TextStyle(
+                                                    color: kcWhite,
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                              ),
+                                              backgroundColor: Colors.redAccent,
+                                              position: FlashPosition.top,
+                                              forwardAnimationCurve:
+                                                  Curves.easeIn,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              shadowColor: kcBlack,
+                                              titleTextStyle: const TextStyle(
+                                                color: kcWhite,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              contentTextStyle: const TextStyle(
+                                                color: kcWhite,
+                                                fontSize: 16,
+                                              ),
+                                              title: const Text(
+                                                'Error',
+                                              ),
+                                              content: Text(
+                                                viewModel
+                                                    .error(kbLoginKey)
+                                                    .message as String,
+                                              ),
+                                              iconColor: kcWhite,
+                                              icon: const Icon(
+                                                Icons.error_outline,
+                                                color: kcWhite,
+                                              ),
+                                              showProgressIndicator: true,
+                                              indicatorColor: kcLightGrey,
+                                            );
+                                          },
+                                        );
+                                      }
                                     },
+                                    icon: Visibility(
+                                      visible: viewModel.busy(kbLoginKey),
+                                      child: Container(
+                                        width: 24,
+                                        height: 24,
+                                        padding: const EdgeInsets.all(2),
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 3,
+                                        ),
+                                      ),
+                                    ),
+                                    label: const Text(
+                                      'Log in',
+                                      style: TextStyle(
+                                        color: kcWhite,
+                                      ),
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      textStyle: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      backgroundColor: kcBlack,
+                                    ),
+                                  ),
+                                ),
+                                verticalSpaceSmall,
+                                RichText(
+                                  text: TextSpan(
+                                    text: "Don't have account?",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: kcMediumGrey,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: ' Register now',
+                                        style: const TextStyle(
+                                          color: kcBlack,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            await viewModel
+                                                .navigateToRegister();
+                                          },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   @override
-  void onViewModelReady(LoginViewModel viewModel) {
+  Future<void> onViewModelReady(LoginViewModel viewModel) async {
+    await HiveService.userProfileBox;
+    if (viewModel.currentUser.isSome()) {
+      await viewModel.navigateToHome();
+    }
+
     syncFormWithViewModel(viewModel);
 
     emailFocusNode.addListener(() {
@@ -389,6 +425,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
   @override
   void onDispose(LoginViewModel viewModel) {
     super.onDispose(viewModel);
+    Hive.close();
     disposeForm();
   }
 }
