@@ -37,7 +37,7 @@ jobs:
         run: |
           flutter pub get
       - name: 🛠️ Build the application
-        run: flutter build web -t lib/main.dart --dart-define=API_BASE_URL="${{ vars.API_BASE_URL }}" --dart-define=SENTRY_DSN="${{ vars.SENTRY_DSN }}" --dart-define=SENTRY_ENVIRONMENT="${{ vars.SENTRY_ENVIRONMENT }}"
+        run: flutter build web -t lib/main.dart --dart-define=API_BASE_URL="${{ vars.API_BASE_URL }}" --dart-define=SENTRY_DSN="${{ vars.SENTRY_DSN }}" --dart-define=ENVIRONMENT="${{ vars.ENVIRONMENT }}"
       - name: ⬇️ Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
