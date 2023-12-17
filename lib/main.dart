@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -7,26 +9,37 @@ import 'package:midgard/app/app.dialogs.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/user/user_models.dart';
+import 'package:midgard/services/services_constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  setPathUrlStrategy();
-  await setupLocator(stackedRouter: stackedRouter);
-  setupDialogUi();
-  setupBottomSheetUi();
+  await runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      setPathUrlStrategy();
+      await setupLocator(stackedRouter: stackedRouter);
+      setupDialogUi();
+      setupBottomSheetUi();
 
-  // setup Hive
-  if (!kIsWeb) {
-    final appDocumentDir =
-        await path_provider.getApplicationDocumentsDirectory();
-    Hive.init(appDocumentDir.path);
-  }
-  Hive.registerAdapter(UserProfileModelAdapter());
+      await setupHive();
+      await SentryFlutter.init(
+        (options) {
+          options
+            ..dsn = ApiConstants.sentryDsn
+            ..environment = ApiConstants.sentryEnvironment
+            ..tracesSampleRate = 1.0;
+        },
+      );
 
-  runApp(const MainApp());
+      runApp(const MainApp());
+    },
+    (error, stack) async {
+      await Sentry.captureException(error, stackTrace: stack);
+    },
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -45,4 +58,13 @@ class MainApp extends StatelessWidget {
           duration: const Duration(milliseconds: 400),
         );
   }
+}
+
+Future<void> setupHive() async {
+  if (!kIsWeb) {
+    final appDocumentDir =
+        await path_provider.getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDir.path);
+  }
+  Hive.registerAdapter(UserProfileModelAdapter());
 }

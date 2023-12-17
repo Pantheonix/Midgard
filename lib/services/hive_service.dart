@@ -7,6 +7,7 @@ import 'package:http/browser_client.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
+import 'package:sentry/sentry.dart';
 
 class HiveService {
   final _logger = getLogger('HiveService');
@@ -34,6 +35,7 @@ class HiveService {
       ),
     );
     _logger.i('Avatar response: ${response.statusCode}');
+    await Sentry.captureMessage('Avatar response: ${response.statusCode}');
 
     if (response.statusCode != HttpStatus.ok) return;
 

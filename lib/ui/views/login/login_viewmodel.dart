@@ -4,11 +4,13 @@ import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/extensions/rive_bear_mixin.dart';
 import 'package:midgard/models/auth/login_models.dart';
+import 'package:midgard/models/exceptions/auth_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/login/login_view.form.dart';
+import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -36,6 +38,7 @@ class LoginViewModel extends FormViewModel with RiveBear {
   //on click event
   Future<void> login() async {
     _logger.i('Start login...');
+    await Sentry.captureMessage('Start login...');
 
     isChecking?.change(false);
     isHandsUp?.change(false);
@@ -62,17 +65,21 @@ class LoginViewModel extends FormViewModel with RiveBear {
   }
 
   Future<void> navigateToHomeIfSuccess(
-    Either<Exception, UserProfileModel> response,
+    Either<AuthException, UserProfileModel> response,
   ) async {
     await response.fold(
-      (error) {
-        _logger.e('Error while login: $error');
+      (AuthException error) async {
+        _logger.e('Error while login: ${error.toJson()}');
+        await Sentry.captureException(
+          Exception('Error while login: ${error.toJson()}'),
+        );
 
         failTrigger?.fire();
         throw Exception('Invalid credentials!');
       },
       (UserProfileModel data) async {
         _logger.i('Login success: ${data.toJson()}');
+        await Sentry.captureMessage('Login success: ${data.toJson()}');
 
         // save user data to hive
         await _hiveService.saveUserProfile(data);

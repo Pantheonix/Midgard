@@ -10,6 +10,7 @@ import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/register/register_view.form.dart';
+import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -37,7 +38,8 @@ class RegisterViewModel extends FormViewModel with RiveBear {
 
   //on click event
   Future<void> register() async {
-    _logger.i('Start login...');
+    _logger.i('Start register...');
+    await Sentry.captureMessage('Start register...');
 
     isChecking?.change(false);
     isHandsUp?.change(false);
@@ -81,12 +83,16 @@ class RegisterViewModel extends FormViewModel with RiveBear {
     await response.fold(
       (AuthException error) {
         _logger.e('Error while register: ${error.toJson()}');
+        Sentry.captureException(
+          Exception('Error while register: ${error.toJson()}'),
+        );
 
         failTrigger?.fire();
         throw Exception(error.errors.asString);
       },
       (UserProfileModel data) async {
         _logger.i('Register success: ${data.toJson()}');
+        await Sentry.captureMessage('Register success: ${data.toJson()}');
 
         // save user data to hive
         await _hiveService.saveUserProfile(data);
