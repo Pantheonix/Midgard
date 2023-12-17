@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/app_strings.dart';
-import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:midgard/ui/views/home/home_viewmodel.dart';
+import 'package:midgard/ui/views/about/about_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_sidebar.dart';
-import 'package:midgard/ui/widgets/home/asset_card.dart';
 import 'package:stacked/stacked.dart';
 
-class HomeView extends StackedView<HomeViewModel> {
-  const HomeView({super.key});
+class AboutView extends StackedView<AboutViewModel> {
+  const AboutView({super.key});
 
   @override
   Widget builder(
     BuildContext context,
-    HomeViewModel viewModel,
+    AboutViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
@@ -35,32 +33,31 @@ class HomeView extends StackedView<HomeViewModel> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: kdHomeViewPadding,
+                  horizontal: kdAboutViewPadding,
                 ),
-                child: Column(
+                child: Stack(
                   children: [
-                    verticalSpaceSmall,
-                    const Text(
-                      ksAppTitle,
-                      style: TextStyle(
-                        color: kcBlack,
-                        fontSize: kdHomeViewTitleTextSize,
-                        fontWeight: FontWeight.bold,
+                    Positioned.fill(
+                      child: Image.asset(
+                        ksAssetAboutBackgroundImage,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    verticalSpaceTiny,
-                    const Text(
-                      ksAppMotto2,
-                      style: TextStyle(
-                        color: kcBlack,
-                        fontSize: kdHomeViewSubtitleTextSize,
+                    const Padding(
+                      padding: EdgeInsets.all(kdAboutViewTextPadding),
+                      child: Center(
+                        child: Text(
+                          ksAppAboutPoetry,
+                          style: TextStyle(
+                            color: kcWhite,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: kdAboutViewTextLetterSpacing,
+                            fontSize: kdAboutViewTextSize,
+                          ),
+                        ),
                       ),
                     ),
-                    for (final asset in viewModel.assetCardsList)
-                      AssetCard(
-                        assetPath: asset.path,
-                        assetText: asset.text,
-                      ),
                   ],
                 ),
               ),
@@ -72,13 +69,13 @@ class HomeView extends StackedView<HomeViewModel> {
   }
 
   @override
-  HomeViewModel viewModelBuilder(
+  AboutViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      HomeViewModel();
+      AboutViewModel();
 
   @override
-  void onDispose(HomeViewModel viewModel) {
+  void onDispose(AboutViewModel viewModel) {
     super.onDispose(viewModel);
     // Hive.close();
     viewModel.sidebarController.dispose();

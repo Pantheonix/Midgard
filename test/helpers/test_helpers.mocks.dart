@@ -4,6 +4,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
+import 'dart:typed_data' as _i14;
 import 'dart:ui' as _i9;
 
 import 'package:dartz/dartz.dart' as _i3;
@@ -590,12 +591,11 @@ class MockDialogService extends _i1.Mock implements _i10.DialogService {
 /// See the documentation for Mockito's code generation for more information.
 class MockHiveService extends _i1.Mock implements _i12.HiveService {
   @override
-  _i5.Future<void> saveUserProfile(
-          _i13.UserProfileModel? userProfileResponse) =>
+  _i5.Future<void> saveUserProfile(_i13.UserProfileModel? userProfile) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveUserProfile,
-          [userProfileResponse],
+          [userProfile],
         ),
         returnValue: _i5.Future<void>.value(),
         returnValueForMissingStub: _i5.Future<void>.value(),
@@ -623,4 +623,36 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
           ),
         ),
       ) as _i3.Option<_i13.UserProfileModel>);
+
+  @override
+  _i3.Option<_i14.Uint8List> getCurrentUserAvatarBlob() => (super.noSuchMethod(
+        Invocation.method(
+          #getCurrentUserAvatarBlob,
+          [],
+        ),
+        returnValue: _FakeOption_3<_i14.Uint8List>(
+          this,
+          Invocation.method(
+            #getCurrentUserAvatarBlob,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _FakeOption_3<_i14.Uint8List>(
+          this,
+          Invocation.method(
+            #getCurrentUserAvatarBlob,
+            [],
+          ),
+        ),
+      ) as _i3.Option<_i14.Uint8List>);
+
+  @override
+  _i5.Future<void> clearUserProfile() => (super.noSuchMethod(
+        Invocation.method(
+          #clearUserProfile,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

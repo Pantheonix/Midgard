@@ -10,7 +10,7 @@ class UserProfileModel {
     required this.email,
     this.fullname,
     this.bio,
-    this.profilePictureUrl,
+    this.profilePictureId,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json)
@@ -19,7 +19,7 @@ class UserProfileModel {
         email = json['email'] as String,
         fullname = json['fullname'] as String?,
         bio = json['bio'] as String?,
-        profilePictureUrl = json['profilePictureUrl'] as String?;
+        profilePictureId = json['profilePictureId'] as String?;
 
   @HiveField(0)
   final String userId;
@@ -37,7 +37,7 @@ class UserProfileModel {
   final String? bio;
 
   @HiveField(5)
-  final String? profilePictureUrl;
+  final String? profilePictureId;
 
   Map<String, dynamic> toJson() => {
         'id': userId,
@@ -45,6 +45,6 @@ class UserProfileModel {
         'email': email,
         'fullname': fullname,
         'bio': bio,
-        'profilePictureUrl': profilePictureUrl,
+        'profilePictureId': profilePictureId,
       };
 }

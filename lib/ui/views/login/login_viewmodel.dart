@@ -20,7 +20,7 @@ class LoginViewModel extends FormViewModel with RiveBear {
   final _hiveService = locator<HiveService>();
 
   final _sidebarController = SidebarXController(
-    selectedIndex: 2,
+    selectedIndex: kiSidebarLoginMenuIndex,
     extended: true,
   );
 

@@ -22,7 +22,7 @@ class UserProfileModelAdapter extends TypeAdapter<UserProfileModel> {
       email: fields[2] as String,
       fullname: fields[3] as String?,
       bio: fields[4] as String?,
-      profilePictureUrl: fields[5] as String?,
+      profilePictureId: fields[5] as String?,
     );
   }
 
@@ -41,7 +41,7 @@ class UserProfileModelAdapter extends TypeAdapter<UserProfileModel> {
       ..writeByte(4)
       ..write(obj.bio)
       ..writeByte(5)
-      ..write(obj.profilePictureUrl);
+      ..write(obj.profilePictureId);
   }
 
   @override

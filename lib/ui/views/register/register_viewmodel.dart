@@ -21,7 +21,7 @@ class RegisterViewModel extends FormViewModel with RiveBear {
   final _hiveService = locator<HiveService>();
 
   final _sidebarController = SidebarXController(
-    selectedIndex: 3,
+    selectedIndex: kiSidebarRegisterMenuIndex,
     extended: true,
   );
 
