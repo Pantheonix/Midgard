@@ -29,7 +29,7 @@ Future<void> main() async {
         (options) {
           options
             ..dsn = ApiConstants.sentryDsn
-            ..environment = ApiConstants.sentryEnvironment
+            ..environment = ApiConstants.environment
             ..tracesSampleRate = 1.0;
         },
       );

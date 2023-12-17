@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
 import 'package:http/browser_client.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/extensions/http_extensions.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:sentry/sentry.dart';
@@ -29,7 +30,7 @@ class HiveService {
     if (userProfile.profilePictureId == null) return;
 
     final response = await _httpClient.get(
-      Uri.http(
+      uriFromEnv(
         ApiConstants.baseUrl,
         '${ApiConstants.imageUrl}/${userProfile.profilePictureId}',
       ),

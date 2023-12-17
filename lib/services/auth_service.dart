@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/extensions/http_extensions.dart';
 import 'package:midgard/models/auth/login_models.dart';
 import 'package:midgard/models/auth/register_models.dart';
 import 'package:midgard/models/exceptions/auth_exception.dart';
@@ -21,7 +22,7 @@ class AuthService {
   ) async {
     try {
       final response = await _httpClient.post(
-        Uri.http(
+        uriFromEnv(
           ApiConstants.baseUrl,
           ApiConstants.loginUrl,
         ),
@@ -72,7 +73,7 @@ class AuthService {
       final streamedResponse = await _httpClient.send(
         MultipartRequest(
           'POST',
-          Uri.http(
+          uriFromEnv(
             ApiConstants.baseUrl,
             ApiConstants.registerUrl,
           ),

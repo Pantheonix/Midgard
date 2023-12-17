@@ -6,8 +6,8 @@ abstract class ApiConstants {
   static const String sentryDsn = String.fromEnvironment(
     'SENTRY_DSN',
   );
-  static const String sentryEnvironment = String.fromEnvironment(
-    'SENTRY_ENVIRONMENT',
+  static const String environment = String.fromEnvironment(
+    'ENVIRONMENT',
   );
 
   static const String loginUrl = '/api/identity/auth/login';
