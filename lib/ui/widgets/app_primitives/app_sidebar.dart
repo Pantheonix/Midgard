@@ -99,7 +99,12 @@ class AppSidebar extends StatelessWidget {
                               ),
                               (data) => CircleAvatar(
                                 radius: kdSidebarAvatarShapeRadius,
-                                child: Image.memory(data),
+                                child: ClipOval(
+                                  child: Image.memory(
+                                    data,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               ),
                             )
                         : const FlutterLogo(size: 50).redacted(
@@ -149,7 +154,7 @@ class AppSidebar extends StatelessWidget {
                         icon: Icons.logout,
                         label: ksSidebarLogoutMenuText,
                         onTap: () async {
-                          await _hiveService.clearUserProfile();
+                          await _hiveService.clearCurrentUserProfile();
                           await _routerService.navigateTo(
                             const HomeViewRoute(),
                           );
@@ -159,7 +164,7 @@ class AppSidebar extends StatelessWidget {
                         icon: Icons.account_circle,
                         label: ksSidebarProfileMenuText,
                         onTap: () async {
-                          // await _routerService.replaceWithProfileView();
+                          await _routerService.replaceWithProfileView();
                         },
                       ),
                     ],

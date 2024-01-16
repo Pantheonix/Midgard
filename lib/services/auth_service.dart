@@ -8,7 +8,7 @@ import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/extensions/http_extensions.dart';
 import 'package:midgard/models/auth/login_models.dart';
 import 'package:midgard/models/auth/register_models.dart';
-import 'package:midgard/models/exceptions/auth_exception.dart';
+import 'package:midgard/models/exceptions/identity_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:sentry/sentry.dart';
@@ -17,7 +17,7 @@ class AuthService {
   final _logger = getLogger('AuthService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
-  Future<Either<AuthException, UserProfileModel>> login(
+  Future<Either<IdentityException, UserProfileModel>> login(
     LoginRequest request,
   ) async {
     try {
@@ -37,15 +37,15 @@ class AuthService {
         final loginResponse = UserProfileModel.fromJson(data);
         await Sentry.captureMessage('Login success: ${loginResponse.username}');
 
-        return Right(loginResponse);
+        return right(loginResponse);
       } else {
         _logger.e('Error while login: ${response.body}');
         await Sentry.captureException(
           Exception('Error while login: ${response.body}'),
         );
 
-        return Left(
-          AuthException.fromJson(
+        return left(
+          IdentityException.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>,
           ),
         );
@@ -56,8 +56,8 @@ class AuthService {
         Exception('Error while login: $e'),
       );
 
-      return Left(
-        AuthException(
+      return left(
+        IdentityException(
           500,
           e.toString(),
           Errors([]),
@@ -66,7 +66,7 @@ class AuthService {
     }
   }
 
-  Future<Either<AuthException, UserProfileModel>> register(
+  Future<Either<IdentityException, UserProfileModel>> register(
     RegisterRequest request,
   ) async {
     try {
@@ -91,15 +91,15 @@ class AuthService {
           'Register success: ${registerResponse.username}',
         );
 
-        return Right(registerResponse);
+        return right(registerResponse);
       } else {
         _logger.e('Error while register: ${response.body}');
         await Sentry.captureException(
           Exception('Error while register: ${response.body}'),
         );
 
-        return Left(
-          AuthException.fromJson(
+        return left(
+          IdentityException.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>,
           ),
         );
@@ -110,8 +110,8 @@ class AuthService {
         Exception('Error while register: $e'),
       );
 
-      return Left(
-        AuthException(
+      return left(
+        IdentityException(
           500,
           e.toString(),
           Errors([]),

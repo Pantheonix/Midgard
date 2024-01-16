@@ -1,7 +1,7 @@
-class AuthException implements Exception {
-  AuthException(this.statusCode, this.message, this.errors);
+class IdentityException implements Exception {
+  IdentityException(this.statusCode, this.message, this.errors);
 
-  AuthException.fromJson(Map<String, dynamic> json)
+  IdentityException.fromJson(Map<String, dynamic> json)
       : statusCode = json['statusCode'] as int,
         message = json['message'] as String,
         errors = Errors.fromJson(json['errors'] as Map<String, dynamic>);

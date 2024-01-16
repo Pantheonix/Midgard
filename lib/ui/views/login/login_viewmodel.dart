@@ -4,7 +4,7 @@ import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/extensions/rive_bear_mixin.dart';
 import 'package:midgard/models/auth/login_models.dart';
-import 'package:midgard/models/exceptions/auth_exception.dart';
+import 'package:midgard/models/exceptions/identity_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
@@ -30,7 +30,9 @@ class LoginViewModel extends FormViewModel with RiveBear {
       _hiveService.getCurrentUserProfile();
 
   HiveService get hiveService => _hiveService;
+
   RouterService get routerService => _routerService;
+
   SidebarXController get sidebarController => _sidebarController;
 
   bool isPasswordObscured = true;
@@ -65,10 +67,10 @@ class LoginViewModel extends FormViewModel with RiveBear {
   }
 
   Future<void> navigateToHomeIfSuccess(
-    Either<AuthException, UserProfileModel> response,
+    Either<IdentityException, UserProfileModel> response,
   ) async {
     await response.fold(
-      (AuthException error) async {
+      (IdentityException error) async {
         _logger.e('Error while login: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while login: ${error.toJson()}'),
@@ -82,7 +84,7 @@ class LoginViewModel extends FormViewModel with RiveBear {
         await Sentry.captureMessage('Login success: ${data.toJson()}');
 
         // save user data to hive
-        await _hiveService.saveUserProfile(data);
+        await _hiveService.saveCurrentUserProfile(data);
 
         successTrigger?.fire();
 
