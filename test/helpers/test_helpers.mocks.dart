@@ -9,6 +9,7 @@ import 'dart:ui' as _i9;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
+import 'package:midgard/models/exceptions/identity_exception.dart' as _i16;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
 import 'package:midgard/services/user_service.dart' as _i15;
@@ -68,6 +69,16 @@ class _FakeRoutingController_2 extends _i1.SmartFake
 
 class _FakeOption_3<A> extends _i1.SmartFake implements _i3.Option<A> {
   _FakeOption_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeEither_4<L, R> extends _i1.SmartFake implements _i3.Either<L, R> {
+  _FakeEither_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -592,10 +603,10 @@ class MockDialogService extends _i1.Mock implements _i10.DialogService {
 /// See the documentation for Mockito's code generation for more information.
 class MockHiveService extends _i1.Mock implements _i12.HiveService {
   @override
-  _i5.Future<void> saveUserProfile(_i13.UserProfileModel? userProfile) =>
+  _i5.Future<void> saveCurrentUserProfile(_i13.UserProfileModel? userProfile) =>
       (super.noSuchMethod(
         Invocation.method(
-          #saveUserProfile,
+          #saveCurrentUserProfile,
           [userProfile],
         ),
         returnValue: _i5.Future<void>.value(),
@@ -648,9 +659,66 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i3.Option<_i14.Uint8List>);
 
   @override
-  _i5.Future<void> clearUserProfile() => (super.noSuchMethod(
+  _i5.Future<void> saveUserProfile(_i13.UserProfileModel? userProfile) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #clearUserProfile,
+          #saveUserProfile,
+          [userProfile],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i3.Option<_i13.UserProfileModel> getUserProfile(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUserProfile,
+          [userId],
+        ),
+        returnValue: _FakeOption_3<_i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #getUserProfile,
+            [userId],
+          ),
+        ),
+        returnValueForMissingStub: _FakeOption_3<_i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #getUserProfile,
+            [userId],
+          ),
+        ),
+      ) as _i3.Option<_i13.UserProfileModel>);
+
+  @override
+  _i3.Option<_i14.Uint8List> getUserAvatarBlob(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUserAvatarBlob,
+          [userId],
+        ),
+        returnValue: _FakeOption_3<_i14.Uint8List>(
+          this,
+          Invocation.method(
+            #getUserAvatarBlob,
+            [userId],
+          ),
+        ),
+        returnValueForMissingStub: _FakeOption_3<_i14.Uint8List>(
+          this,
+          Invocation.method(
+            #getUserAvatarBlob,
+            [userId],
+          ),
+        ),
+      ) as _i3.Option<_i14.Uint8List>);
+
+  @override
+  _i5.Future<void> clearCurrentUserProfile() => (super.noSuchMethod(
+        Invocation.method(
+          #clearCurrentUserProfile,
           [],
         ),
         returnValue: _i5.Future<void>.value(),
@@ -661,4 +729,62 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
 /// A class which mocks [UserService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserService extends _i1.Mock implements _i15.UserService {}
+class MockUserService extends _i1.Mock implements _i15.UserService {
+  @override
+  _i5.Future<
+      _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>> getAll({
+    String? name = r'',
+    String? email = r'',
+    String? sortBy = r'',
+    int? page = 1,
+    int? pageSize = 10,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+          {
+            #name: name,
+            #email: email,
+            #sortBy: sortBy,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i16.IdentityException,
+                    List<_i13.UserProfileModel>>>.value(
+            _FakeEither_4<_i16.IdentityException, List<_i13.UserProfileModel>>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #name: name,
+              #email: email,
+              #sortBy: sortBy,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i16.IdentityException,
+                    List<_i13.UserProfileModel>>>.value(
+            _FakeEither_4<_i16.IdentityException, List<_i13.UserProfileModel>>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #name: name,
+              #email: email,
+              #sortBy: sortBy,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>>);
+}

@@ -9,7 +9,7 @@ import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class ProfileViewModel extends FutureViewModel<List<UserProfileModel>> {
+class ProfileViewModel extends FormViewModel {
   final _userService = locator<UserService>();
   final _hiveService = locator<HiveService>();
   final _routerService = locator<RouterService>();
@@ -20,17 +20,20 @@ class ProfileViewModel extends FutureViewModel<List<UserProfileModel>> {
     extended: true,
   );
 
+  final _users = <UserProfileModel>[];
+
   HiveService get hiveService => _hiveService;
 
   RouterService get routerService => _routerService;
 
   SidebarXController get sidebarController => _sidebarController;
 
-  @override
-  Future<List<UserProfileModel>> futureToRun() => getUsers();
+  List<UserProfileModel> get users => _users;
 
   Future<List<UserProfileModel>> getUsers() async {
-    final result = await _userService.getAll();
+    final result = await _userService.getAll(
+      sortBy: SortUsersBy.nameAsc.value,
+    );
 
     return result.fold(
       (IdentityException error) {
@@ -42,5 +45,18 @@ class ProfileViewModel extends FutureViewModel<List<UserProfileModel>> {
         return users;
       },
     );
+  }
+
+  Future<void> initialise() async {
+    _logger.i('ProfileViewModel initialised');
+
+    _users
+      ..clear()
+      ..addAll(
+        await runBusyFuture(
+          getUsers(),
+          busyObject: kbProfileKey,
+        ),
+      );
   }
 }

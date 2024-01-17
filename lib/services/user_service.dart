@@ -17,12 +17,25 @@ class UserService {
   final _logger = getLogger('UserService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
-  Future<Either<IdentityException, List<UserProfileModel>>> getAll() async {
+  Future<Either<IdentityException, List<UserProfileModel>>> getAll({
+    String name = '',
+    String email = '',
+    String sortBy = '',
+    int page = 1,
+    int pageSize = 10,
+  }) async {
     try {
       final response = await _httpClient.get(
         uriFromEnv(
           ApiConstants.baseUrl,
           ApiConstants.usersUrl,
+          queryParams: {
+            'name': name,
+            'email': email,
+            'sortBy': sortBy,
+            'page': page.toString(),
+            'pageSize': pageSize.toString(),
+          },
         ),
       );
 
@@ -38,7 +51,7 @@ class UserService {
           });
 
         return right(users);
-      } else {
+      } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while retrieving users: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving users: ${response.body}'),
@@ -49,6 +62,17 @@ class UserService {
             response.statusCode,
             'Session expired',
             Errors([]),
+          ),
+        );
+      } else {
+        _logger.e('Error while retrieving users: ${response.body}');
+        await Sentry.captureException(
+          Exception('Error while retrieving users: ${response.body}'),
+        );
+
+        return left(
+          IdentityException.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
           ),
         );
       }

@@ -98,13 +98,8 @@ class AppSidebar extends StatelessWidget {
                                 redact: true,
                               ),
                               (data) => CircleAvatar(
-                                radius: kdSidebarAvatarShapeRadius,
-                                child: ClipOval(
-                                  child: Image.memory(
-                                    data,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
+                                radius: kdUserListAvatarShapeRadius,
+                                backgroundImage: MemoryImage(data),
                               ),
                             )
                         : const FlutterLogo(size: 50).redacted(

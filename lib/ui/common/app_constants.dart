@@ -13,6 +13,7 @@ const double kdDesktopSubtitleTextSize = 14;
 // busy keys
 const String kbLoginKey = 'login';
 const String kbRegisterKey = 'register';
+const String kbProfileKey = 'profile';
 
 // validation constants
 const int kMinUsernameLength = 3;

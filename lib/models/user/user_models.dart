@@ -48,3 +48,17 @@ class UserProfileModel {
         'profilePictureId': profilePictureId,
       };
 }
+
+enum SortUsersBy {
+  nameAsc,
+  nameDesc,
+  emailAsc,
+  emailDesc;
+
+  String get value => switch (this) {
+        SortUsersBy.nameAsc => 'NameAsc',
+        SortUsersBy.nameDesc => 'NameDesc',
+        SortUsersBy.emailAsc => 'EmailAsc',
+        SortUsersBy.emailDesc => 'EmailDesc',
+      };
+}
