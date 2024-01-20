@@ -6,23 +6,26 @@ import 'package:http/browser_client.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/extensions/http_extensions.dart';
+import 'package:midgard/models/auth/refresh_token_models.dart';
 import 'package:midgard/models/exceptions/identity_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
+import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:sentry/sentry.dart';
 
 class UserService {
   final _hiveService = locator<HiveService>();
+  final _authService = locator<AuthService>();
   final _logger = getLogger('UserService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
   Future<Either<IdentityException, List<UserProfileModel>>> getAll({
-    String name = '',
-    String email = '',
-    String sortBy = '',
-    int page = 1,
-    int pageSize = 10,
+    String? name,
+    String? email,
+    String? sortBy,
+    int? page,
+    int? pageSize,
   }) async {
     try {
       final response = await _httpClient.get(
@@ -30,11 +33,11 @@ class UserService {
           ApiConstants.baseUrl,
           ApiConstants.usersUrl,
           queryParams: {
-            'name': name,
-            'email': email,
-            'sortBy': sortBy,
-            'page': page.toString(),
-            'pageSize': pageSize.toString(),
+            'name': name ?? '',
+            'email': email ?? '',
+            'sortBy': sortBy ?? 'NameAsc',
+            'page': page == null ? '1' : page.toString(),
+            'pageSize': pageSize == null ? '10' : pageSize.toString(),
           },
         ),
       );
@@ -57,11 +60,31 @@ class UserService {
           Exception('Error while retrieving users: ${response.body}'),
         );
 
-        return left(
-          IdentityException(
-            response.statusCode,
-            'Session expired',
-            Errors([]),
+        await HiveService.userProfileBox;
+        final currentUserId = _hiveService
+            .getCurrentUserProfile()
+            .fold(() => '', (user) => user.userId);
+
+        final refreshTokenRequest = RefreshTokenRequest(
+          userId: currentUserId,
+        );
+        final refreshTokenResponse =
+            await _authService.refreshToken(refreshTokenRequest);
+
+        return refreshTokenResponse.fold(
+          (l) => left(
+            IdentityException(
+              response.statusCode,
+              'Session expired',
+              Errors([]),
+            ),
+          ),
+          (r) => getAll(
+            name: name,
+            email: email,
+            sortBy: sortBy,
+            page: page,
+            pageSize: pageSize,
           ),
         );
       } else {

@@ -733,11 +733,11 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
   @override
   _i5.Future<
       _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>> getAll({
-    String? name = r'',
-    String? email = r'',
-    String? sortBy = r'',
-    int? page = 1,
-    int? pageSize = 10,
+    String? name,
+    String? email,
+    String? sortBy,
+    int? page,
+    int? pageSize,
   }) =>
       (super.noSuchMethod(
         Invocation.method(

@@ -4,8 +4,8 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:midgard/ui/views/profile/profile_view.form.dart';
-import 'package:midgard/ui/views/profile/profile_viewmodel.dart';
+import 'package:midgard/ui/views/profile/profiles_view.form.dart';
+import 'package:midgard/ui/views/profile/profiles_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_sidebar.dart';
 import 'package:redacted/redacted.dart';
 import 'package:stacked/stacked.dart';
@@ -37,16 +37,16 @@ import 'package:stacked/stacked_annotations.dart';
       ],
     ),
     FormTextField(name: 'page'),
-    FormTextField(name: 'limit'),
+    FormTextField(name: 'pageSize'),
   ],
 )
-class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
-  const ProfileView({super.key});
+class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
+  const ProfilesView({super.key});
 
   @override
   Widget builder(
     BuildContext context,
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
@@ -67,11 +67,13 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: kdProfileViewPadding,
+                  horizontal: kdProfilesViewPadding,
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildFormHeader(viewModel),
+                    verticalSpaceMedium,
                     if (viewModel.isBusy)
                       const CircularProgressIndicator()
                     else
@@ -87,36 +89,44 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
   }
 
   Widget _buildFormHeader(
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         _buildFilterNameField(viewModel),
-        horizontalSpaceTiny,
+        horizontalSpaceSmall,
         _buildFilterEmailField(viewModel),
-        horizontalSpaceTiny,
+        horizontalSpaceSmall,
         _buildFilterSortByField(viewModel),
-        horizontalSpaceTiny,
+        horizontalSpaceSmall,
         _buildFilterPageField(viewModel),
-        horizontalSpaceTiny,
+        horizontalSpaceSmall,
         _buildFilterLimitField(viewModel),
-        horizontalSpaceTiny,
+        horizontalSpaceSmall,
         IconButton(
           icon: const Icon(Icons.filter_list),
-          onPressed: () {},
+          onPressed: () {
+            viewModel.reinitialise();
+          },
         ),
       ],
     );
   }
 
   Widget _buildFilterNameField(
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return Expanded(
       child: TextFormField(
         decoration: const InputDecoration(
           hintText: 'Name',
+          contentPadding: EdgeInsets.all(kdProfilesViewNameFieldPadding),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+          ),
         ),
         focusNode: nameFocusNode,
         keyboardType: TextInputType.name,
@@ -127,12 +137,18 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
   }
 
   Widget _buildFilterEmailField(
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return Expanded(
       child: TextFormField(
         decoration: const InputDecoration(
           hintText: 'Email',
+          contentPadding: EdgeInsets.all(kdProfilesViewEmailFieldPadding),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+          ),
         ),
         focusNode: emailFocusNode,
         keyboardType: TextInputType.emailAddress,
@@ -143,12 +159,18 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
   }
 
   Widget _buildFilterSortByField(
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return Expanded(
       child: DropdownButtonFormField<String>(
         decoration: const InputDecoration(
           hintText: 'Sort By',
+          contentPadding: EdgeInsets.all(kdProfilesViewSortByFieldPadding),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+          ),
         ),
         items: const [
           DropdownMenuItem(
@@ -168,18 +190,28 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
             child: Text('Email Desc'),
           ),
         ],
-        onChanged: (String? value) {},
+        onChanged: (String? value) {
+          if (value != null) {
+            viewModel.setSortBy(value);
+          }
+        },
       ),
     );
   }
 
   Widget _buildFilterPageField(
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return Expanded(
       child: TextFormField(
         decoration: const InputDecoration(
           hintText: 'Page',
+          contentPadding: EdgeInsets.all(kdProfilesViewPageFieldPadding),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+          ),
         ),
         focusNode: pageFocusNode,
         keyboardType: TextInputType.number,
@@ -193,17 +225,23 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
   }
 
   Widget _buildFilterLimitField(
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return Expanded(
       child: TextFormField(
         decoration: const InputDecoration(
-          hintText: 'Limit',
+          hintText: 'Page Size',
+          contentPadding: EdgeInsets.all(kdProfilesViewPageSizeFieldPadding),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+          ),
         ),
-        focusNode: limitFocusNode,
+        focusNode: pageSizeFocusNode,
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
-        controller: limitController,
+        controller: pageSizeController,
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
         ],
@@ -213,7 +251,7 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
 
   Widget _buildUsersGridView(
     BuildContext context,
-    ProfileViewModel viewModel,
+    ProfilesViewModel viewModel,
   ) {
     return GridView.builder(
       shrinkWrap: true,
@@ -225,60 +263,61 @@ class ProfileView extends StackedView<ProfileViewModel> with $ProfileView {
       itemBuilder: (context, index) {
         final user = viewModel.users[index];
 
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              FutureBuilder(
-                future: HiveService.avatarDataBox,
-                builder: (context, snapshot) {
-                  return snapshot.connectionState == ConnectionState.done
-                      ? viewModel.hiveService
-                          .getUserAvatarBlob(user.userId)
-                          .fold(
-                            () => const FlutterLogo(size: 50).redacted(
-                              context: context,
-                              redact: true,
-                            ),
-                            (data) => CircleAvatar(
-                              radius: kdUserListAvatarShapeRadius,
-                              backgroundImage: MemoryImage(data),
-                            ),
-                          )
-                      : const FlutterLogo(size: 50).redacted(
-                          context: context,
-                          redact: true,
-                        );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  user.username,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FutureBuilder(
+              future: HiveService.avatarDataBox,
+              builder: (context, snapshot) {
+                return snapshot.connectionState == ConnectionState.done
+                    ? viewModel.hiveService.getUserAvatarBlob(user.userId).fold(
+                          () => const FlutterLogo(size: 50).redacted(
+                            context: context,
+                            redact: true,
+                          ),
+                          (data) => CircleAvatar(
+                            radius: kdProfilesViewUserListAvatarShapeRadius,
+                            backgroundImage: MemoryImage(data),
+                          ),
+                        )
+                    : const FlutterLogo(size: 50).redacted(
+                        context: context,
+                        redact: true,
+                      );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                user.username,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
   }
 
   @override
-  void onViewModelReady(ProfileViewModel viewModel) {
+  void onViewModelReady(ProfilesViewModel viewModel) {
     super.onViewModelReady(viewModel);
-    viewModel.initialise();
+
+    viewModel.reinitialise();
+    syncFormWithViewModel(viewModel);
   }
 
   @override
-  ProfileViewModel viewModelBuilder(BuildContext context) => ProfileViewModel();
+  ProfilesViewModel viewModelBuilder(BuildContext context) =>
+      ProfilesViewModel();
 
   @override
-  void onDispose(ProfileViewModel viewModel) {
+  void onDispose(ProfilesViewModel viewModel) {
     super.onDispose(viewModel);
+    disposeForm();
     viewModel.sidebarController.dispose();
   }
 }

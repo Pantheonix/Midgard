@@ -149,16 +149,21 @@ const double kdAboutViewTextSize = 15;
 const double kdAboutViewTextLetterSpacing = 1;
 const double kdAboutViewTextPadding = 15;
 
-// profile view
-const double kdProfileViewPadding = 20;
-const double kdUserListAvatarShapeRadius = 70;
+// profiles view
+const double kdProfilesViewPadding = 20;
+const double kdProfilesViewUserListAvatarShapeRadius = 80;
+const double kdProfilesViewNameFieldPadding = 10;
+const double kdProfilesViewEmailFieldPadding = 10;
+const double kdProfilesViewSortByFieldPadding = 10;
+const double kdProfilesViewPageFieldPadding = 10;
+const double kdProfilesViewPageSizeFieldPadding = 10;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
 const int kiSidebarAboutMenuIndex = 1;
 const int kiSidebarLoginMenuIndex = 2;
 const int kiSidebarRegisterMenuIndex = 3;
-const int kiSidebarProfileMenuIndex = 3;
+const int kiSidebarProfilesMenuIndex = 3;
 
 const double kdSidebarPadding = 10;
 const double kdSidebarShapeRadius = 20;
@@ -179,4 +184,4 @@ const String ksSidebarAboutMenuText = 'About';
 const String ksSidebarLoginMenuText = 'Login';
 const String ksSidebarRegisterMenuText = 'Register';
 const String ksSidebarLogoutMenuText = 'Logout';
-const String ksSidebarProfileMenuText = 'Profile';
+const String ksSidebarProfilesMenuText = 'Profiles';

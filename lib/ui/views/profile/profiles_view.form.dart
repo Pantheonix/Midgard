@@ -15,7 +15,7 @@ const String NameValueKey = 'name';
 const String EmailValueKey = 'email';
 const String SortByValueKey = 'sortBy';
 const String PageValueKey = 'page';
-const String LimitValueKey = 'limit';
+const String PageSizeValueKey = 'pageSize';
 
 final Map<String, String> SortByValueToTitleMap = {
   'NameAsc': 'Name Asc',
@@ -24,52 +24,52 @@ final Map<String, String> SortByValueToTitleMap = {
   'EmailDesc': 'Email Desc',
 };
 
-final Map<String, TextEditingController> _ProfileViewTextEditingControllers =
+final Map<String, TextEditingController> _ProfilesViewTextEditingControllers =
     {};
 
-final Map<String, FocusNode> _ProfileViewFocusNodes = {};
+final Map<String, FocusNode> _ProfilesViewFocusNodes = {};
 
-final Map<String, String? Function(String?)?> _ProfileViewTextValidations = {
+final Map<String, String? Function(String?)?> _ProfilesViewTextValidations = {
   NameValueKey: null,
   EmailValueKey: null,
   PageValueKey: null,
-  LimitValueKey: null,
+  PageSizeValueKey: null,
 };
 
-mixin $ProfileView {
+mixin $ProfilesView {
   TextEditingController get nameController =>
       _getFormTextEditingController(NameValueKey);
   TextEditingController get emailController =>
       _getFormTextEditingController(EmailValueKey);
   TextEditingController get pageController =>
       _getFormTextEditingController(PageValueKey);
-  TextEditingController get limitController =>
-      _getFormTextEditingController(LimitValueKey);
+  TextEditingController get pageSizeController =>
+      _getFormTextEditingController(PageSizeValueKey);
 
   FocusNode get nameFocusNode => _getFormFocusNode(NameValueKey);
   FocusNode get emailFocusNode => _getFormFocusNode(EmailValueKey);
   FocusNode get pageFocusNode => _getFormFocusNode(PageValueKey);
-  FocusNode get limitFocusNode => _getFormFocusNode(LimitValueKey);
+  FocusNode get pageSizeFocusNode => _getFormFocusNode(PageSizeValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
     String? initialValue,
   }) {
-    if (_ProfileViewTextEditingControllers.containsKey(key)) {
-      return _ProfileViewTextEditingControllers[key]!;
+    if (_ProfilesViewTextEditingControllers.containsKey(key)) {
+      return _ProfilesViewTextEditingControllers[key]!;
     }
 
-    _ProfileViewTextEditingControllers[key] =
+    _ProfilesViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
-    return _ProfileViewTextEditingControllers[key]!;
+    return _ProfilesViewTextEditingControllers[key]!;
   }
 
   FocusNode _getFormFocusNode(String key) {
-    if (_ProfileViewFocusNodes.containsKey(key)) {
-      return _ProfileViewFocusNodes[key]!;
+    if (_ProfilesViewFocusNodes.containsKey(key)) {
+      return _ProfilesViewFocusNodes[key]!;
     }
-    _ProfileViewFocusNodes[key] = FocusNode();
-    return _ProfileViewFocusNodes[key]!;
+    _ProfilesViewFocusNodes[key] = FocusNode();
+    return _ProfilesViewFocusNodes[key]!;
   }
 
   /// Registers a listener on every generated controller that calls [model.setData()]
@@ -78,7 +78,7 @@ mixin $ProfileView {
     nameController.addListener(() => _updateFormData(model));
     emailController.addListener(() => _updateFormData(model));
     pageController.addListener(() => _updateFormData(model));
-    limitController.addListener(() => _updateFormData(model));
+    pageSizeController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -93,7 +93,7 @@ mixin $ProfileView {
     nameController.addListener(() => _updateFormData(model));
     emailController.addListener(() => _updateFormData(model));
     pageController.addListener(() => _updateFormData(model));
-    limitController.addListener(() => _updateFormData(model));
+    pageSizeController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -106,7 +106,7 @@ mixin $ProfileView {
           NameValueKey: nameController.text,
           EmailValueKey: emailController.text,
           PageValueKey: pageController.text,
-          LimitValueKey: limitController.text,
+          PageSizeValueKey: pageSizeController.text,
         }),
     );
 
@@ -124,15 +124,15 @@ mixin $ProfileView {
   void disposeForm() {
     // The dispose function for a TextEditingController sets all listeners to null
 
-    for (var controller in _ProfileViewTextEditingControllers.values) {
+    for (var controller in _ProfilesViewTextEditingControllers.values) {
       controller.dispose();
     }
-    for (var focusNode in _ProfileViewFocusNodes.values) {
+    for (var focusNode in _ProfilesViewFocusNodes.values) {
       focusNode.dispose();
     }
 
-    _ProfileViewTextEditingControllers.clear();
-    _ProfileViewFocusNodes.clear();
+    _ProfilesViewTextEditingControllers.clear();
+    _ProfilesViewFocusNodes.clear();
   }
 }
 
@@ -152,15 +152,15 @@ extension ValueProperties on FormStateHelper {
   String? get emailValue => this.formValueMap[EmailValueKey] as String?;
   String? get sortByValue => this.formValueMap[SortByValueKey] as String?;
   String? get pageValue => this.formValueMap[PageValueKey] as String?;
-  String? get limitValue => this.formValueMap[LimitValueKey] as String?;
+  String? get pageSizeValue => this.formValueMap[PageSizeValueKey] as String?;
 
   set nameValue(String? value) {
     this.setData(
       this.formValueMap..addAll({NameValueKey: value}),
     );
 
-    if (_ProfileViewTextEditingControllers.containsKey(NameValueKey)) {
-      _ProfileViewTextEditingControllers[NameValueKey]?.text = value ?? '';
+    if (_ProfilesViewTextEditingControllers.containsKey(NameValueKey)) {
+      _ProfilesViewTextEditingControllers[NameValueKey]?.text = value ?? '';
     }
   }
 
@@ -169,8 +169,8 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({EmailValueKey: value}),
     );
 
-    if (_ProfileViewTextEditingControllers.containsKey(EmailValueKey)) {
-      _ProfileViewTextEditingControllers[EmailValueKey]?.text = value ?? '';
+    if (_ProfilesViewTextEditingControllers.containsKey(EmailValueKey)) {
+      _ProfilesViewTextEditingControllers[EmailValueKey]?.text = value ?? '';
     }
   }
 
@@ -179,18 +179,18 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({PageValueKey: value}),
     );
 
-    if (_ProfileViewTextEditingControllers.containsKey(PageValueKey)) {
-      _ProfileViewTextEditingControllers[PageValueKey]?.text = value ?? '';
+    if (_ProfilesViewTextEditingControllers.containsKey(PageValueKey)) {
+      _ProfilesViewTextEditingControllers[PageValueKey]?.text = value ?? '';
     }
   }
 
-  set limitValue(String? value) {
+  set pageSizeValue(String? value) {
     this.setData(
-      this.formValueMap..addAll({LimitValueKey: value}),
+      this.formValueMap..addAll({PageSizeValueKey: value}),
     );
 
-    if (_ProfileViewTextEditingControllers.containsKey(LimitValueKey)) {
-      _ProfileViewTextEditingControllers[LimitValueKey]?.text = value ?? '';
+    if (_ProfilesViewTextEditingControllers.containsKey(PageSizeValueKey)) {
+      _ProfilesViewTextEditingControllers[PageSizeValueKey]?.text = value ?? '';
     }
   }
 
@@ -204,9 +204,9 @@ extension ValueProperties on FormStateHelper {
   bool get hasPage =>
       this.formValueMap.containsKey(PageValueKey) &&
       (pageValue?.isNotEmpty ?? false);
-  bool get hasLimit =>
-      this.formValueMap.containsKey(LimitValueKey) &&
-      (limitValue?.isNotEmpty ?? false);
+  bool get hasPageSize =>
+      this.formValueMap.containsKey(PageSizeValueKey) &&
+      (pageSizeValue?.isNotEmpty ?? false);
 
   bool get hasNameValidationMessage =>
       this.fieldsValidationMessages[NameValueKey]?.isNotEmpty ?? false;
@@ -216,8 +216,8 @@ extension ValueProperties on FormStateHelper {
       this.fieldsValidationMessages[SortByValueKey]?.isNotEmpty ?? false;
   bool get hasPageValidationMessage =>
       this.fieldsValidationMessages[PageValueKey]?.isNotEmpty ?? false;
-  bool get hasLimitValidationMessage =>
-      this.fieldsValidationMessages[LimitValueKey]?.isNotEmpty ?? false;
+  bool get hasPageSizeValidationMessage =>
+      this.fieldsValidationMessages[PageSizeValueKey]?.isNotEmpty ?? false;
 
   String? get nameValidationMessage =>
       this.fieldsValidationMessages[NameValueKey];
@@ -227,8 +227,8 @@ extension ValueProperties on FormStateHelper {
       this.fieldsValidationMessages[SortByValueKey];
   String? get pageValidationMessage =>
       this.fieldsValidationMessages[PageValueKey];
-  String? get limitValidationMessage =>
-      this.fieldsValidationMessages[LimitValueKey];
+  String? get pageSizeValidationMessage =>
+      this.fieldsValidationMessages[PageSizeValueKey];
 }
 
 extension Methods on FormStateHelper {
@@ -250,15 +250,15 @@ extension Methods on FormStateHelper {
       this.fieldsValidationMessages[SortByValueKey] = validationMessage;
   setPageValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[PageValueKey] = validationMessage;
-  setLimitValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[LimitValueKey] = validationMessage;
+  setPageSizeValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[PageSizeValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
     nameValue = '';
     emailValue = '';
     pageValue = '';
-    limitValue = '';
+    pageSizeValue = '';
   }
 
   /// Validates text input fields on the Form
@@ -267,18 +267,18 @@ extension Methods on FormStateHelper {
       NameValueKey: getValidationMessage(NameValueKey),
       EmailValueKey: getValidationMessage(EmailValueKey),
       PageValueKey: getValidationMessage(PageValueKey),
-      LimitValueKey: getValidationMessage(LimitValueKey),
+      PageSizeValueKey: getValidationMessage(PageSizeValueKey),
     });
   }
 }
 
 /// Returns the validation message for the given key
 String? getValidationMessage(String key) {
-  final validatorForKey = _ProfileViewTextValidations[key];
+  final validatorForKey = _ProfilesViewTextValidations[key];
   if (validatorForKey == null) return null;
 
   String? validationMessageForKey = validatorForKey(
-    _ProfileViewTextEditingControllers[key]!.text,
+    _ProfilesViewTextEditingControllers[key]!.text,
   );
 
   return validationMessageForKey;
@@ -290,5 +290,5 @@ void updateValidationData(FormStateHelper model) =>
       NameValueKey: getValidationMessage(NameValueKey),
       EmailValueKey: getValidationMessage(EmailValueKey),
       PageValueKey: getValidationMessage(PageValueKey),
-      LimitValueKey: getValidationMessage(LimitValueKey),
+      PageSizeValueKey: getValidationMessage(PageSizeValueKey),
     });

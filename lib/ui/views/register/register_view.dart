@@ -678,5 +678,6 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
     super.onDispose(viewModel);
     // Hive.close();
     disposeForm();
+    viewModel.sidebarController.dispose();
   }
 }

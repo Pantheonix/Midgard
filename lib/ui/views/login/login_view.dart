@@ -443,5 +443,6 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     super.onDispose(viewModel);
     // Hive.close();
     disposeForm();
+    viewModel.sidebarController.dispose();
   }
 }

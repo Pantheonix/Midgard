@@ -5,18 +5,19 @@ import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
+import 'package:midgard/ui/views/profile/profiles_view.form.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class ProfileViewModel extends FormViewModel {
+class ProfilesViewModel extends FormViewModel {
   final _userService = locator<UserService>();
   final _hiveService = locator<HiveService>();
   final _routerService = locator<RouterService>();
-  final _logger = getLogger('ProfileViewModel');
+  final _logger = getLogger('ProfilesViewModel');
 
   final _sidebarController = SidebarXController(
-    selectedIndex: kiSidebarProfileMenuIndex,
+    selectedIndex: kiSidebarProfilesMenuIndex,
     extended: true,
   );
 
@@ -30,9 +31,19 @@ class ProfileViewModel extends FormViewModel {
 
   List<UserProfileModel> get users => _users;
 
-  Future<List<UserProfileModel>> getUsers() async {
+  Future<List<UserProfileModel>> getUsers({
+    String? name,
+    String? email,
+    String? sortBy,
+    int? page,
+    int? pageSize,
+  }) async {
     final result = await _userService.getAll(
-      sortBy: SortUsersBy.nameAsc.value,
+      name: name,
+      email: email,
+      sortBy: sortBy,
+      page: page,
+      pageSize: pageSize,
     );
 
     return result.fold(
@@ -47,14 +58,24 @@ class ProfileViewModel extends FormViewModel {
     );
   }
 
-  Future<void> initialise() async {
-    _logger.i('ProfileViewModel initialised');
+  Future<void> reinitialise() async {
+    _logger.i('Users list reinitialised');
 
     _users
       ..clear()
       ..addAll(
         await runBusyFuture(
-          getUsers(),
+          getUsers(
+            name: nameValue,
+            email: emailValue,
+            sortBy: sortByValue,
+            page: pageValue == null || pageValue!.isEmpty
+                ? null
+                : int.parse(pageValue!),
+            pageSize: pageSizeValue == null || pageSizeValue!.isEmpty
+                ? null
+                : int.parse(pageSizeValue!),
+          ),
           busyObject: kbProfileKey,
         ),
       );

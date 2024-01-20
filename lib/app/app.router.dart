@@ -12,7 +12,7 @@ import 'package:stacked_services/stacked_services.dart' as _i8;
 import '../ui/views/about/about_view.dart' as _i5;
 import '../ui/views/home/home_view.dart' as _i2;
 import '../ui/views/login/login_view.dart' as _i3;
-import '../ui/views/profile/profile_view.dart' as _i6;
+import '../ui/views/profile/profiles_view.dart' as _i6;
 import '../ui/views/register/register_view.dart' as _i4;
 import '../ui/views/startup/startup_view.dart' as _i1;
 import '../ui/views/unknown/unknown_view.dart' as _i7;
@@ -60,10 +60,10 @@ class StackedRouterWeb extends _i9.RootStackRouter {
         child: const _i5.AboutView(),
       );
     },
-    ProfileViewRoute.name: (routeData) {
+    ProfilesViewRoute.name: (routeData) {
       return _i9.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i6.ProfileView(),
+        child: const _i6.ProfilesView(),
       );
     },
     UnknownViewRoute.name: (routeData) {
@@ -99,8 +99,8 @@ class StackedRouterWeb extends _i9.RootStackRouter {
           path: '/about',
         ),
         _i9.RouteConfig(
-          ProfileViewRoute.name,
-          path: '/profile',
+          ProfilesViewRoute.name,
+          path: '/profiles',
         ),
         _i9.RouteConfig(
           UnknownViewRoute.name,
@@ -176,15 +176,15 @@ class AboutViewRoute extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i6.ProfileView]
-class ProfileViewRoute extends _i9.PageRouteInfo<void> {
-  const ProfileViewRoute()
+/// [_i6.ProfilesView]
+class ProfilesViewRoute extends _i9.PageRouteInfo<void> {
+  const ProfilesViewRoute()
       : super(
-          ProfileViewRoute.name,
-          path: '/profile',
+          ProfilesViewRoute.name,
+          path: '/profiles',
         );
 
-  static const String name = 'ProfileView';
+  static const String name = 'ProfilesView';
 }
 
 /// generated route for
@@ -240,10 +240,10 @@ extension RouterStateExtension on _i8.RouterService {
     );
   }
 
-  Future<dynamic> navigateToProfileView(
+  Future<dynamic> navigateToProfilesView(
       {void Function(_i9.NavigationFailure)? onFailure}) async {
     return navigateTo(
-      const ProfileViewRoute(),
+      const ProfilesViewRoute(),
       onFailure: onFailure,
     );
   }
@@ -296,10 +296,10 @@ extension RouterStateExtension on _i8.RouterService {
     );
   }
 
-  Future<dynamic> replaceWithProfileView(
+  Future<dynamic> replaceWithProfilesView(
       {void Function(_i9.NavigationFailure)? onFailure}) async {
     return replaceWith(
-      const ProfileViewRoute(),
+      const ProfilesViewRoute(),
       onFailure: onFailure,
     );
   }

@@ -98,7 +98,7 @@ class AppSidebar extends StatelessWidget {
                                 redact: true,
                               ),
                               (data) => CircleAvatar(
-                                radius: kdUserListAvatarShapeRadius,
+                                radius: kdSidebarAvatarShapeRadius,
                                 backgroundImage: MemoryImage(data),
                               ),
                             )
@@ -157,9 +157,9 @@ class AppSidebar extends StatelessWidget {
                       ),
                       SidebarXItem(
                         icon: Icons.account_circle,
-                        label: ksSidebarProfileMenuText,
+                        label: ksSidebarProfilesMenuText,
                         onTap: () async {
-                          await _routerService.replaceWithProfileView();
+                          await _routerService.replaceWithProfilesView();
                         },
                       ),
                     ],
