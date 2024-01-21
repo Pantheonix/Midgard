@@ -5,7 +5,7 @@ import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:midgard/ui/views/profile/profiles_view.form.dart';
+import 'package:midgard/ui/views/profiles/profiles_view.form.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
