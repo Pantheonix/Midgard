@@ -1,13 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/profile/profiles_view.form.dart';
 import 'package:midgard/ui/views/profile/profiles_viewmodel.dart';
-import 'package:midgard/ui/widgets/app_primitives/app_sidebar.dart';
-import 'package:redacted/redacted.dart';
+import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -52,16 +51,13 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     return Scaffold(
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
-        routerService: viewModel.routerService,
-        hiveService: viewModel.hiveService,
       ),
       backgroundColor: kcWhite,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
-            routerService: viewModel.routerService,
-            hiveService: viewModel.hiveService,
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -70,12 +66,13 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                   horizontal: kdProfilesViewPadding,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildFormHeader(viewModel),
                     verticalSpaceMedium,
-                    if (viewModel.isBusy)
-                      const CircularProgressIndicator()
+                    if (viewModel.busy(kbProfilesKey))
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      )
                     else
                       _buildUsersGridView(context, viewModel),
                   ],
@@ -107,7 +104,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
         IconButton(
           icon: const Icon(Icons.filter_list),
           onPressed: () {
-            viewModel.reinitialise();
+            viewModel.reinitialize();
           },
         ),
       ],
@@ -258,7 +255,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: viewModel.users.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: kiProfilesViewUsersGridCrossAxisCount,
       ),
       itemBuilder: (context, index) {
         final user = viewModel.users[index];
@@ -267,28 +264,19 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FutureBuilder(
-              future: HiveService.avatarDataBox,
-              builder: (context, snapshot) {
-                return snapshot.connectionState == ConnectionState.done
-                    ? viewModel.hiveService.getUserAvatarBlob(user.userId).fold(
-                          () => const FlutterLogo(size: 50).redacted(
-                            context: context,
-                            redact: true,
-                          ),
-                          (data) => CircleAvatar(
-                            radius: kdProfilesViewUserListAvatarShapeRadius,
-                            backgroundImage: MemoryImage(data),
-                          ),
-                        )
-                    : const FlutterLogo(size: 50).redacted(
-                        context: context,
-                        redact: true,
-                      );
-              },
+            CachedNetworkImage(
+              imageUrl: user.profilePictureUrl,
+              placeholder: (context, url) => const FlutterLogo(size: 50),
+              errorWidget: (context, url, error) => const FlutterLogo(size: 50),
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: kdProfilesViewUserListAvatarShapeRadius,
+                backgroundImage: imageProvider,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(
+                kdProfilesViewAvatarUsernamePadding,
+              ),
               child: Text(
                 user.username,
                 style: const TextStyle(
@@ -306,8 +294,8 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
   void onViewModelReady(ProfilesViewModel viewModel) {
     super.onViewModelReady(viewModel);
 
-    viewModel.reinitialise();
     syncFormWithViewModel(viewModel);
+    viewModel.reinitialize();
   }
 
   @override

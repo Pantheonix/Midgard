@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+import 'package:midgard/extensions/http_extensions.dart';
+import 'package:midgard/services/services_constants.dart';
 
 part 'user_models.g.dart';
 
@@ -47,6 +49,11 @@ class UserProfileModel {
         'bio': bio,
         'profilePictureId': profilePictureId,
       };
+
+  String get profilePictureUrl {
+    final imageUrl = uriFromEnv(ApiConstants.baseUrl, ApiConstants.imageUrl);
+    return '$imageUrl/$profilePictureId';
+  }
 }
 
 enum SortUsersBy {

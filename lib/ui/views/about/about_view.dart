@@ -3,7 +3,7 @@ import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/views/about/about_viewmodel.dart';
-import 'package:midgard/ui/widgets/app_primitives/app_sidebar.dart';
+import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 
 class AboutView extends StackedView<AboutViewModel> {
@@ -18,16 +18,12 @@ class AboutView extends StackedView<AboutViewModel> {
     return Scaffold(
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
-        routerService: viewModel.routerService,
-        hiveService: viewModel.hiveService,
       ),
       backgroundColor: kcWhite,
       body: Row(
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
-            routerService: viewModel.routerService,
-            hiveService: viewModel.hiveService,
           ),
           Expanded(
             child: SingleChildScrollView(

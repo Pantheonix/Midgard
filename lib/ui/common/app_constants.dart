@@ -13,7 +13,7 @@ const double kdDesktopSubtitleTextSize = 14;
 // busy keys
 const String kbLoginKey = 'login';
 const String kbRegisterKey = 'register';
-const String kbProfileKey = 'profile';
+const String kbProfilesKey = 'profile';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -157,6 +157,8 @@ const double kdProfilesViewEmailFieldPadding = 10;
 const double kdProfilesViewSortByFieldPadding = 10;
 const double kdProfilesViewPageFieldPadding = 10;
 const double kdProfilesViewPageSizeFieldPadding = 10;
+const double kdProfilesViewAvatarUsernamePadding = 8;
+const int kiProfilesViewUsersGridCrossAxisCount = 4;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

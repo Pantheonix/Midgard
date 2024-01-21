@@ -48,10 +48,7 @@ class UserService {
 
         final users = usersJson
             .map((e) => UserProfileModel.fromJson(e as Map<String, dynamic>))
-            .toList()
-          ..forEach((user) async {
-            await _hiveService.saveUserProfile(user);
-          });
+            .toList();
 
         return right(users);
       } else if (response.statusCode == HttpStatus.unauthorized) {

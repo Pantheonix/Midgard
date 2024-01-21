@@ -58,8 +58,8 @@ class ProfilesViewModel extends FormViewModel {
     );
   }
 
-  Future<void> reinitialise() async {
-    _logger.i('Users list reinitialised');
+  Future<void> reinitialize() async {
+    _logger.i('Users list reinitialized');
 
     _users
       ..clear()
@@ -76,7 +76,7 @@ class ProfilesViewModel extends FormViewModel {
                 ? null
                 : int.parse(pageSizeValue!),
           ),
-          busyObject: kbProfileKey,
+          busyObject: kbProfilesKey,
         ),
       );
   }
