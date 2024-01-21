@@ -12,7 +12,7 @@ import 'package:stacked_services/stacked_services.dart' as _i8;
 import '../ui/views/about/about_view.dart' as _i5;
 import '../ui/views/home/home_view.dart' as _i2;
 import '../ui/views/login/login_view.dart' as _i3;
-import '../ui/views/profile/profiles_view.dart' as _i6;
+import '../ui/views/profiles/profiles_view.dart' as _i6;
 import '../ui/views/register/register_view.dart' as _i4;
 import '../ui/views/startup/startup_view.dart' as _i1;
 import '../ui/views/unknown/unknown_view.dart' as _i7;
