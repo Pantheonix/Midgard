@@ -12,7 +12,6 @@ import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
-import 'package:sentry/sentry.dart';
 
 class UserService {
   final _hiveService = locator<HiveService>();
@@ -53,9 +52,6 @@ class UserService {
         return right(users);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while retrieving users: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving users: ${response.body}'),
-        );
 
         await HiveService.userProfileBox;
         final currentUserId = _hiveService
@@ -86,9 +82,6 @@ class UserService {
         );
       } else {
         _logger.e('Error while retrieving users: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving users: ${response.body}'),
-        );
 
         return left(
           IdentityException.fromJson(
@@ -98,10 +91,7 @@ class UserService {
       }
     } catch (e) {
       _logger.e('Error while retrieving users: $e');
-      await Sentry.captureException(
-        Exception('Error while retrieving users: $e'),
-      );
-
+     
       return left(
         IdentityException(
           500,

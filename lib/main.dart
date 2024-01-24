@@ -12,34 +12,18 @@ import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      setPathUrlStrategy();
-      await setupLocator(stackedRouter: stackedRouter);
-      setupDialogUi();
-      setupBottomSheetUi();
+  WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
+  await setupLocator(stackedRouter: stackedRouter);
+  setupDialogUi();
+  setupBottomSheetUi();
 
-      await setupHive();
-      await SentryFlutter.init(
-        (options) {
-          options
-            ..dsn = ApiConstants.sentryDsn
-            ..environment = ApiConstants.environment
-            ..tracesSampleRate = 1.0;
-        },
-      );
+  await setupHive();
 
-      runApp(const MainApp());
-    },
-    (error, stack) async {
-      await Sentry.captureException(error, stackTrace: stack);
-    },
-  );
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {

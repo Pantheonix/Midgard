@@ -29,10 +29,12 @@ COPY . $APP
 # stup new folder as the working directory
 WORKDIR $APP
 
+ARG API_BASE_URL=127.0.0.1
+
 # Run build: 1 - clean, 2 - pub get, 3 - build web
 RUN flutter clean
 RUN flutter pub get
-RUN flutter build web
+RUN flutter build web -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL
 
 # once here the app will be compiled and ready to deploy
 

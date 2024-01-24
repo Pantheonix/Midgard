@@ -12,7 +12,6 @@ import 'package:midgard/models/auth/register_models.dart';
 import 'package:midgard/models/exceptions/identity_exception.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
-import 'package:sentry/sentry.dart';
 
 class AuthService {
   final _logger = getLogger('AuthService');
@@ -35,14 +34,10 @@ class AuthService {
 
       if (response.statusCode == HttpStatus.ok) {
         _logger.i('Refresh token success');
-        await Sentry.captureMessage('Refresh token success');
 
         return right(unit);
       } else {
         _logger.e('Error while refreshing token: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while refreshing token: ${response.body}'),
-        );
 
         return left(
           IdentityException(
@@ -54,9 +49,6 @@ class AuthService {
       }
     } catch (e) {
       _logger.e('Error while refreshing token: $e');
-      await Sentry.captureException(
-        Exception('Error while refreshing token: $e'),
-      );
 
       return left(
         IdentityException(
@@ -86,14 +78,10 @@ class AuthService {
       if (response.statusCode == HttpStatus.ok) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final loginResponse = UserProfileModel.fromJson(data);
-        await Sentry.captureMessage('Login success: ${loginResponse.username}');
 
         return right(loginResponse);
       } else {
         _logger.e('Error while login: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while login: ${response.body}'),
-        );
 
         return left(
           IdentityException.fromJson(
@@ -103,9 +91,6 @@ class AuthService {
       }
     } catch (e) {
       _logger.e('Error while login: $e');
-      await Sentry.captureException(
-        Exception('Error while login: $e'),
-      );
 
       return left(
         IdentityException(
@@ -138,16 +123,10 @@ class AuthService {
       if (response.statusCode == HttpStatus.created) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final registerResponse = UserProfileModel.fromJson(data);
-        await Sentry.captureMessage(
-          'Register success: ${registerResponse.username}',
-        );
 
         return right(registerResponse);
       } else {
         _logger.e('Error while register: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while register: ${response.body}'),
-        );
 
         return left(
           IdentityException.fromJson(
@@ -157,9 +136,6 @@ class AuthService {
       }
     } catch (e) {
       _logger.e('Error while register: $e');
-      await Sentry.captureException(
-        Exception('Error while register: $e'),
-      );
 
       return left(
         IdentityException(
