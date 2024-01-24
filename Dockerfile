@@ -30,11 +30,12 @@ COPY . $APP
 WORKDIR $APP
 
 ARG API_BASE_URL=127.0.0.1
+ARG ENVIRONMENT=dev
 
 # Run build: 1 - clean, 2 - pub get, 3 - build web
 RUN flutter clean
 RUN flutter pub get
-RUN flutter build web -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL
+RUN flutter build web -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
 
 # once here the app will be compiled and ready to deploy
 

@@ -9,7 +9,6 @@ import 'package:midgard/app/app.dialogs.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/user/user_models.dart';
-import 'package:midgard/services/services_constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_strategy/url_strategy.dart';

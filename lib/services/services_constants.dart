@@ -3,6 +3,10 @@ abstract class ApiConstants {
     'API_BASE_URL',
   );
 
+  static const String environment = String.fromEnvironment(
+    'ENVIRONMENT',
+  );
+
   static const String loginUrl = '/api/identity/auth/login';
   static const String registerUrl = '/api/identity/auth/register';
   static const String refreshTokenUrl = '/api/identity/auth/refresh-token';
