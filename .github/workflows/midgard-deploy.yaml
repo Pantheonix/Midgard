@@ -5,25 +5,33 @@ on:
     branches:
       - develop
 
+    paths:
+      - "lib/**"
+      - "test/**"
+      - "web/**"
+      - "assets/**"
+      - "pubspec.yaml"
+      - ".github/workflows/**"
+
   pull_request:
     branches:
       - master
 
 jobs:
-#  semantic-pull-request:
-#    name: "Semantic"
-#    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+  #  semantic-pull-request:
+  #    name: "Semantic"
+  #    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 
-#  analyze:
-#    name: "Analyze"
-#    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-#    with:
-#      flutter_channel: stable
-#      flutter_version: 3.16.0
+  #  analyze:
+  #    name: "Analyze"
+  #    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+  #    with:
+  #      flutter_channel: stable
+  #      flutter_version: 3.16.0
 
   build:
     name: Build
-#    needs: [semantic-pull-request, analyze]
+    #    needs: [semantic-pull-request, analyze]
     runs-on: ubuntu-latest
     steps:
       - name: 📚 Git Checkout
