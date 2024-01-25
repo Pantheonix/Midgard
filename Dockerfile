@@ -1,41 +1,17 @@
-# Environemnt to install flutter and build web
-FROM debian:12.4 AS build
+FROM ghcr.io/cirruslabs/flutter:3.16.3 AS build
 
-# install all needed stuff
-RUN apt-get update
-RUN apt-get install -y curl git unzip
+RUN mkdir /app/
+COPY . /app/
+WORKDIR /app/
 
-# define variables
-ARG FLUTTER_SDK=/usr/local/flutter
-ARG FLUTTER_VERSION=3.16.3
-ARG APP=/app/
-
-#clone flutter
-RUN git clone https://github.com/flutter/flutter.git $FLUTTER_SDK
-# change dir to current flutter folder and make a checkout to the specific version
-RUN cd $FLUTTER_SDK && git fetch && git checkout $FLUTTER_VERSION
-
-# setup the flutter path as an enviromental variable
-ENV PATH="$FLUTTER_SDK/bin:$FLUTTER_SDK/bin/cache/dart-sdk/bin:${PATH}"
-
-# Start to run Flutter commands
-# doctor to see if all was installes ok
 RUN flutter doctor -v
 
-# create folder to copy source code
-RUN mkdir $APP
-# copy source code to folder
-COPY . $APP
-# stup new folder as the working directory
-WORKDIR $APP
+RUN flutter config --enable-web
 
 ENV API_BASE_URL=localhost
 ENV ENVIRONMENT=prod
 
-# Run build: 1 - clean, 2 - pub get, 3 - build web
-RUN flutter clean
-RUN flutter pub get
-RUN flutter build web -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
+RUN flutter build web --release --web-renderer=auto -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
 
 # once here the app will be compiled and ready to deploy
 
