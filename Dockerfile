@@ -29,8 +29,8 @@ COPY . $APP
 # stup new folder as the working directory
 WORKDIR $APP
 
-ARG API_BASE_URL=localhost
-ARG ENVIRONMENT=prod
+ENV API_BASE_URL=localhost
+ENV ENVIRONMENT=prod
 
 # Run build: 1 - clean, 2 - pub get, 3 - build web
 RUN flutter clean
