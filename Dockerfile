@@ -29,8 +29,8 @@ COPY . $APP
 # stup new folder as the working directory
 WORKDIR $APP
 
-ARG API_BASE_URL=127.0.0.1
-ARG ENVIRONMENT=dev
+ARG API_BASE_URL=localhost
+ARG ENVIRONMENT=prod
 
 # Run build: 1 - clean, 2 - pub get, 3 - build web
 RUN flutter clean
@@ -53,6 +53,4 @@ RUN rm -rf ./*
 # copy the info of the builded web app to nginx
 COPY --from=build /app/build/web .
 
-# Expose and run nginx
-EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
