@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
@@ -13,30 +13,6 @@ import 'package:stacked/stacked_annotations.dart';
 @FormView(
   fields: [
     FormTextField(name: 'name'),
-    FormTextField(name: 'email'),
-    FormDropdownField(
-      name: 'sortBy',
-      items: [
-        StaticDropdownItem(
-          title: 'Name Asc',
-          value: 'NameAsc',
-        ),
-        StaticDropdownItem(
-          title: 'Name Desc',
-          value: 'NameDesc',
-        ),
-        StaticDropdownItem(
-          title: 'Email Asc',
-          value: 'EmailAsc',
-        ),
-        StaticDropdownItem(
-          title: 'Email Desc',
-          value: 'EmailDesc',
-        ),
-      ],
-    ),
-    FormTextField(name: 'page'),
-    FormTextField(name: 'pageSize'),
   ],
 )
 class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
@@ -73,8 +49,11 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                       const Center(
                         child: CircularProgressIndicator(),
                       )
-                    else
-                      _buildUsersGridView(context, viewModel),
+                    else ...[
+                      _buildUsersTable(context, viewModel),
+                      verticalSpaceMedium,
+                      _buildPaginationFooter(context, viewModel),
+                    ],
                   ],
                 ),
               ),
@@ -92,14 +71,6 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         _buildFilterNameField(viewModel),
-        horizontalSpaceSmall,
-        _buildFilterEmailField(viewModel),
-        horizontalSpaceSmall,
-        _buildFilterSortByField(viewModel),
-        horizontalSpaceSmall,
-        _buildFilterPageField(viewModel),
-        horizontalSpaceSmall,
-        _buildFilterLimitField(viewModel),
         horizontalSpaceSmall,
         IconButton(
           icon: const Icon(Icons.filter_list),
@@ -133,160 +104,142 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     );
   }
 
-  Widget _buildFilterEmailField(
-    ProfilesViewModel viewModel,
-  ) {
-    return Expanded(
-      child: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Email',
-          contentPadding: EdgeInsets.all(kdProfilesViewEmailFieldPadding),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          focusedBorder: UnderlineInputBorder(),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: kcLightGrey),
-          ),
-        ),
-        focusNode: emailFocusNode,
-        keyboardType: TextInputType.emailAddress,
-        textInputAction: TextInputAction.next,
-        controller: emailController,
-      ),
-    );
-  }
-
-  Widget _buildFilterSortByField(
-    ProfilesViewModel viewModel,
-  ) {
-    return Expanded(
-      child: DropdownButtonFormField<String>(
-        decoration: const InputDecoration(
-          hintText: 'Sort By',
-          contentPadding: EdgeInsets.all(kdProfilesViewSortByFieldPadding),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          focusedBorder: UnderlineInputBorder(),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: kcLightGrey),
-          ),
-        ),
-        items: const [
-          DropdownMenuItem(
-            value: 'NameAsc',
-            child: Text('Name Asc'),
-          ),
-          DropdownMenuItem(
-            value: 'NameDesc',
-            child: Text('Name Desc'),
-          ),
-          DropdownMenuItem(
-            value: 'EmailAsc',
-            child: Text('Email Asc'),
-          ),
-          DropdownMenuItem(
-            value: 'EmailDesc',
-            child: Text('Email Desc'),
-          ),
-        ],
-        onChanged: (String? value) {
-          if (value != null) {
-            viewModel.setSortBy(value);
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildFilterPageField(
-    ProfilesViewModel viewModel,
-  ) {
-    return Expanded(
-      child: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Page',
-          contentPadding: EdgeInsets.all(kdProfilesViewPageFieldPadding),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          focusedBorder: UnderlineInputBorder(),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: kcLightGrey),
-          ),
-        ),
-        focusNode: pageFocusNode,
-        keyboardType: TextInputType.number,
-        textInputAction: TextInputAction.next,
-        controller: pageController,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilterLimitField(
-    ProfilesViewModel viewModel,
-  ) {
-    return Expanded(
-      child: TextFormField(
-        decoration: const InputDecoration(
-          hintText: 'Page Size',
-          contentPadding: EdgeInsets.all(kdProfilesViewPageSizeFieldPadding),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          focusedBorder: UnderlineInputBorder(),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: kcLightGrey),
-          ),
-        ),
-        focusNode: pageSizeFocusNode,
-        keyboardType: TextInputType.number,
-        textInputAction: TextInputAction.next,
-        controller: pageSizeController,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUsersGridView(
+  Widget _buildUsersTable(
     BuildContext context,
     ProfilesViewModel viewModel,
   ) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: viewModel.users.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: kiProfilesViewUsersGridCrossAxisCount,
-      ),
-      itemBuilder: (context, index) {
-        final user = viewModel.users[index];
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CachedNetworkImage(
-              imageUrl: user.profilePictureUrl,
-              placeholder: (context, url) => const FlutterLogo(size: 50),
-              errorWidget: (context, url, error) => const FlutterLogo(size: 50),
-              imageBuilder: (context, imageProvider) => CircleAvatar(
-                radius: kdProfilesViewUserListAvatarShapeRadius,
-                backgroundImage: imageProvider,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(
-                kdProfilesViewAvatarUsernamePadding,
-              ),
-              child: Text(
-                user.username,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: constraints.maxWidth),
+          child: DataTable(
+            sortColumnIndex: 1,
+            sortAscending: viewModel.sortByValue == SortUsersBy.nameAsc,
+            showCheckboxColumn: false,
+            columns: [
+              const DataColumn(
+                label: Text(
+                  'Avatar',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdProfilesViewDataColumnTitleFontSize,
+                  ),
                 ),
               ),
+              DataColumn(
+                label: const Text(
+                  'Username',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdProfilesViewDataColumnTitleFontSize,
+                  ),
+                ),
+                onSort: (int columnIndex, bool ascending) {
+                  viewModel
+                    ..sortByValue =
+                        ascending ? SortUsersBy.nameAsc : SortUsersBy.nameDesc
+                    ..reinitialize();
+                },
+              ),
+              const DataColumn(
+                label: Text(
+                  'Roles',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdProfilesViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+            ],
+            rows: List<DataRow>.generate(
+              viewModel.users.length,
+              (int index) {
+                final user = viewModel.users[index];
+                return DataRow(
+                  selected: viewModel.selectedIndex == index,
+                  onSelectChanged: (bool? selected) {
+                    if (selected != null && selected) {
+                      viewModel.selectedIndex = index;
+                    }
+                  },
+                  cells: [
+                    DataCell(
+                      CachedNetworkImage(
+                        imageUrl: user.profilePictureUrl,
+                        placeholder: (context, url) => const FlutterLogo(
+                          size: kdProfilesViewUserListAvatarShapeRadius,
+                        ),
+                        errorWidget: (context, url, error) => const FlutterLogo(
+                          size: kdProfilesViewUserListAvatarShapeRadius,
+                        ),
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: kdProfilesViewUserListAvatarShapeRadius,
+                          backgroundImage: imageProvider,
+                        ),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        user.username,
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        user.roles.map((e) => e.value).join(', '),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaginationFooter(
+    BuildContext context,
+    ProfilesViewModel viewModel,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            if (viewModel.pageValue == 1) {
+              return;
+            }
+
+            viewModel
+              ..pageValue = viewModel.pageValue - 1
+              ..reinitialize();
+          },
+        ),
+        horizontalSpaceMedium,
+        Text(
+          '${viewModel.pageValue} / ${(viewModel.count / kiProfilesViewPageSize).ceil()}',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        horizontalSpaceMedium,
+        IconButton(
+          icon: const Icon(Icons.arrow_forward_ios),
+          onPressed: () {
+            if (viewModel.pageValue ==
+                (viewModel.count / kiProfilesViewPageSize).ceil()) {
+              return;
+            }
+
+            viewModel
+              ..pageValue = viewModel.pageValue + 1
+              ..reinitialize();
+          },
+        ),
+      ],
     );
   }
 

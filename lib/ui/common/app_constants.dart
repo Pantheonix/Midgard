@@ -150,8 +150,9 @@ const double kdAboutViewTextLetterSpacing = 1;
 const double kdAboutViewTextPadding = 15;
 
 // profiles view
+const double kdProfilesViewDataColumnTitleFontSize = 16;
 const double kdProfilesViewPadding = 20;
-const double kdProfilesViewUserListAvatarShapeRadius = 80;
+const double kdProfilesViewUserListAvatarShapeRadius = 20;
 const double kdProfilesViewNameFieldPadding = 10;
 const double kdProfilesViewEmailFieldPadding = 10;
 const double kdProfilesViewSortByFieldPadding = 10;
@@ -159,6 +160,7 @@ const double kdProfilesViewPageFieldPadding = 10;
 const double kdProfilesViewPageSizeFieldPadding = 10;
 const double kdProfilesViewAvatarUsernamePadding = 8;
 const int kiProfilesViewUsersGridCrossAxisCount = 4;
+const int kiProfilesViewPageSize = 10;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

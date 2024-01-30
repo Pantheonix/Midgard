@@ -732,9 +732,9 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
 class MockUserService extends _i1.Mock implements _i15.UserService {
   @override
   _i5.Future<
-      _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>> getAll({
+      _i3.Either<_i16.IdentityException,
+          ({int count, List<_i13.UserProfileModel> users})>> getAll({
     String? name,
-    String? email,
     String? sortBy,
     int? page,
     int? pageSize,
@@ -745,7 +745,6 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           [],
           {
             #name: name,
-            #email: email,
             #sortBy: sortBy,
             #page: page,
             #pageSize: pageSize,
@@ -753,15 +752,15 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
         ),
         returnValue: _i5.Future<
                 _i3.Either<_i16.IdentityException,
-                    List<_i13.UserProfileModel>>>.value(
-            _FakeEither_4<_i16.IdentityException, List<_i13.UserProfileModel>>(
+                    ({int count, List<_i13.UserProfileModel> users})>>.value(
+            _FakeEither_4<_i16.IdentityException,
+                ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
             #getAll,
             [],
             {
               #name: name,
-              #email: email,
               #sortBy: sortBy,
               #page: page,
               #pageSize: pageSize,
@@ -770,15 +769,15 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
         )),
         returnValueForMissingStub: _i5.Future<
                 _i3.Either<_i16.IdentityException,
-                    List<_i13.UserProfileModel>>>.value(
-            _FakeEither_4<_i16.IdentityException, List<_i13.UserProfileModel>>(
+                    ({int count, List<_i13.UserProfileModel> users})>>.value(
+            _FakeEither_4<_i16.IdentityException,
+                ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
             #getAll,
             [],
             {
               #name: name,
-              #email: email,
               #sortBy: sortBy,
               #page: page,
               #pageSize: pageSize,
@@ -786,5 +785,6 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           ),
         )),
       ) as _i5.Future<
-          _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>>);
+          _i3.Either<_i16.IdentityException,
+              ({int count, List<_i13.UserProfileModel> users})>>);
 }

@@ -10,6 +10,7 @@ class UserProfileModel {
     required this.userId,
     required this.username,
     required this.email,
+    required this.roles,
     this.fullname,
     this.bio,
     this.profilePictureId,
@@ -21,7 +22,11 @@ class UserProfileModel {
         email = json['email'] as String,
         fullname = json['fullname'] as String?,
         bio = json['bio'] as String?,
-        profilePictureId = json['profilePictureId'] as String?;
+        profilePictureId = json['profilePictureId'] as String?,
+        roles = (json['roles'] as List<dynamic>)
+            .map((e) => UserRole.values.firstWhere((role) => role.value == e))
+            .toList()
+          ..add(UserRole.user);
 
   @HiveField(0)
   final String userId;
@@ -41,6 +46,9 @@ class UserProfileModel {
   @HiveField(5)
   final String? profilePictureId;
 
+  @HiveField(6)
+  final List<UserRole> roles;
+
   Map<String, dynamic> toJson() => {
         'id': userId,
         'username': username,
@@ -48,6 +56,7 @@ class UserProfileModel {
         'fullname': fullname,
         'bio': bio,
         'profilePictureId': profilePictureId,
+        'roles': roles.map((e) => e.value).toList(),
       };
 
   String get profilePictureUrl {
@@ -56,16 +65,28 @@ class UserProfileModel {
   }
 }
 
+@HiveType(typeId: 1)
+enum UserRole {
+  @HiveField(0)
+  admin,
+  @HiveField(1)
+  proposer,
+  @HiveField(2)
+  user;
+
+  String get value => switch (this) {
+        UserRole.admin => 'Admin',
+        UserRole.proposer => 'Proposer',
+        UserRole.user => 'User',
+      };
+}
+
 enum SortUsersBy {
   nameAsc,
-  nameDesc,
-  emailAsc,
-  emailDesc;
+  nameDesc;
 
   String get value => switch (this) {
         SortUsersBy.nameAsc => 'NameAsc',
         SortUsersBy.nameDesc => 'NameDesc',
-        SortUsersBy.emailAsc => 'EmailAsc',
-        SortUsersBy.emailDesc => 'EmailDesc',
       };
 }

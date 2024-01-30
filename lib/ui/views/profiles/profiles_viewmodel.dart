@@ -22,6 +22,10 @@ class ProfilesViewModel extends FormViewModel {
   );
 
   final _users = <UserProfileModel>[];
+  late int _selectedIndex = -1;
+  late int _count = 0;
+  late int _page = 1;
+  late SortUsersBy _sortBy = SortUsersBy.nameAsc;
 
   HiveService get hiveService => _hiveService;
 
@@ -30,6 +34,25 @@ class ProfilesViewModel extends FormViewModel {
   SidebarXController get sidebarController => _sidebarController;
 
   List<UserProfileModel> get users => _users;
+  int get selectedIndex => _selectedIndex;
+  int get count => _count;
+  int get pageValue => _page;
+  SortUsersBy get sortByValue => _sortBy;
+
+  set selectedIndex(int index) {
+    _selectedIndex = index;
+    notifyListeners();
+  }
+
+  set pageValue(int page) {
+    _page = page;
+    notifyListeners();
+  }
+
+  set sortByValue(SortUsersBy sortBy) {
+    _sortBy = sortBy;
+    notifyListeners();
+  }
 
   Future<List<UserProfileModel>> getUsers({
     String? name,
@@ -40,7 +63,6 @@ class ProfilesViewModel extends FormViewModel {
   }) async {
     final result = await _userService.getAll(
       name: name,
-      email: email,
       sortBy: sortBy,
       page: page,
       pageSize: pageSize,
@@ -51,8 +73,10 @@ class ProfilesViewModel extends FormViewModel {
         _logger.e('Error while retrieving users: ${error.message}');
         return [];
       },
-      (List<UserProfileModel> users) {
+      (data) {
+        final (:users, :count) = data;
         _logger.i('Users retrieved: ${users.length}');
+        _count = count;
         return users;
       },
     );
@@ -67,14 +91,9 @@ class ProfilesViewModel extends FormViewModel {
         await runBusyFuture(
           getUsers(
             name: nameValue,
-            email: emailValue,
-            sortBy: sortByValue,
-            page: pageValue == null || pageValue!.isEmpty
-                ? null
-                : int.parse(pageValue!),
-            pageSize: pageSizeValue == null || pageSizeValue!.isEmpty
-                ? null
-                : int.parse(pageSizeValue!),
+            sortBy: sortByValue.value,
+            page: pageValue == 0 ? null : pageValue,
+            pageSize: kiProfilesViewPageSize,
           ),
           busyObject: kbProfilesKey,
         ),
