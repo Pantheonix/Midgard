@@ -12,3 +12,7 @@ const Color kcVeryLightGrey = Color(0xFFE3E3E3);
 const Color kcWhite = Color(0xFFFFFFFF);
 const Color kcBackgroundColor = kcDarkGreyColor;
 const Color kcBearBackgroundColor = Color.fromARGB(255, 249, 246, 254);
+const Color kcAdminBadgeColor = Colors.redAccent;
+const Color kcProposerBadgeColor = Colors.greenAccent;
+const Color kcUserBadgeColor = Colors.blueAccent;
+const Color kcOrange = Color(0xFFFFA500);

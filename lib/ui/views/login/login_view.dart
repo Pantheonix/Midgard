@@ -35,6 +35,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
       ),
       backgroundColor: kcWhite,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
@@ -63,7 +64,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 kdLoginViewRiveAnimationHeightPercentage,
                             child: _buildRiveAnimation(viewModel),
                           ),
-                          verticalSpaceLarge,
+                          verticalSpaceMassive,
                           Container(
                             padding: const EdgeInsets.all(
                               kdLoginViewFormContainerPadding,

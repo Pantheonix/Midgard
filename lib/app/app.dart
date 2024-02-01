@@ -8,11 +8,11 @@ import 'package:midgard/ui/views/home/home_view.dart';
 import 'package:midgard/ui/views/login/login_view.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.dart';
 import 'package:midgard/ui/views/register/register_view.dart';
+import 'package:midgard/ui/views/single_profile/single_profile_view.dart';
 import 'package:midgard/ui/views/startup/startup_view.dart';
 import 'package:midgard/ui/views/unknown/unknown_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:midgard/ui/views/single_profile/single_profile_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -23,7 +23,7 @@ import 'package:midgard/ui/views/single_profile/single_profile_view.dart';
     MaterialRoute(page: RegisterView, path: '/register'),
     MaterialRoute(page: AboutView, path: '/about'),
     MaterialRoute(page: ProfilesView, path: '/profiles'),
-    MaterialRoute(page: SingleProfileView),
+    MaterialRoute(page: SingleProfileView, path: '/profiles/:userId'),
 // @stacked-route
 
     CustomRoute(page: UnknownView, path: '/404'),

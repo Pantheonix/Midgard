@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -70,25 +71,25 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildFilterNameField(viewModel),
+        _buildFilterUsernameField(viewModel),
         horizontalSpaceSmall,
         IconButton(
           icon: const Icon(Icons.filter_list),
           onPressed: () {
-            viewModel.reinitialize();
+            viewModel.update();
           },
         ),
       ],
     );
   }
 
-  Widget _buildFilterNameField(
+  Widget _buildFilterUsernameField(
     ProfilesViewModel viewModel,
   ) {
     return Expanded(
       child: TextFormField(
         decoration: const InputDecoration(
-          hintText: 'Name',
+          hintText: 'Username',
           contentPadding: EdgeInsets.all(kdProfilesViewNameFieldPadding),
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           focusedBorder: UnderlineInputBorder(),
@@ -139,7 +140,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                   viewModel
                     ..sortByValue =
                         ascending ? SortUsersBy.nameAsc : SortUsersBy.nameDesc
-                    ..reinitialize();
+                    ..update();
                 },
               ),
               const DataColumn(
@@ -161,6 +162,9 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                   onSelectChanged: (bool? selected) {
                     if (selected != null && selected) {
                       viewModel.selectedIndex = index;
+                      viewModel.routerService.replaceWithSingleProfileView(
+                        userId: user.userId,
+                      );
                     }
                   },
                   cells: [
@@ -186,7 +190,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                     ),
                     DataCell(
                       Text(
-                        user.roles.map((e) => e.value).join(', '),
+                        user.roles.value,
                       ),
                     ),
                   ],
@@ -215,7 +219,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
 
             viewModel
               ..pageValue = viewModel.pageValue - 1
-              ..reinitialize();
+              ..update();
           },
         ),
         horizontalSpaceMedium,
@@ -236,7 +240,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
 
             viewModel
               ..pageValue = viewModel.pageValue + 1
-              ..reinitialize();
+              ..update();
           },
         ),
       ],
@@ -248,7 +252,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     super.onViewModelReady(viewModel);
 
     syncFormWithViewModel(viewModel);
-    viewModel.reinitialize();
+    viewModel.update();
   }
 
   @override

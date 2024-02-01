@@ -789,4 +789,38 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
       ) as _i5.Future<
           _i3.Either<_i17.IdentityException,
               ({int count, List<_i13.UserProfileModel> users})>>);
+
+  @override
+  _i5.Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>> getById(
+          {required String? id}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [],
+          {#id: id},
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#id: id},
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#id: id},
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
 }

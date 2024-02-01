@@ -48,6 +48,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
       ),
       backgroundColor: kcWhite,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
@@ -76,7 +77,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                                 kdRegisterViewRiveAnimationHeightPercentage,
                             child: _buildRiveAnimation(viewModel),
                           ),
-                          verticalSpaceLarge,
+                          verticalSpaceMassive,
                           Container(
                             padding: const EdgeInsets.all(
                               kdRegisterViewFormContainerPadding,

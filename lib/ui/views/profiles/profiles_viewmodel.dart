@@ -34,9 +34,13 @@ class ProfilesViewModel extends FormViewModel {
   SidebarXController get sidebarController => _sidebarController;
 
   List<UserProfileModel> get users => _users;
+
   int get selectedIndex => _selectedIndex;
+
   int get count => _count;
+
   int get pageValue => _page;
+
   SortUsersBy get sortByValue => _sortBy;
 
   set selectedIndex(int index) {
@@ -82,8 +86,8 @@ class ProfilesViewModel extends FormViewModel {
     );
   }
 
-  Future<void> reinitialize() async {
-    _logger.i('Users list reinitialized');
+  Future<void> update() async {
+    _logger.i('Users list updated');
 
     _users
       ..clear()

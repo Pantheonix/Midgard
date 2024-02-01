@@ -5,6 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:flutter/foundation.dart' as _i12;
 import 'package:flutter/material.dart' as _i11;
 import 'package:stacked/stacked.dart' as _i10;
 import 'package:stacked_services/stacked_services.dart' as _i9;
@@ -68,9 +69,16 @@ class StackedRouterWeb extends _i10.RootStackRouter {
       );
     },
     SingleProfileViewRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<SingleProfileViewArgs>(
+          orElse: () =>
+              SingleProfileViewArgs(userId: pathParams.getString('userId')));
       return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i7.SingleProfileView(),
+        child: _i7.SingleProfileView(
+          userId: args.userId,
+          key: args.key,
+        ),
       );
     },
     UnknownViewRoute.name: (routeData) {
@@ -111,7 +119,7 @@ class StackedRouterWeb extends _i10.RootStackRouter {
         ),
         _i10.RouteConfig(
           SingleProfileViewRoute.name,
-          path: '/single-profile-view',
+          path: '/profiles/:userId',
         ),
         _i10.RouteConfig(
           UnknownViewRoute.name,
@@ -200,14 +208,37 @@ class ProfilesViewRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.SingleProfileView]
-class SingleProfileViewRoute extends _i10.PageRouteInfo<void> {
-  const SingleProfileViewRoute()
-      : super(
+class SingleProfileViewRoute extends _i10.PageRouteInfo<SingleProfileViewArgs> {
+  SingleProfileViewRoute({
+    required String userId,
+    _i12.Key? key,
+  }) : super(
           SingleProfileViewRoute.name,
-          path: '/single-profile-view',
+          path: '/profiles/:userId',
+          args: SingleProfileViewArgs(
+            userId: userId,
+            key: key,
+          ),
+          rawPathParams: {'userId': userId},
         );
 
   static const String name = 'SingleProfileView';
+}
+
+class SingleProfileViewArgs {
+  const SingleProfileViewArgs({
+    required this.userId,
+    this.key,
+  });
+
+  final String userId;
+
+  final _i12.Key? key;
+
+  @override
+  String toString() {
+    return 'SingleProfileViewArgs{userId: $userId, key: $key}';
+  }
 }
 
 /// generated route for
@@ -271,10 +302,16 @@ extension RouterStateExtension on _i9.RouterService {
     );
   }
 
-  Future<dynamic> navigateToSingleProfileView(
-      {void Function(_i10.NavigationFailure)? onFailure}) async {
+  Future<dynamic> navigateToSingleProfileView({
+    required String userId,
+    _i12.Key? key,
+    void Function(_i10.NavigationFailure)? onFailure,
+  }) async {
     return navigateTo(
-      const SingleProfileViewRoute(),
+      SingleProfileViewRoute(
+        userId: userId,
+        key: key,
+      ),
       onFailure: onFailure,
     );
   }
@@ -335,10 +372,16 @@ extension RouterStateExtension on _i9.RouterService {
     );
   }
 
-  Future<dynamic> replaceWithSingleProfileView(
-      {void Function(_i10.NavigationFailure)? onFailure}) async {
+  Future<dynamic> replaceWithSingleProfileView({
+    required String userId,
+    _i12.Key? key,
+    void Function(_i10.NavigationFailure)? onFailure,
+  }) async {
     return replaceWith(
-      const SingleProfileViewRoute(),
+      SingleProfileViewRoute(
+        userId: userId,
+        key: key,
+      ),
       onFailure: onFailure,
     );
   }

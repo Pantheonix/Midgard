@@ -118,4 +118,75 @@ class UserService {
       );
     }
   }
+
+  Future<Either<IdentityException, UserProfileModel>> getById({
+    required String id,
+  }) async {
+    try {
+      final response = await _httpClient.get(
+        uriFromEnv(
+          ApiConstants.baseUrl,
+          '${ApiConstants.usersUrl}/$id',
+        ),
+      );
+
+      if (response.statusCode == HttpStatus.ok) {
+        final data = jsonDecode(response.body);
+        final user = UserProfileModel.fromJson(data as Map<String, dynamic>);
+
+        return right(user);
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        _logger.e('Error while retrieving user: ${response.body}');
+        await Sentry.captureException(
+          Exception('Error while retrieving user: ${response.body}'),
+        );
+
+        final userProfileBox = await HiveService.userProfileBoxAsync;
+        final currentUserId = _hiveService
+            .getCurrentUserProfile(userProfileBox)
+            .fold(() => '', (user) => user.userId);
+
+        final refreshTokenRequest = RefreshTokenRequest(
+          userId: currentUserId,
+        );
+        final refreshTokenResponse =
+            await _authService.refreshToken(refreshTokenRequest);
+
+        return refreshTokenResponse.fold(
+          (l) => left(
+            IdentityException(
+              response.statusCode,
+              'Session expired',
+              Errors([]),
+            ),
+          ),
+          (r) => getById(id: id),
+        );
+      } else {
+        _logger.e('Error while retrieving user: ${response.body}');
+        await Sentry.captureException(
+          Exception('Error while retrieving user: ${response.body}'),
+        );
+
+        return left(
+          IdentityException.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
+          ),
+        );
+      }
+    } catch (e) {
+      _logger.e('Error while retrieving user: $e');
+      await Sentry.captureException(
+        Exception('Error while retrieving user: $e'),
+      );
+
+      return left(
+        IdentityException(
+          500,
+          e.toString(),
+          Errors([]),
+        ),
+      );
+    }
+  }
 }

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:midgard/extensions/http_extensions.dart';
 import 'package:midgard/services/services_constants.dart';
+import 'package:midgard/ui/common/app_colors.dart';
 
 part 'user_models.g.dart';
 
@@ -26,7 +28,8 @@ class UserProfileModel {
         roles = (json['roles'] as List<dynamic>)
             .map((e) => UserRole.values.firstWhere((role) => role.value == e))
             .toList()
-          ..add(UserRole.user);
+          ..add(UserRole.user)
+          ..sort((a, b) => a.compareTo(b));
 
   @HiveField(0)
   final String userId;
@@ -79,6 +82,20 @@ enum UserRole {
         UserRole.proposer => 'Proposer',
         UserRole.user => 'User',
       };
+
+  Color get color => switch (this) {
+        UserRole.admin => kcAdminBadgeColor,
+        UserRole.proposer => kcProposerBadgeColor,
+        UserRole.user => kcUserBadgeColor,
+      };
+}
+
+extension UserRoleExtensions on UserRole {
+  int compareTo(UserRole other) => index.compareTo(other.index);
+}
+
+extension UserRoleListExtensions on List<UserRole> {
+  String get value => map((e) => e.value).join(', ');
 }
 
 enum SortUsersBy {

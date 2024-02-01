@@ -14,6 +14,7 @@ const double kdDesktopSubtitleTextSize = 14;
 const String kbLoginKey = 'login';
 const String kbRegisterKey = 'register';
 const String kbProfilesKey = 'profile';
+const String kbSingleProfileKey = 'singleProfile';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -161,6 +162,21 @@ const double kdProfilesViewPageSizeFieldPadding = 10;
 const double kdProfilesViewAvatarUsernamePadding = 8;
 const int kiProfilesViewUsersGridCrossAxisCount = 4;
 const int kiProfilesViewPageSize = 10;
+
+// single profile view
+const double kdSingleProfileViewPadding = 20;
+const double kdSingleProfileViewAvatarShapeRadius = 100;
+const double kdSingleProfileViewMaxWidth = 600;
+const double kdSingleProfileViewNameFieldPadding = 10;
+const double kdSingleProfileViewEmailFieldPadding = 10;
+const double kdSingleProfileViewFullnameFieldPadding = 10;
+const double kdSingleProfileViewBioFieldPadding = 10;
+const double kdSingleProfileViewRoleBadgePadding = 5;
+const double kdSingleProfileViewRoleBadgeShapeRadius = 50;
+const double kdSingleProfileViewFieldBorderRadius = 50;
+const double kdSingleProfileViewAvatarEditIconSize = 33;
+const int kiSingleProfileViewAvatarEditBadgeAnimationDurationSec = 1;
+const int kiSingleProfileViewAvatarEditBadgeColorChangeAnimationDurationSec = 1;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
