@@ -4,15 +4,16 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:typed_data' as _i14;
+import 'dart:typed_data' as _i15;
 import 'dart:ui' as _i9;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
-import 'package:midgard/models/exceptions/identity_exception.dart' as _i16;
+import 'package:hive_flutter/adapters.dart' as _i14;
+import 'package:midgard/models/exceptions/identity_exception.dart' as _i17;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
-import 'package:midgard/services/user_service.dart' as _i15;
+import 'package:midgard/services/user_service.dart' as _i16;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked/stacked.dart' as _i2;
 import 'package:stacked_services/src/bottom_sheet/bottom_sheet_service.dart'
@@ -614,49 +615,50 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i5.Future<void>);
 
   @override
-  _i3.Option<_i13.UserProfileModel> getCurrentUserProfile() =>
+  _i3.Option<_i13.UserProfileModel> getCurrentUserProfile(
+          _i14.Box<_i13.UserProfileModel>? box) =>
       (super.noSuchMethod(
         Invocation.method(
           #getCurrentUserProfile,
-          [],
+          [box],
         ),
         returnValue: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getCurrentUserProfile,
-            [],
+            [box],
           ),
         ),
         returnValueForMissingStub: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getCurrentUserProfile,
-            [],
+            [box],
           ),
         ),
       ) as _i3.Option<_i13.UserProfileModel>);
 
   @override
-  _i3.Option<_i14.Uint8List> getCurrentUserAvatarBlob() => (super.noSuchMethod(
+  _i3.Option<_i15.Uint8List> getCurrentUserAvatarBlob() => (super.noSuchMethod(
         Invocation.method(
           #getCurrentUserAvatarBlob,
           [],
         ),
-        returnValue: _FakeOption_3<_i14.Uint8List>(
+        returnValue: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getCurrentUserAvatarBlob,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeOption_3<_i14.Uint8List>(
+        returnValueForMissingStub: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getCurrentUserAvatarBlob,
             [],
           ),
         ),
-      ) as _i3.Option<_i14.Uint8List>);
+      ) as _i3.Option<_i15.Uint8List>);
 
   @override
   _i5.Future<void> saveUserProfile(_i13.UserProfileModel? userProfile) =>
@@ -693,27 +695,27 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i3.Option<_i13.UserProfileModel>);
 
   @override
-  _i3.Option<_i14.Uint8List> getUserAvatarBlob(String? userId) =>
+  _i3.Option<_i15.Uint8List> getUserAvatarBlob(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserAvatarBlob,
           [userId],
         ),
-        returnValue: _FakeOption_3<_i14.Uint8List>(
+        returnValue: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getUserAvatarBlob,
             [userId],
           ),
         ),
-        returnValueForMissingStub: _FakeOption_3<_i14.Uint8List>(
+        returnValueForMissingStub: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getUserAvatarBlob,
             [userId],
           ),
         ),
-      ) as _i3.Option<_i14.Uint8List>);
+      ) as _i3.Option<_i15.Uint8List>);
 
   @override
   _i5.Future<void> clearCurrentUserProfile() => (super.noSuchMethod(
@@ -729,10 +731,10 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
 /// A class which mocks [UserService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserService extends _i1.Mock implements _i15.UserService {
+class MockUserService extends _i1.Mock implements _i16.UserService {
   @override
   _i5.Future<
-      _i3.Either<_i16.IdentityException,
+      _i3.Either<_i17.IdentityException,
           ({int count, List<_i13.UserProfileModel> users})>> getAll({
     String? name,
     String? sortBy,
@@ -751,9 +753,9 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           },
         ),
         returnValue: _i5.Future<
-                _i3.Either<_i16.IdentityException,
+                _i3.Either<_i17.IdentityException,
                     ({int count, List<_i13.UserProfileModel> users})>>.value(
-            _FakeEither_4<_i16.IdentityException,
+            _FakeEither_4<_i17.IdentityException,
                 ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
@@ -768,9 +770,9 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           ),
         )),
         returnValueForMissingStub: _i5.Future<
-                _i3.Either<_i16.IdentityException,
+                _i3.Either<_i17.IdentityException,
                     ({int count, List<_i13.UserProfileModel> users})>>.value(
-            _FakeEither_4<_i16.IdentityException,
+            _FakeEither_4<_i17.IdentityException,
                 ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
@@ -785,6 +787,6 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           ),
         )),
       ) as _i5.Future<
-          _i3.Either<_i16.IdentityException,
+          _i3.Either<_i17.IdentityException,
               ({int count, List<_i13.UserProfileModel> users})>>);
 }

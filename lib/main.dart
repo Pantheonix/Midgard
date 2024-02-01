@@ -66,7 +66,11 @@ Future<void> setupHive() async {
         await path_provider.getApplicationDocumentsDirectory();
     Hive.init(appDocumentDir.path);
   }
+
   Hive
     ..registerAdapter(UserProfileModelAdapter())
     ..registerAdapter(UserRoleAdapter());
+
+  await Hive.openBox<UserProfileModel>(HiveConstants.userProfileBox);
+  await Hive.openBox<Uint8List>(HiveConstants.userAvatarBox);
 }

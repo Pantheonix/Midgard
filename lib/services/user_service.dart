@@ -65,9 +65,9 @@ class UserService {
           Exception('Error while retrieving users: ${response.body}'),
         );
 
-        await HiveService.userProfileBox;
+        final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
-            .getCurrentUserProfile()
+            .getCurrentUserProfile(userProfileBox)
             .fold(() => '', (user) => user.userId);
 
         final refreshTokenRequest = RefreshTokenRequest(

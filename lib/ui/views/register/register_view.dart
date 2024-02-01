@@ -630,8 +630,8 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
 
   @override
   Future<void> onViewModelReady(RegisterViewModel viewModel) async {
-    await HiveService.userProfileBox;
-    if (viewModel.currentUser.isSome()) {
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isSome()) {
       await viewModel.navigateToHome();
     }
 

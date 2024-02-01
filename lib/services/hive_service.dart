@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:http/browser_client.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/extensions/http_extensions.dart';
@@ -14,14 +14,25 @@ class HiveService {
   final _logger = getLogger('HiveService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
-  static Future<Box<UserProfileModel>> get userProfileBox =>
+  static Future<Box<UserProfileModel>> get userProfileBoxAsync =>
       Hive.openBox<UserProfileModel>(
         HiveConstants.userProfileBox,
       );
 
-  static Future<Box<Uint8List>> get avatarDataBox => Hive.openBox<Uint8List>(
+  static Future<Box<Uint8List>> get userAvatarBoxAsync =>
+      Hive.openBox<Uint8List>(
         HiveConstants.userAvatarBox,
       );
+
+  static ValueListenable<Box<UserProfileModel>> get userProfileBoxListenable =>
+      Hive.box<UserProfileModel>(
+        HiveConstants.userProfileBox,
+      ).listenable();
+
+  static ValueListenable<Box<Uint8List>> get userAvatarBox =>
+      Hive.box<Uint8List>(
+        HiveConstants.userAvatarBox,
+      ).listenable();
 
   Future<void> saveCurrentUserProfile(UserProfileModel userProfile) async {
     final profileBox =
@@ -50,8 +61,7 @@ class HiveService {
     );
   }
 
-  Option<UserProfileModel> getCurrentUserProfile() {
-    final box = Hive.box<UserProfileModel>(HiveConstants.userProfileBox);
+  Option<UserProfileModel> getCurrentUserProfile(Box<UserProfileModel> box) {
     final userProfile = box.get(HiveConstants.currentUserProfile);
 
     return switch (userProfile) {

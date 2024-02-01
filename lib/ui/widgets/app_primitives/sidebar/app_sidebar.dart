@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:midgard/app/app.router.dart';
+import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -21,9 +23,9 @@ class AppSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<AppSidebarViewModel>.nonReactive(
       builder: (context, viewModel, child) {
-        return FutureBuilder(
-          future: HiveService.userProfileBox,
-          builder: (context, snapshot) {
+        return ValueListenableBuilder(
+          valueListenable: HiveService.userProfileBoxListenable,
+          builder: (context, Box<UserProfileModel> box, widget) {
             return SidebarX(
               controller: _controller,
               theme: SidebarXTheme(
@@ -87,12 +89,12 @@ class AppSidebar extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(kdSidebarHeaderPadding),
                     child: CachedNetworkImage(
-                      imageUrl: snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              viewModel.hiveService
-                                  .getCurrentUserProfile()
-                                  .isSome()
-                          ? viewModel.hiveService.getCurrentUserProfile().fold(
+                      imageUrl: viewModel.hiveService
+                              .getCurrentUserProfile(box)
+                              .isSome()
+                          ? viewModel.hiveService
+                              .getCurrentUserProfile(box)
+                              .fold(
                                 () => '',
                                 (data) => data.profilePictureUrl,
                               )
@@ -124,47 +126,46 @@ class AppSidebar extends StatelessWidget {
                     await viewModel.routerService.replaceWithAboutView();
                   },
                 ),
-                if (snapshot.connectionState == ConnectionState.done)
-                  ...viewModel.hiveService.getCurrentUserProfile().isNone()
-                      ? [
-                          SidebarXItem(
-                            icon: Icons.login_outlined,
-                            label: ksSidebarLoginMenuText,
-                            onTap: () async {
-                              await viewModel.routerService
-                                  .replaceWithLoginView();
-                            },
-                          ),
-                          SidebarXItem(
-                            icon: Icons.add_circle,
-                            label: ksSidebarRegisterMenuText,
-                            onTap: () async {
-                              await viewModel.routerService
-                                  .replaceWithRegisterView();
-                            },
-                          ),
-                        ]
-                      : [
-                          SidebarXItem(
-                            icon: Icons.logout,
-                            label: ksSidebarLogoutMenuText,
-                            onTap: () async {
-                              await viewModel.hiveService
-                                  .clearCurrentUserProfile();
-                              await viewModel.routerService.navigateTo(
-                                const HomeViewRoute(),
-                              );
-                            },
-                          ),
-                          SidebarXItem(
-                            icon: Icons.people,
-                            label: ksSidebarProfilesMenuText,
-                            onTap: () async {
-                              await viewModel.routerService
-                                  .replaceWithProfilesView();
-                            },
-                          ),
-                        ],
+                ...viewModel.hiveService.getCurrentUserProfile(box).isNone()
+                    ? [
+                        SidebarXItem(
+                          icon: Icons.login_outlined,
+                          label: ksSidebarLoginMenuText,
+                          onTap: () async {
+                            await viewModel.routerService
+                                .replaceWithLoginView();
+                          },
+                        ),
+                        SidebarXItem(
+                          icon: Icons.add_circle,
+                          label: ksSidebarRegisterMenuText,
+                          onTap: () async {
+                            await viewModel.routerService
+                                .replaceWithRegisterView();
+                          },
+                        ),
+                      ]
+                    : [
+                        SidebarXItem(
+                          icon: Icons.logout,
+                          label: ksSidebarLogoutMenuText,
+                          onTap: () async {
+                            await viewModel.hiveService
+                                .clearCurrentUserProfile();
+                            await viewModel.routerService.navigateTo(
+                              const HomeViewRoute(),
+                            );
+                          },
+                        ),
+                        SidebarXItem(
+                          icon: Icons.people,
+                          label: ksSidebarProfilesMenuText,
+                          onTap: () async {
+                            await viewModel.routerService
+                                .replaceWithProfilesView();
+                          },
+                        ),
+                      ],
               ],
             );
           },

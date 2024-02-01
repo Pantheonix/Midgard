@@ -5,29 +5,30 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i10;
-import 'package:stacked/stacked.dart' as _i9;
-import 'package:stacked_services/stacked_services.dart' as _i8;
+import 'package:flutter/material.dart' as _i11;
+import 'package:stacked/stacked.dart' as _i10;
+import 'package:stacked_services/stacked_services.dart' as _i9;
 
 import '../ui/views/about/about_view.dart' as _i5;
 import '../ui/views/home/home_view.dart' as _i2;
 import '../ui/views/login/login_view.dart' as _i3;
 import '../ui/views/profiles/profiles_view.dart' as _i6;
 import '../ui/views/register/register_view.dart' as _i4;
+import '../ui/views/single_profile/single_profile_view.dart' as _i7;
 import '../ui/views/startup/startup_view.dart' as _i1;
-import '../ui/views/unknown/unknown_view.dart' as _i7;
+import '../ui/views/unknown/unknown_view.dart' as _i8;
 
 final stackedRouter =
-    StackedRouterWeb(navigatorKey: _i8.StackedService.navigatorKey);
+    StackedRouterWeb(navigatorKey: _i9.StackedService.navigatorKey);
 
-class StackedRouterWeb extends _i9.RootStackRouter {
-  StackedRouterWeb({_i10.GlobalKey<_i10.NavigatorState>? navigatorKey})
+class StackedRouterWeb extends _i10.RootStackRouter {
+  StackedRouterWeb({_i11.GlobalKey<_i11.NavigatorState>? navigatorKey})
       : super(navigatorKey);
 
   @override
-  final Map<String, _i9.PageFactory> pagesMap = {
+  final Map<String, _i10.PageFactory> pagesMap = {
     StartupViewRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i10.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.StartupView(),
         opaque: true,
@@ -35,7 +36,7 @@ class StackedRouterWeb extends _i9.RootStackRouter {
       );
     },
     HomeViewRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i10.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.HomeView(),
         opaque: true,
@@ -43,33 +44,39 @@ class StackedRouterWeb extends _i9.RootStackRouter {
       );
     },
     LoginViewRoute.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i3.LoginView(),
       );
     },
     RegisterViewRoute.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i4.RegisterView(),
       );
     },
     AboutViewRoute.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i5.AboutView(),
       );
     },
     ProfilesViewRoute.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i6.ProfilesView(),
       );
     },
-    UnknownViewRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+    SingleProfileViewRoute.name: (routeData) {
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i7.UnknownView(),
+        child: const _i7.SingleProfileView(),
+      );
+    },
+    UnknownViewRoute.name: (routeData) {
+      return _i10.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i8.UnknownView(),
         opaque: true,
         barrierDismissible: false,
       );
@@ -77,36 +84,40 @@ class StackedRouterWeb extends _i9.RootStackRouter {
   };
 
   @override
-  List<_i9.RouteConfig> get routes => [
-        _i9.RouteConfig(
+  List<_i10.RouteConfig> get routes => [
+        _i10.RouteConfig(
           StartupViewRoute.name,
           path: '/',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           HomeViewRoute.name,
           path: '/home',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           LoginViewRoute.name,
           path: '/login',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           RegisterViewRoute.name,
           path: '/register',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           AboutViewRoute.name,
           path: '/about',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           ProfilesViewRoute.name,
           path: '/profiles',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
+          SingleProfileViewRoute.name,
+          path: '/single-profile-view',
+        ),
+        _i10.RouteConfig(
           UnknownViewRoute.name,
           path: '/404',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           '*#redirect',
           path: '*',
           redirectTo: '/404',
@@ -117,7 +128,7 @@ class StackedRouterWeb extends _i9.RootStackRouter {
 
 /// generated route for
 /// [_i1.StartupView]
-class StartupViewRoute extends _i9.PageRouteInfo<void> {
+class StartupViewRoute extends _i10.PageRouteInfo<void> {
   const StartupViewRoute()
       : super(
           StartupViewRoute.name,
@@ -129,7 +140,7 @@ class StartupViewRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomeView]
-class HomeViewRoute extends _i9.PageRouteInfo<void> {
+class HomeViewRoute extends _i10.PageRouteInfo<void> {
   const HomeViewRoute()
       : super(
           HomeViewRoute.name,
@@ -141,7 +152,7 @@ class HomeViewRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.LoginView]
-class LoginViewRoute extends _i9.PageRouteInfo<void> {
+class LoginViewRoute extends _i10.PageRouteInfo<void> {
   const LoginViewRoute()
       : super(
           LoginViewRoute.name,
@@ -153,7 +164,7 @@ class LoginViewRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.RegisterView]
-class RegisterViewRoute extends _i9.PageRouteInfo<void> {
+class RegisterViewRoute extends _i10.PageRouteInfo<void> {
   const RegisterViewRoute()
       : super(
           RegisterViewRoute.name,
@@ -165,7 +176,7 @@ class RegisterViewRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.AboutView]
-class AboutViewRoute extends _i9.PageRouteInfo<void> {
+class AboutViewRoute extends _i10.PageRouteInfo<void> {
   const AboutViewRoute()
       : super(
           AboutViewRoute.name,
@@ -177,7 +188,7 @@ class AboutViewRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.ProfilesView]
-class ProfilesViewRoute extends _i9.PageRouteInfo<void> {
+class ProfilesViewRoute extends _i10.PageRouteInfo<void> {
   const ProfilesViewRoute()
       : super(
           ProfilesViewRoute.name,
@@ -188,8 +199,20 @@ class ProfilesViewRoute extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.UnknownView]
-class UnknownViewRoute extends _i9.PageRouteInfo<void> {
+/// [_i7.SingleProfileView]
+class SingleProfileViewRoute extends _i10.PageRouteInfo<void> {
+  const SingleProfileViewRoute()
+      : super(
+          SingleProfileViewRoute.name,
+          path: '/single-profile-view',
+        );
+
+  static const String name = 'SingleProfileView';
+}
+
+/// generated route for
+/// [_i8.UnknownView]
+class UnknownViewRoute extends _i10.PageRouteInfo<void> {
   const UnknownViewRoute()
       : super(
           UnknownViewRoute.name,
@@ -199,9 +222,9 @@ class UnknownViewRoute extends _i9.PageRouteInfo<void> {
   static const String name = 'UnknownView';
 }
 
-extension RouterStateExtension on _i8.RouterService {
+extension RouterStateExtension on _i9.RouterService {
   Future<dynamic> navigateToStartupView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const StartupViewRoute(),
       onFailure: onFailure,
@@ -209,7 +232,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> navigateToHomeView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const HomeViewRoute(),
       onFailure: onFailure,
@@ -217,7 +240,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> navigateToLoginView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const LoginViewRoute(),
       onFailure: onFailure,
@@ -225,7 +248,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> navigateToRegisterView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const RegisterViewRoute(),
       onFailure: onFailure,
@@ -233,7 +256,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> navigateToAboutView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const AboutViewRoute(),
       onFailure: onFailure,
@@ -241,15 +264,23 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> navigateToProfilesView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const ProfilesViewRoute(),
       onFailure: onFailure,
     );
   }
 
+  Future<dynamic> navigateToSingleProfileView(
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
+    return navigateTo(
+      const SingleProfileViewRoute(),
+      onFailure: onFailure,
+    );
+  }
+
   Future<dynamic> navigateToUnknownView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const UnknownViewRoute(),
       onFailure: onFailure,
@@ -257,7 +288,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> replaceWithStartupView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const StartupViewRoute(),
       onFailure: onFailure,
@@ -265,7 +296,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> replaceWithHomeView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const HomeViewRoute(),
       onFailure: onFailure,
@@ -273,7 +304,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> replaceWithLoginView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const LoginViewRoute(),
       onFailure: onFailure,
@@ -281,7 +312,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> replaceWithRegisterView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const RegisterViewRoute(),
       onFailure: onFailure,
@@ -289,7 +320,7 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> replaceWithAboutView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const AboutViewRoute(),
       onFailure: onFailure,
@@ -297,15 +328,23 @@ extension RouterStateExtension on _i8.RouterService {
   }
 
   Future<dynamic> replaceWithProfilesView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const ProfilesViewRoute(),
       onFailure: onFailure,
     );
   }
 
+  Future<dynamic> replaceWithSingleProfileView(
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
+    return replaceWith(
+      const SingleProfileViewRoute(),
+      onFailure: onFailure,
+    );
+  }
+
   Future<dynamic> replaceWithUnknownView(
-      {void Function(_i9.NavigationFailure)? onFailure}) async {
+      {void Function(_i10.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const UnknownViewRoute(),
       onFailure: onFailure,

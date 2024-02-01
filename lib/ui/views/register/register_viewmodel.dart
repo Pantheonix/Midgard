@@ -26,9 +26,6 @@ class RegisterViewModel extends FormViewModel with RiveBear {
     extended: true,
   );
 
-  Option<UserProfileModel> get currentUser =>
-      _hiveService.getCurrentUserProfile();
-
   HiveService get hiveService => _hiveService;
 
   RouterService get routerService => _routerService;

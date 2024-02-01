@@ -407,8 +407,8 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
 
   @override
   Future<void> onViewModelReady(LoginViewModel viewModel) async {
-    await HiveService.userProfileBox;
-    if (viewModel.currentUser.isSome()) {
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isSome()) {
       await viewModel.navigateToHome();
     }
 
