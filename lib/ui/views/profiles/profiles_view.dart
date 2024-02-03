@@ -76,7 +76,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
         IconButton(
           icon: const Icon(Icons.filter_list),
           onPressed: () {
-            viewModel.update();
+            viewModel.init();
           },
         ),
       ],
@@ -140,7 +140,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                   viewModel
                     ..sortByValue =
                         ascending ? SortUsersBy.nameAsc : SortUsersBy.nameDesc
-                    ..update();
+                    ..init();
                 },
               ),
               const DataColumn(
@@ -219,7 +219,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
 
             viewModel
               ..pageValue = viewModel.pageValue - 1
-              ..update();
+              ..init();
           },
         ),
         horizontalSpaceMedium,
@@ -240,7 +240,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
 
             viewModel
               ..pageValue = viewModel.pageValue + 1
-              ..update();
+              ..init();
           },
         ),
       ],
@@ -252,7 +252,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     super.onViewModelReady(viewModel);
 
     syncFormWithViewModel(viewModel);
-    viewModel.update();
+    viewModel.init();
   }
 
   @override
@@ -262,6 +262,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
   @override
   void onDispose(ProfilesViewModel viewModel) {
     super.onDispose(viewModel);
+
     disposeForm();
     viewModel.sidebarController.dispose();
   }

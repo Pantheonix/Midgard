@@ -11,6 +11,7 @@ import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
 import 'package:hive_flutter/adapters.dart' as _i14;
 import 'package:midgard/models/exceptions/identity_exception.dart' as _i17;
+import 'package:midgard/models/user/update_user_models.dart' as _i18;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
 import 'package:midgard/services/user_service.dart' as _i16;
@@ -616,7 +617,7 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
 
   @override
   _i3.Option<_i13.UserProfileModel> getCurrentUserProfile(
-          _i14.Box<_i13.UserProfileModel>? box) =>
+          [_i14.Box<_i13.UserProfileModel>? box]) =>
       (super.noSuchMethod(
         Invocation.method(
           #getCurrentUserProfile,
@@ -819,6 +820,134 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
             #getById,
             [],
             {#id: id},
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>> update(
+    _i18.UpdateUserRequest? request, {
+    required String? userId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #update,
+          [request],
+          {#userId: userId},
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #update,
+            [request],
+            {#userId: userId},
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #update,
+            [request],
+            {#userId: userId},
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i17.IdentityException, _i13.UserProfileModel>> addRole({
+    required String? userId,
+    required _i13.UserRole? role,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addRole,
+          [],
+          {
+            #userId: userId,
+            #role: role,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #addRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #addRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i17.IdentityException, _i13.UserProfileModel>> removeRole({
+    required String? userId,
+    required _i13.UserRole? role,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeRole,
+          [],
+          {
+            #userId: userId,
+            #role: role,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #removeRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #removeRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
           ),
         )),
       ) as _i5

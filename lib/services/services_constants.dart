@@ -15,6 +15,7 @@ abstract class ApiConstants {
   static const String refreshTokenUrl = '/api/identity/auth/refresh-token';
   static const String imageUrl = '/api/identity/images';
   static const String usersUrl = '/api/identity/users';
+  static const String rolesUrl = '/api/identity/users/:id/role';
 }
 
 abstract class HiveConstants {

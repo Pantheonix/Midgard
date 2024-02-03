@@ -66,6 +66,10 @@ class UserProfileModel {
     final imageUrl = uriFromEnv(ApiConstants.baseUrl, ApiConstants.imageUrl);
     return '$imageUrl/$profilePictureId';
   }
+
+  bool get isAdmin => roles.contains(UserRole.admin);
+
+  bool get isProposer => roles.contains(UserRole.proposer);
 }
 
 @HiveType(typeId: 1)
@@ -87,6 +91,10 @@ enum UserRole {
         UserRole.admin => kcAdminBadgeColor,
         UserRole.proposer => kcProposerBadgeColor,
         UserRole.user => kcUserBadgeColor,
+      };
+
+  Map<String, dynamic> toJson() => {
+        'role': value,
       };
 }
 

@@ -86,7 +86,7 @@ class ProfilesViewModel extends FormViewModel {
     );
   }
 
-  Future<void> update() async {
+  Future<void> init() async {
     _logger.i('Users list updated');
 
     _users

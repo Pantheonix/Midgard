@@ -16,3 +16,5 @@ const Color kcAdminBadgeColor = Colors.redAccent;
 const Color kcProposerBadgeColor = Colors.greenAccent;
 const Color kcUserBadgeColor = Colors.blueAccent;
 const Color kcOrange = Color(0xFFFFA500);
+const Color kcGreen = Color(0xFF008000);
+const Color kcBlue = Color(0xFF0000FF);

@@ -173,10 +173,15 @@ const double kdSingleProfileViewFullnameFieldPadding = 10;
 const double kdSingleProfileViewBioFieldPadding = 10;
 const double kdSingleProfileViewRoleBadgePadding = 5;
 const double kdSingleProfileViewRoleBadgeShapeRadius = 50;
-const double kdSingleProfileViewFieldBorderRadius = 50;
+const double kdSingleProfileViewFieldBorderRadius = 20;
 const double kdSingleProfileViewAvatarEditIconSize = 33;
 const int kiSingleProfileViewAvatarEditBadgeAnimationDurationSec = 1;
 const int kiSingleProfileViewAvatarEditBadgeColorChangeAnimationDurationSec = 1;
+const double kdSingleProfileViewRoleEditIconSize = 20;
+const double kdSingleProfileViewSubmitButtonPadding = 10;
+const double kdSingleProfileViewSubmitButtonShapeRadius = 30;
+const double KdSingleProfileViewSubmitButtonTextSize = 18;
+const double kdSingleProfileViewSubmitButtonMinHeight = 44;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

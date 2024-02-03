@@ -110,6 +110,13 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
               viewModel,
               user.bio ?? '',
             ),
+            if (viewModel.currentUser.userId == user.userId) ...[
+              verticalSpaceMedium,
+              _buildSubmitButton(
+                context,
+                viewModel,
+              ),
+            ],
           ],
         ),
       ),
@@ -122,12 +129,29 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     String profilePictureUrl,
   ) {
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+        if (viewModel.currentUser.userId !=
+            viewModel.user
+                .map(
+                  (user) => user.userId,
+                )
+                .getOrElse(() => '')) {
+          return;
+        }
+
+        await viewModel.updateProfilePicture();
+      },
       radius: kdSingleProfileViewAvatarShapeRadius,
       borderRadius: BorderRadius.circular(
         kdSingleProfileViewAvatarShapeRadius,
       ),
       child: badges.Badge(
+        showBadge: viewModel.currentUser.userId ==
+            viewModel.user
+                .map(
+                  (user) => user.userId,
+                )
+                .getOrElse(() => ''),
         position: badges.BadgePosition.bottomStart(),
         badgeContent: const Icon(
           Icons.edit,
@@ -148,17 +172,23 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
         badgeStyle: const badges.BadgeStyle(
           badgeColor: kcOrange,
         ),
-        child: CachedNetworkImage(
-          imageUrl: profilePictureUrl,
-          placeholder: (context, url) => const FlutterLogo(
-            size: kdSingleProfileViewAvatarShapeRadius,
+        child: viewModel.profilePicture.fold(
+          () => CachedNetworkImage(
+            imageUrl: profilePictureUrl,
+            placeholder: (context, url) => const FlutterLogo(
+              size: kdSingleProfileViewAvatarShapeRadius,
+            ),
+            errorWidget: (context, url, error) => const FlutterLogo(
+              size: kdSingleProfileViewAvatarShapeRadius,
+            ),
+            imageBuilder: (context, imageProvider) => CircleAvatar(
+              radius: kdSingleProfileViewAvatarShapeRadius,
+              backgroundImage: imageProvider,
+            ),
           ),
-          errorWidget: (context, url, error) => const FlutterLogo(
-            size: kdSingleProfileViewAvatarShapeRadius,
-          ),
-          imageBuilder: (context, imageProvider) => CircleAvatar(
+          (data) => CircleAvatar(
             radius: kdSingleProfileViewAvatarShapeRadius,
-            backgroundImage: imageProvider,
+            backgroundImage: MemoryImage(data.bytes),
           ),
         ),
       ),
@@ -170,8 +200,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String username,
   ) {
-    nameController.text = username;
-
     return TextFormField(
       decoration: const InputDecoration(
         hintText: 'Username',
@@ -189,7 +217,12 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
       keyboardType: TextInputType.name,
       textInputAction: TextInputAction.next,
       controller: nameController,
-      readOnly: true,
+      readOnly: viewModel.currentUser.userId !=
+          viewModel.user
+              .map(
+                (user) => user.userId,
+              )
+              .getOrElse(() => ''),
     );
   }
 
@@ -198,8 +231,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String email,
   ) {
-    emailController.text = email;
-
     return TextFormField(
       decoration: const InputDecoration(
         hintText: 'Email',
@@ -217,7 +248,12 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       controller: emailController,
-      readOnly: true,
+      readOnly: viewModel.currentUser.userId !=
+          viewModel.user
+              .map(
+                (user) => user.userId,
+              )
+              .getOrElse(() => ''),
     );
   }
 
@@ -226,8 +262,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String fullname,
   ) {
-    fullnameController.text = fullname;
-
     return TextFormField(
       decoration: const InputDecoration(
         hintText: 'Fullname',
@@ -245,7 +279,12 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
       keyboardType: TextInputType.name,
       textInputAction: TextInputAction.next,
       controller: fullnameController,
-      readOnly: true,
+      readOnly: viewModel.currentUser.userId !=
+          viewModel.user
+              .map(
+                (user) => user.userId,
+              )
+              .getOrElse(() => ''),
     );
   }
 
@@ -254,8 +293,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String bio,
   ) {
-    bioController.text = bio;
-
     return TextFormField(
       decoration: const InputDecoration(
         hintText: 'Bio',
@@ -273,7 +310,12 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
       maxLines: null,
       keyboardType: TextInputType.multiline,
       controller: bioController,
-      readOnly: true,
+      readOnly: viewModel.currentUser.userId !=
+          viewModel.user
+              .map(
+                (user) => user.userId,
+              )
+              .getOrElse(() => ''),
     );
   }
 
@@ -285,51 +327,150 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ...roles.map(
-          (role) => Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: kdSingleProfileViewRoleBadgePadding,
-            ),
-            child: Chip(
-              side: BorderSide(
-                color: role.color,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  kdSingleProfileViewRoleBadgeShapeRadius,
-                ),
-              ),
-              label: Text(
-                role.value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              backgroundColor: role.color,
-            ),
-          ),
+        ...UserRole.values.map(
+          (role) {
+            if (!roles.contains(role) &&
+                (role != UserRole.proposer || !viewModel.currentUser.isAdmin)) {
+              return const SizedBox.shrink();
+            }
+
+            return _buildRoleBadge(
+              context,
+              viewModel,
+              role,
+            );
+          },
         ),
       ],
     );
   }
 
-  @override
-  void onViewModelReady(
+  Widget _buildRoleBadge(
+    BuildContext context,
+    SingleProfileViewModel viewModel,
+    UserRole role,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: kdSingleProfileViewRoleBadgePadding,
+      ),
+      child: Chip(
+        deleteIcon: CircleAvatar(
+          backgroundColor:
+              viewModel.currentUser.isAdmin && role == UserRole.proposer
+                  ? viewModel.user
+                      .map(
+                        (user) => user.isProposer ? kcRed : kcOrange,
+                      )
+                      .getOrElse(() => role.color)
+                  : role.color,
+          child: Icon(
+            viewModel.currentUser.isAdmin && role == UserRole.proposer
+                ? viewModel.user
+                    .map(
+                      (user) => user.isProposer ? Icons.remove : Icons.add,
+                    )
+                    .getOrElse(() => Icons.verified)
+                : Icons.verified,
+            color: kcWhite,
+            size: kdSingleProfileViewRoleEditIconSize,
+          ),
+        ),
+        deleteButtonTooltipMessage:
+            viewModel.currentUser.isAdmin && role == UserRole.proposer
+                ? viewModel.user
+                    .map(
+                      (user) => user.isProposer ? 'Remove role' : 'Add role',
+                    )
+                    .getOrElse(() => 'Role verified')
+                : 'Role verified',
+        onDeleted: () async {
+          if (viewModel.currentUser.isAdmin &&
+              role == UserRole.proposer &&
+              viewModel.user.isSome()) {
+            final isProposer = viewModel.user
+                .map(
+                  (user) => user.isProposer,
+                )
+                .getOrElse(() => false);
+
+            if (isProposer) {
+              await viewModel.removeRole(role);
+            } else {
+              await viewModel.addRole(role);
+            }
+          }
+        },
+        side: BorderSide(
+          color: role.color,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            kdSingleProfileViewRoleBadgeShapeRadius,
+          ),
+        ),
+        label: Text(
+          role.value,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: role.color,
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton(
+    BuildContext context,
     SingleProfileViewModel viewModel,
   ) {
-    super.onViewModelReady(viewModel);
-    viewModel.update();
+    return ElevatedButton(
+      onPressed: () async {
+        await viewModel.updateUser();
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: kcOrange,
+        minimumSize: const Size(
+          kdSingleProfileViewMaxWidth / 2,
+          kdSingleProfileViewSubmitButtonMinHeight,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: kdSingleProfileViewSubmitButtonPadding,
+          vertical: kdSingleProfileViewSubmitButtonPadding,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            kdSingleProfileViewSubmitButtonShapeRadius,
+          ),
+        ),
+      ),
+      child: const Text(
+        'Update',
+        style: TextStyle(
+          color: kcWhite,
+          fontSize: KdSingleProfileViewSubmitButtonTextSize,
+        ),
+      ),
+    );
   }
 
   @override
-  SingleProfileViewModel viewModelBuilder(
-    BuildContext context,
-  ) =>
+  void onViewModelReady(SingleProfileViewModel viewModel) {
+    super.onViewModelReady(viewModel);
+
+    syncFormWithViewModel(viewModel);
+    viewModel.init();
+  }
+
+  @override
+  SingleProfileViewModel viewModelBuilder(BuildContext context) =>
       SingleProfileViewModel(userId: userId);
 
   @override
   void onDispose(SingleProfileViewModel viewModel) {
     super.onDispose(viewModel);
+
+    disposeForm();
     viewModel.sidebarController.dispose();
   }
 }

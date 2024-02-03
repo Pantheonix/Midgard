@@ -84,28 +84,42 @@ class AppSidebar extends StatelessWidget {
               ),
               footerDivider: horizontalSpaceTiny,
               headerBuilder: (context, extended) {
-                return SizedBox(
-                  height: kdSidebarHeaderHeight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(kdSidebarHeaderPadding),
-                    child: CachedNetworkImage(
-                      imageUrl: viewModel.hiveService
-                              .getCurrentUserProfile(box)
-                              .isSome()
-                          ? viewModel.hiveService
-                              .getCurrentUserProfile(box)
-                              .fold(
-                                () => '',
-                                (data) => data.profilePictureUrl,
-                              )
-                          : '',
-                      placeholder: (context, url) =>
-                          const FlutterLogo(size: 50),
-                      errorWidget: (context, url, error) =>
-                          const FlutterLogo(size: 50),
-                      imageBuilder: (context, imageProvider) => CircleAvatar(
-                        radius: kdSidebarAvatarShapeRadius,
-                        backgroundImage: imageProvider,
+                return InkWell(
+                  onTap: () {
+                    viewModel.hiveService.getCurrentUserProfile(box).fold(
+                      () {},
+                      (user) {
+                        viewModel.routerService.replaceWithSingleProfileView(
+                          userId: user.userId,
+                        );
+                      },
+                    );
+                  },
+                  child: SizedBox(
+                    height: kdSidebarHeaderHeight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(kdSidebarHeaderPadding),
+                      child: CachedNetworkImage(
+                        imageUrl: viewModel.hiveService
+                                .getCurrentUserProfile(box)
+                                .isSome()
+                            ? viewModel.hiveService
+                                .getCurrentUserProfile(box)
+                                .fold(
+                                  () => '',
+                                  (data) => data.profilePictureUrl,
+                                )
+                            : '',
+                        placeholder: (context, url) => const FlutterLogo(
+                          size: kdSidebarAvatarShapeRadius,
+                        ),
+                        errorWidget: (context, url, error) => const FlutterLogo(
+                          size: kdSidebarAvatarShapeRadius,
+                        ),
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: kdSidebarAvatarShapeRadius,
+                          backgroundImage: imageProvider,
+                        ),
                       ),
                     ),
                   ),

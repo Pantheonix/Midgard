@@ -61,7 +61,8 @@ class HiveService {
     );
   }
 
-  Option<UserProfileModel> getCurrentUserProfile(Box<UserProfileModel> box) {
+  Option<UserProfileModel> getCurrentUserProfile([Box<UserProfileModel>? box]) {
+    box ??= Hive.box<UserProfileModel>(HiveConstants.userProfileBox);
     final userProfile = box.get(HiveConstants.currentUserProfile);
 
     return switch (userProfile) {
