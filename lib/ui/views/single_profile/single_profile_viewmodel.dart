@@ -9,6 +9,7 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_view.form.dart';
+import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -63,7 +64,7 @@ class SingleProfileViewModel extends FormViewModel {
 
     return result.fold(
       (IdentityException error) {
-        _logger.e('Error while retrieving user: ${error.message}');
+        _logger.e('Error while retrieving user: ${error.toJson()}');
         return none();
       },
       (UserProfileModel user) {
@@ -73,10 +74,10 @@ class SingleProfileViewModel extends FormViewModel {
     );
   }
 
-  Future<void> updateProfilePicture() async {
+  Future<void> _updateProfilePicture() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png'],
+      allowedExtensions: kAllowedProfilePictureTypes,
     );
 
     if (result == null) return;
@@ -84,7 +85,14 @@ class SingleProfileViewModel extends FormViewModel {
     final bytes = result.files.single.bytes;
     final mimeType = result.files.single.extension;
     final filename = result.files.single.name;
+    final size = result.files.single.size;
+
     if (bytes == null || mimeType == null) return;
+
+    if (size > kMaxProfilePictureSize) {
+      _logger.e('Profile picture size is too large');
+      throw Exception('Profile picture size is too large');
+    }
 
     profilePicture = some(
       (
@@ -95,9 +103,24 @@ class SingleProfileViewModel extends FormViewModel {
     );
   }
 
-  Future<void> updateUser() async {
+  Future<void> updateProfilePicture() async {
+    await runBusyFuture(
+      _updateProfilePicture(),
+      busyObject: kbSingleProfileKey,
+    );
+  }
+
+  Future<void> _updateUser() async {
+    // check client validation rules
+    await runBusyFuture(
+      _validate(),
+      busyObject: kbSingleProfileKey,
+    );
+
+    if (hasAnyValidationMessage) return;
+
     final updateUserRequest = UpdateUserRequest(
-      username: nameValue == null ? none() : some(nameValue!),
+      username: usernameValue == null ? none() : some(usernameValue!),
       email: emailValue == null ? none() : some(emailValue!),
       fullname: fullnameValue == null ? none() : some(fullnameValue!),
       bio: bioValue == null ? none() : some(bioValue!),
@@ -113,21 +136,35 @@ class SingleProfileViewModel extends FormViewModel {
     );
 
     await result.fold(
-      (IdentityException error) {
-        _logger.e('Error while updating user: ${error.message}');
-        return;
+      (IdentityException error) async {
+        _logger.e('Error while updating user: ${error.toJson()}');
+        await Sentry.captureException(
+          Exception('Error while updating user: ${error.toJson()}'),
+        );
+
+        throw Exception(
+          'Unable to update user profile: ${error.errors.asString}',
+        );
       },
       (UserProfileModel user) async {
         _logger
           ..i('User updated successfully')
           ..d('User: ${user.toJson()}');
+
         _user = some(user);
         await _hiveService.saveCurrentUserProfile(user);
       },
     );
   }
 
-  Future<void> addRole(UserRole role) async {
+  Future<void> updateUser() async {
+    await runBusyFuture(
+      _updateUser(),
+      busyObject: kbSingleProfileKey,
+    );
+  }
+
+  Future<void> _addRole(UserRole role) async {
     final userId = _user.fold(
       () => '',
       (user) => user.userId,
@@ -141,10 +178,14 @@ class SingleProfileViewModel extends FormViewModel {
       busyObject: kbSingleProfileKey,
     );
 
-    result.fold(
-      (IdentityException error) {
-        _logger.e('Error while adding role: ${error.message}');
-        return;
+    await result.fold(
+      (IdentityException error) async {
+        _logger.e('Error while adding role: ${error.toJson()}');
+        await Sentry.captureException(
+          Exception('Error while adding role: ${error.toJson()}'),
+        );
+
+        throw Exception('Unable to add role: ${error.errors.asString}');
       },
       (UserProfileModel user) {
         _logger
@@ -155,7 +196,14 @@ class SingleProfileViewModel extends FormViewModel {
     );
   }
 
-  Future<void> removeRole(UserRole role) async {
+  Future<void> addRole(UserRole role) async {
+    await runBusyFuture(
+      _addRole(role),
+      busyObject: kbSingleProfileKey,
+    );
+  }
+
+  Future<void> _removeRole(UserRole role) async {
     final userId = _user.fold(
       () => '',
       (user) => user.userId,
@@ -169,10 +217,14 @@ class SingleProfileViewModel extends FormViewModel {
       busyObject: kbSingleProfileKey,
     );
 
-    result.fold(
-      (IdentityException error) {
-        _logger.e('Error while removing role: ${error.message}');
-        return;
+    await result.fold(
+      (IdentityException error) async {
+        _logger.e('Error while removing role: ${error.toJson()}');
+        await Sentry.captureException(
+          Exception('Error while removing role: ${error.toJson()}'),
+        );
+
+        throw Exception('Unable to remove role: ${error.errors.asString}');
       },
       (UserProfileModel user) {
         _logger
@@ -183,6 +235,31 @@ class SingleProfileViewModel extends FormViewModel {
     );
   }
 
+  Future<void> removeRole(UserRole role) async {
+    await runBusyFuture(
+      _removeRole(role),
+      busyObject: kbSingleProfileKey,
+    );
+  }
+
+  Future<void> _validate() async {
+    if (hasUsernameValidationMessage) {
+      throw Exception(usernameValidationMessage);
+    }
+
+    if (hasEmailValidationMessage) {
+      throw Exception(emailValidationMessage);
+    }
+
+    if (hasFullnameValidationMessage) {
+      throw Exception(fullnameValidationMessage);
+    }
+
+    if (hasBioValidationMessage) {
+      throw Exception(bioValidationMessage);
+    }
+  }
+
   Future<void> init() async {
     _logger.i('Updating user');
 
@@ -191,7 +268,7 @@ class SingleProfileViewModel extends FormViewModel {
       busyObject: kbSingleProfileKey,
     );
 
-    nameValue = _user.fold(
+    usernameValue = _user.fold(
       () => 'Username',
       (user) => user.username,
     );

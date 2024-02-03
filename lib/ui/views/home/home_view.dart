@@ -1,3 +1,6 @@
+import 'package:badges/badges.dart' as badges;
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -9,7 +12,12 @@ import 'package:midgard/ui/widgets/home/asset_card.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
-  const HomeView({super.key});
+  HomeView({
+    this.warningMessage,
+    super.key,
+  });
+
+  late String? warningMessage;
 
   @override
   Widget builder(
@@ -22,6 +30,56 @@ class HomeView extends StackedView<HomeViewModel> {
         controller: viewModel.sidebarController,
       ),
       backgroundColor: kcWhite,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(kdHomeViewPadding),
+        child: badges.Badge(
+          showBadge: warningMessage != null,
+          badgeContent: const Icon(
+            Icons.circle,
+            size: kdHomeViewWarningBadgeIconSize,
+            color: kcRed,
+          ),
+          badgeAnimation: const badges.BadgeAnimation.scale(
+            animationDuration: Duration(
+              seconds: kiHomeViewWarningBadgeAnimationDurationSec,
+            ),
+            colorChangeAnimationDuration: Duration(
+              seconds: kiHomeViewWarningBadgeColorChangeAnimationDurationSec,
+            ),
+            colorChangeAnimationCurve: Curves.easeInOut,
+          ),
+          badgeStyle: const badges.BadgeStyle(
+            badgeColor: kcRed,
+          ),
+          child: FloatingActionButton(
+            onPressed: () async {
+              if (warningMessage != null) {
+                await context.showInfoBar(
+                  position: FlashPosition.top,
+                  indicatorColor: kcRed,
+                  content: Text(warningMessage!),
+                  primaryActionBuilder: (context, controller) {
+                    return IconButton(
+                      onPressed: () {
+                        warningMessage = null;
+                        viewModel.rebuildUi();
+                        controller.dismiss();
+                      },
+                      icon: const Icon(Icons.close),
+                    );
+                  },
+                );
+              }
+            },
+            child: const Icon(
+              Icons.notification_important,
+              size: kdHomeViewWarningIconSize,
+              color: kcOrange,
+            ),
+          ),
+        ),
+      ),
       body: Row(
         children: [
           AppSidebar(
@@ -76,7 +134,7 @@ class HomeView extends StackedView<HomeViewModel> {
   @override
   void onDispose(HomeViewModel viewModel) {
     super.onDispose(viewModel);
-    // Hive.close();
+
     viewModel.sidebarController.dispose();
   }
 }

@@ -1,9 +1,15 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/user/user_models.dart';
+import 'package:midgard/models/validators/user_validators.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
+import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_view.form.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_viewmodel.dart';
@@ -13,10 +19,22 @@ import 'package:stacked/stacked_annotations.dart';
 
 @FormView(
   fields: [
-    FormTextField(name: 'name'),
-    FormTextField(name: 'email'),
-    FormTextField(name: 'fullname'),
-    FormTextField(name: 'bio'),
+    FormTextField(
+      name: 'username',
+      validator: UserValidators.validateUsername,
+    ),
+    FormTextField(
+      name: 'email',
+      validator: UserValidators.validateEmail,
+    ),
+    FormTextField(
+      name: 'fullname',
+      validator: UserValidators.validateFullname,
+    ),
+    FormTextField(
+      name: 'bio',
+      validator: UserValidators.validateBio,
+    ),
   ],
 )
 class SingleProfileView extends StackedView<SingleProfileViewModel>
@@ -81,7 +99,7 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
               user.profilePictureUrl,
             ),
             verticalSpaceLarge,
-            _buildRolesBadges(
+            _buildRolesChips(
               context,
               viewModel,
               user.roles,
@@ -200,29 +218,45 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String username,
   ) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Username',
-        contentPadding: EdgeInsets.all(kdSingleProfileViewNameFieldPadding),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(kdSingleProfileViewFieldBorderRadius),
+    return Column(
+      children: [
+        TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Username',
+            contentPadding: EdgeInsets.all(kdSingleProfileViewNameFieldPadding),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            focusedBorder: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kcLightGrey),
+              borderRadius: BorderRadius.all(
+                Radius.circular(kdSingleProfileViewFieldBorderRadius),
+              ),
+            ),
           ),
+          focusNode: usernameFocusNode,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.next,
+          controller: usernameController,
+          readOnly: viewModel.currentUser.userId !=
+              viewModel.user
+                  .map(
+                    (user) => user.userId,
+                  )
+                  .getOrElse(() => ''),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
-      ),
-      focusNode: nameFocusNode,
-      keyboardType: TextInputType.name,
-      textInputAction: TextInputAction.next,
-      controller: nameController,
-      readOnly: viewModel.currentUser.userId !=
-          viewModel.user
-              .map(
-                (user) => user.userId,
-              )
-              .getOrElse(() => ''),
+        if (viewModel.hasUsernameValidationMessage) ...[
+          verticalSpaceTiny,
+          Text(
+            viewModel.usernameValidationMessage!,
+            style: const TextStyle(
+              color: kcRed,
+              fontSize: kdSingleProfileViewUsernameFieldValidationTextSize,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -231,29 +265,46 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String email,
   ) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Email',
-        contentPadding: EdgeInsets.all(kdSingleProfileViewEmailFieldPadding),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(kdSingleProfileViewFieldBorderRadius),
+    return Column(
+      children: [
+        TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Email',
+            contentPadding:
+                EdgeInsets.all(kdSingleProfileViewEmailFieldPadding),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            focusedBorder: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kcLightGrey),
+              borderRadius: BorderRadius.all(
+                Radius.circular(kdSingleProfileViewFieldBorderRadius),
+              ),
+            ),
           ),
+          focusNode: emailFocusNode,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
+          controller: emailController,
+          readOnly: viewModel.currentUser.userId !=
+              viewModel.user
+                  .map(
+                    (user) => user.userId,
+                  )
+                  .getOrElse(() => ''),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
-      ),
-      focusNode: emailFocusNode,
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
-      controller: emailController,
-      readOnly: viewModel.currentUser.userId !=
-          viewModel.user
-              .map(
-                (user) => user.userId,
-              )
-              .getOrElse(() => ''),
+        if (viewModel.hasEmailValidationMessage) ...[
+          verticalSpaceTiny,
+          Text(
+            viewModel.emailValidationMessage!,
+            style: const TextStyle(
+              color: kcRed,
+              fontSize: kdSingleProfileViewEmailFieldValidationTextSize,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -262,29 +313,47 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String fullname,
   ) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Fullname',
-        contentPadding: EdgeInsets.all(kdSingleProfileViewFullnameFieldPadding),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(kdSingleProfileViewFieldBorderRadius),
+    return Column(
+      children: [
+        TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Fullname',
+            contentPadding:
+                EdgeInsets.all(kdSingleProfileViewFullnameFieldPadding),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            focusedBorder: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kcLightGrey),
+              borderRadius: BorderRadius.all(
+                Radius.circular(kdSingleProfileViewFieldBorderRadius),
+              ),
+            ),
           ),
+          focusNode: fullnameFocusNode,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.next,
+          controller: fullnameController,
+          readOnly: viewModel.currentUser.userId !=
+              viewModel.user
+                  .map(
+                    (user) => user.userId,
+                  )
+                  .getOrElse(() => ''),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          maxLength: kMaxFullnameLength,
         ),
-      ),
-      focusNode: fullnameFocusNode,
-      keyboardType: TextInputType.name,
-      textInputAction: TextInputAction.next,
-      controller: fullnameController,
-      readOnly: viewModel.currentUser.userId !=
-          viewModel.user
-              .map(
-                (user) => user.userId,
-              )
-              .getOrElse(() => ''),
+        if (viewModel.hasFullnameValidationMessage) ...[
+          verticalSpaceTiny,
+          Text(
+            viewModel.fullnameValidationMessage!,
+            style: const TextStyle(
+              color: kcRed,
+              fontSize: kdSingleProfileViewFullnameFieldValidationTextSize,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -293,33 +362,50 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
     String bio,
   ) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Bio',
-        contentPadding: EdgeInsets.all(kdSingleProfileViewBioFieldPadding),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(kdSingleProfileViewFieldBorderRadius),
+    return Column(
+      children: [
+        TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Bio',
+            contentPadding: EdgeInsets.all(kdSingleProfileViewBioFieldPadding),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            focusedBorder: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kcLightGrey),
+              borderRadius: BorderRadius.all(
+                Radius.circular(kdSingleProfileViewFieldBorderRadius),
+              ),
+            ),
           ),
+          focusNode: bioFocusNode,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          controller: bioController,
+          readOnly: viewModel.currentUser.userId !=
+              viewModel.user
+                  .map(
+                    (user) => user.userId,
+                  )
+                  .getOrElse(() => ''),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          maxLength: kMaxBioLength,
         ),
-      ),
-      focusNode: bioFocusNode,
-      maxLines: null,
-      keyboardType: TextInputType.multiline,
-      controller: bioController,
-      readOnly: viewModel.currentUser.userId !=
-          viewModel.user
-              .map(
-                (user) => user.userId,
-              )
-              .getOrElse(() => ''),
+        if (viewModel.hasBioValidationMessage) ...[
+          verticalSpaceTiny,
+          Text(
+            viewModel.bioValidationMessage!,
+            style: const TextStyle(
+              color: kcRed,
+              fontSize: kdSingleProfileViewBioFieldValidationTextSize,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ],
     );
   }
 
-  Widget _buildRolesBadges(
+  Widget _buildRolesChips(
     BuildContext context,
     SingleProfileViewModel viewModel,
     List<UserRole> roles,
@@ -334,7 +420,7 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
               return const SizedBox.shrink();
             }
 
-            return _buildRoleBadge(
+            return _buildRoleChip(
               context,
               viewModel,
               role,
@@ -345,7 +431,7 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     );
   }
 
-  Widget _buildRoleBadge(
+  Widget _buildRoleChip(
     BuildContext context,
     SingleProfileViewModel viewModel,
     UserRole role,
@@ -427,6 +513,36 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     return ElevatedButton(
       onPressed: () async {
         await viewModel.updateUser();
+
+        if (!context.mounted) return;
+
+        if (viewModel.hasErrorForKey(kbSingleProfileKey)) {
+          await context.showErrorBar(
+            position: FlashPosition.top,
+            indicatorColor: kcRed,
+            content: Text(
+              viewModel.error(kbSingleProfileKey).message as String,
+            ),
+            primaryActionBuilder: (context, controller) {
+              return IconButton(
+                onPressed: controller.dismiss,
+                icon: const Icon(Icons.close),
+              );
+            },
+          );
+        } else {
+          await context.showSuccessBar(
+            position: FlashPosition.top,
+            indicatorColor: kcGreen,
+            content: const Text('Profile updated successfully!'),
+            primaryActionBuilder: (context, controller) {
+              return IconButton(
+                onPressed: controller.dismiss,
+                icon: const Icon(Icons.close),
+              );
+            },
+          );
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: kcOrange,
@@ -455,11 +571,18 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
   }
 
   @override
-  void onViewModelReady(SingleProfileViewModel viewModel) {
+  Future<void> onViewModelReady(SingleProfileViewModel viewModel) async {
     super.onViewModelReady(viewModel);
 
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
+      await viewModel.routerService.replaceWithHomeView(
+        warningMessage: ksAppNotLoggedInRedirectMessage,
+      );
+    }
+
     syncFormWithViewModel(viewModel);
-    viewModel.init();
+    await viewModel.init();
   }
 
   @override

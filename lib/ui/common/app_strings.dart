@@ -35,3 +35,6 @@ Ensuring the coders did test their skills and overwhelm
 
 And so the balade of the competitive programming platform Pantheonix did end 
 With the gods of code, ensuring the mortals did ascend. ''';
+const String ksAppNotLoggedInRedirectMessage =
+    'You should be logged in to access this page!';
+const String ksAppAlreadyLoggedInRedirectMessage = 'You are already logged in!';

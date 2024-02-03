@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/user/user_models.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
+import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.form.dart';
 import 'package:midgard/ui/views/profiles/profiles_viewmodel.dart';
@@ -13,7 +15,7 @@ import 'package:stacked/stacked_annotations.dart';
 
 @FormView(
   fields: [
-    FormTextField(name: 'name'),
+    FormTextField(name: 'username'),
   ],
 )
 class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
@@ -97,10 +99,10 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
             borderSide: BorderSide(color: kcLightGrey),
           ),
         ),
-        focusNode: nameFocusNode,
+        focusNode: usernameFocusNode,
         keyboardType: TextInputType.name,
         textInputAction: TextInputAction.next,
-        controller: nameController,
+        controller: usernameController,
       ),
     );
   }
@@ -248,11 +250,18 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
   }
 
   @override
-  void onViewModelReady(ProfilesViewModel viewModel) {
+  Future<void> onViewModelReady(ProfilesViewModel viewModel) async {
     super.onViewModelReady(viewModel);
 
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
+      await viewModel.routerService.replaceWithHomeView(
+        warningMessage: ksAppNotLoggedInRedirectMessage,
+      );
+    }
+
     syncFormWithViewModel(viewModel);
-    viewModel.init();
+    await viewModel.init();
   }
 
   @override

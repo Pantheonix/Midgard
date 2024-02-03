@@ -166,9 +166,7 @@ class AppSidebar extends StatelessWidget {
                           onTap: () async {
                             await viewModel.hiveService
                                 .clearCurrentUserProfile();
-                            await viewModel.routerService.navigateTo(
-                              const HomeViewRoute(),
-                            );
+                            await viewModel.routerService.replaceWithHomeView();
                           },
                         ),
                         SidebarXItem(

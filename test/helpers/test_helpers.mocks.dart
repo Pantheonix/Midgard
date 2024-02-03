@@ -737,7 +737,7 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
   _i5.Future<
       _i3.Either<_i17.IdentityException,
           ({int count, List<_i13.UserProfileModel> users})>> getAll({
-    String? name,
+    String? username,
     String? sortBy,
     int? page,
     int? pageSize,
@@ -747,7 +747,7 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           #getAll,
           [],
           {
-            #name: name,
+            #username: username,
             #sortBy: sortBy,
             #page: page,
             #pageSize: pageSize,
@@ -763,7 +763,7 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
             #getAll,
             [],
             {
-              #name: name,
+              #username: username,
               #sortBy: sortBy,
               #page: page,
               #pageSize: pageSize,
@@ -780,7 +780,7 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
             #getAll,
             [],
             {
-              #name: name,
+              #username: username,
               #sortBy: sortBy,
               #page: page,
               #pageSize: pageSize,

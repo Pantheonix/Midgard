@@ -23,6 +23,14 @@ const int kMinPasswordLength = 6;
 const int kMaxPasswordLength = 20;
 const kPasswordRegex =
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,20}$';
+const int kMaxFullnameLength = 50;
+const int kMaxBioLength = 300;
+const int kMaxProfilePictureSize = 10000000;
+const List<String> kAllowedProfilePictureTypes = [
+  'jpeg',
+  'png',
+  'jpg',
+];
 
 // placeholders
 const String kRiveMoveEyesPadding = '--------------------------';
@@ -143,6 +151,11 @@ const String ksRegisterViewFormFooterLinkText = ' Login now!';
 const double kdHomeViewPadding = 20;
 const double kdHomeViewTitleTextSize = 20;
 const double kdHomeViewSubtitleTextSize = 14;
+const double kdHomeViewWarningIconSize = 40;
+const double kdHomeViewWarningBadgeIconSize = 10;
+const double kdHomeViewWarningIconPadding = 8;
+const int kiHomeViewWarningBadgeAnimationDurationSec = 2;
+const int kiHomeViewWarningBadgeColorChangeAnimationDurationSec = 1;
 
 // about view
 const double kdAboutViewPadding = 20;
@@ -182,6 +195,11 @@ const double kdSingleProfileViewSubmitButtonPadding = 10;
 const double kdSingleProfileViewSubmitButtonShapeRadius = 30;
 const double KdSingleProfileViewSubmitButtonTextSize = 18;
 const double kdSingleProfileViewSubmitButtonMinHeight = 44;
+
+const double kdSingleProfileViewUsernameFieldValidationTextSize = 12;
+const double kdSingleProfileViewEmailFieldValidationTextSize = 12;
+const double kdSingleProfileViewFullnameFieldValidationTextSize = 12;
+const double kdSingleProfileViewBioFieldValidationTextSize = 12;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

@@ -11,7 +11,7 @@ import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;
 
-const String NameValueKey = 'name';
+const String UsernameValueKey = 'username';
 
 final Map<String, TextEditingController> _ProfilesViewTextEditingControllers =
     {};
@@ -19,14 +19,14 @@ final Map<String, TextEditingController> _ProfilesViewTextEditingControllers =
 final Map<String, FocusNode> _ProfilesViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?> _ProfilesViewTextValidations = {
-  NameValueKey: null,
+  UsernameValueKey: null,
 };
 
 mixin $ProfilesView {
-  TextEditingController get nameController =>
-      _getFormTextEditingController(NameValueKey);
+  TextEditingController get usernameController =>
+      _getFormTextEditingController(UsernameValueKey);
 
-  FocusNode get nameFocusNode => _getFormFocusNode(NameValueKey);
+  FocusNode get usernameFocusNode => _getFormFocusNode(UsernameValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
@@ -52,7 +52,7 @@ mixin $ProfilesView {
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
   void syncFormWithViewModel(FormStateHelper model) {
-    nameController.addListener(() => _updateFormData(model));
+    usernameController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -64,7 +64,7 @@ mixin $ProfilesView {
     'This feature was deprecated after 3.1.0.',
   )
   void listenToFormUpdated(FormViewModel model) {
-    nameController.addListener(() => _updateFormData(model));
+    usernameController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -74,7 +74,7 @@ mixin $ProfilesView {
     model.setData(
       model.formValueMap
         ..addAll({
-          NameValueKey: nameController.text,
+          UsernameValueKey: usernameController.text,
         }),
     );
 
@@ -116,42 +116,42 @@ extension ValueProperties on FormStateHelper {
     return !hasAnyValidationMessage;
   }
 
-  String? get nameValue => this.formValueMap[NameValueKey] as String?;
+  String? get usernameValue => this.formValueMap[UsernameValueKey] as String?;
 
-  set nameValue(String? value) {
+  set usernameValue(String? value) {
     this.setData(
-      this.formValueMap..addAll({NameValueKey: value}),
+      this.formValueMap..addAll({UsernameValueKey: value}),
     );
 
-    if (_ProfilesViewTextEditingControllers.containsKey(NameValueKey)) {
-      _ProfilesViewTextEditingControllers[NameValueKey]?.text = value ?? '';
+    if (_ProfilesViewTextEditingControllers.containsKey(UsernameValueKey)) {
+      _ProfilesViewTextEditingControllers[UsernameValueKey]?.text = value ?? '';
     }
   }
 
-  bool get hasName =>
-      this.formValueMap.containsKey(NameValueKey) &&
-      (nameValue?.isNotEmpty ?? false);
+  bool get hasUsername =>
+      this.formValueMap.containsKey(UsernameValueKey) &&
+      (usernameValue?.isNotEmpty ?? false);
 
-  bool get hasNameValidationMessage =>
-      this.fieldsValidationMessages[NameValueKey]?.isNotEmpty ?? false;
+  bool get hasUsernameValidationMessage =>
+      this.fieldsValidationMessages[UsernameValueKey]?.isNotEmpty ?? false;
 
-  String? get nameValidationMessage =>
-      this.fieldsValidationMessages[NameValueKey];
+  String? get usernameValidationMessage =>
+      this.fieldsValidationMessages[UsernameValueKey];
 }
 
 extension Methods on FormStateHelper {
-  setNameValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[NameValueKey] = validationMessage;
+  setUsernameValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[UsernameValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
-    nameValue = '';
+    usernameValue = '';
   }
 
   /// Validates text input fields on the Form
   void validateForm() {
     this.setValidationMessages({
-      NameValueKey: getValidationMessage(NameValueKey),
+      UsernameValueKey: getValidationMessage(UsernameValueKey),
     });
   }
 }
@@ -171,5 +171,5 @@ String? getValidationMessage(String key) {
 /// Updates the fieldsValidationMessages on the FormViewModel
 void updateValidationData(FormStateHelper model) =>
     model.setValidationMessages({
-      NameValueKey: getValidationMessage(NameValueKey),
+      UsernameValueKey: getValidationMessage(UsernameValueKey),
     });

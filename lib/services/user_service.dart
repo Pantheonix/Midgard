@@ -31,7 +31,7 @@ class UserService {
             List<UserProfileModel> users,
             int count,
           })>> getAll({
-    String? name,
+    String? username,
     String? sortBy,
     int? page,
     int? pageSize,
@@ -42,7 +42,7 @@ class UserService {
           ApiConstants.baseUrl,
           ApiConstants.usersUrl,
           queryParams: {
-            'name': name ?? '',
+            'username': username ?? '',
             'sortBy': sortBy ?? 'NameAsc',
             'page': page == null ? '1' : page.toString(),
             'pageSize': pageSize == null ? '10' : pageSize.toString(),
@@ -91,7 +91,7 @@ class UserService {
             ),
           ),
           (r) => getAll(
-            name: name,
+            username: username,
             sortBy: sortBy,
             page: page,
             pageSize: pageSize,

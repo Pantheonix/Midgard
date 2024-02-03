@@ -37,9 +37,14 @@ class StackedRouterWeb extends _i10.RootStackRouter {
       );
     },
     HomeViewRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<HomeViewArgs>(orElse: () => const HomeViewArgs());
       return _i10.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i2.HomeView(),
+        child: _i2.HomeView(
+          warningMessage: args.warningMessage,
+          key: args.key,
+        ),
         opaque: true,
         barrierDismissible: false,
       );
@@ -148,14 +153,36 @@ class StartupViewRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomeView]
-class HomeViewRoute extends _i10.PageRouteInfo<void> {
-  const HomeViewRoute()
-      : super(
+class HomeViewRoute extends _i10.PageRouteInfo<HomeViewArgs> {
+  HomeViewRoute({
+    String? warningMessage,
+    _i12.Key? key,
+  }) : super(
           HomeViewRoute.name,
           path: '/home',
+          args: HomeViewArgs(
+            warningMessage: warningMessage,
+            key: key,
+          ),
         );
 
   static const String name = 'HomeView';
+}
+
+class HomeViewArgs {
+  const HomeViewArgs({
+    this.warningMessage,
+    this.key,
+  });
+
+  final String? warningMessage;
+
+  final _i12.Key? key;
+
+  @override
+  String toString() {
+    return 'HomeViewArgs{warningMessage: $warningMessage, key: $key}';
+  }
 }
 
 /// generated route for
@@ -262,10 +289,16 @@ extension RouterStateExtension on _i9.RouterService {
     );
   }
 
-  Future<dynamic> navigateToHomeView(
-      {void Function(_i10.NavigationFailure)? onFailure}) async {
+  Future<dynamic> navigateToHomeView({
+    String? warningMessage,
+    _i12.Key? key,
+    void Function(_i10.NavigationFailure)? onFailure,
+  }) async {
     return navigateTo(
-      const HomeViewRoute(),
+      HomeViewRoute(
+        warningMessage: warningMessage,
+        key: key,
+      ),
       onFailure: onFailure,
     );
   }
@@ -332,10 +365,16 @@ extension RouterStateExtension on _i9.RouterService {
     );
   }
 
-  Future<dynamic> replaceWithHomeView(
-      {void Function(_i10.NavigationFailure)? onFailure}) async {
+  Future<dynamic> replaceWithHomeView({
+    String? warningMessage,
+    _i12.Key? key,
+    void Function(_i10.NavigationFailure)? onFailure,
+  }) async {
     return replaceWith(
-      const HomeViewRoute(),
+      HomeViewRoute(
+        warningMessage: warningMessage,
+        key: key,
+      ),
       onFailure: onFailure,
     );
   }

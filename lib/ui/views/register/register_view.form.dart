@@ -7,7 +7,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, non_constant_identifier_names,unnecessary_this
 
 import 'package:flutter/material.dart';
-import 'package:midgard/ui/views/register/register_viewmodel.dart';
+import 'package:midgard/models/validators/user_validators.dart';
 import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;
@@ -23,9 +23,9 @@ final Map<String, TextEditingController> _RegisterViewTextEditingControllers =
 final Map<String, FocusNode> _RegisterViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?> _RegisterViewTextValidations = {
-  UsernameValueKey: RegisterValidators.validateUsername,
-  EmailValueKey: RegisterValidators.validateEmail,
-  PasswordValueKey: RegisterValidators.validatePassword,
+  UsernameValueKey: UserValidators.validateUsername,
+  EmailValueKey: UserValidators.validateEmail,
+  PasswordValueKey: UserValidators.validatePassword,
   ConfirmPasswordValueKey: null,
 };
 

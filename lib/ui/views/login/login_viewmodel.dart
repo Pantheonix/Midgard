@@ -95,14 +95,6 @@ class LoginViewModel extends FormViewModel with RiveBear {
 
   void togglePasswordVisibility() {
     isPasswordObscured = !isPasswordObscured;
-    rebuildUi();
-  }
-
-  Future<void> navigateToRegister() async {
-    await _routerService.replaceWithRegisterView();
-  }
-
-  Future<void> navigateToHome() async {
-    await _routerService.replaceWithHomeView();
+    notifyListeners();
   }
 }

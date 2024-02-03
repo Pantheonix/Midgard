@@ -1,6 +1,9 @@
 import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:midgard/app/app.router.dart';
+import 'package:midgard/models/validators/user_validators.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -18,15 +21,15 @@ import 'package:stacked/stacked_annotations.dart';
   fields: [
     FormTextField(
       name: 'username',
-      validator: RegisterValidators.validateUsername,
+      validator: UserValidators.validateUsername,
     ),
     FormTextField(
       name: 'email',
-      validator: RegisterValidators.validateEmail,
+      validator: UserValidators.validateEmail,
     ),
     FormTextField(
       name: 'password',
-      validator: RegisterValidators.validatePassword,
+      validator: UserValidators.validatePassword,
     ),
     FormTextField(
       name: 'confirmPassword',
@@ -515,55 +518,16 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
         if (!context.mounted) return;
 
         if (viewModel.hasErrorForKey(kbRegisterKey)) {
-          await showFlash(
-            context: context,
-            duration: const Duration(seconds: kiRegisterViewSnackbarDuration),
-            builder: (context, controller) {
-              return FlashBar(
-                controller: controller,
-                primaryAction: TextButton(
-                  onPressed: () {
-                    controller.dismiss();
-                  },
-                  child: const Text(
-                    ksRegisterViewSnackbarDismissText,
-                    style: TextStyle(
-                      color: kcWhite,
-                      fontSize: kdRegisterViewSnackbarDismissTextSize,
-                    ),
-                  ),
-                ),
-                backgroundColor: Colors.redAccent,
-                position: FlashPosition.top,
-                forwardAnimationCurve: Curves.easeIn,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    kdRegisterViewSnackbarShapeRadius,
-                  ),
-                ),
-                shadowColor: kcBlack,
-                titleTextStyle: const TextStyle(
-                  color: kcWhite,
-                  fontSize: kdRegisterViewSnackbarTitleTextSize,
-                  fontWeight: FontWeight.bold,
-                ),
-                contentTextStyle: const TextStyle(
-                  color: kcWhite,
-                  fontSize: kdRegisterViewSnackbarTitleTextSize,
-                ),
-                title: const Text(
-                  ksRegisterViewSnackbarTitleText,
-                ),
-                content: Text(
-                  viewModel.error(kbRegisterKey).message as String,
-                ),
-                iconColor: kcWhite,
-                icon: const Icon(
-                  Icons.error_outline,
-                  color: kcWhite,
-                ),
-                showProgressIndicator: true,
-                indicatorColor: kcLightGrey,
+          await context.showErrorBar(
+            position: FlashPosition.top,
+            indicatorColor: kcRed,
+            content: Text(
+              viewModel.error(kbRegisterKey).message as String,
+            ),
+            primaryActionBuilder: (context, controller) {
+              return IconButton(
+                onPressed: controller.dismiss,
+                icon: const Icon(Icons.close),
               );
             },
           );
@@ -621,7 +585,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                viewModel.navigateToLogin();
+                viewModel.routerService.replaceWithLoginView();
               },
           ),
         ],
@@ -631,9 +595,13 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
 
   @override
   Future<void> onViewModelReady(RegisterViewModel viewModel) async {
+    super.onViewModelReady(viewModel);
+
     final userProfileBox = await HiveService.userProfileBoxAsync;
     if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isSome()) {
-      await viewModel.navigateToHome();
+      await viewModel.routerService.replaceWithHomeView(
+        warningMessage: ksAppAlreadyLoggedInRedirectMessage,
+      );
     }
 
     syncFormWithViewModel(viewModel);
