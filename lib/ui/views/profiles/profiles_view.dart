@@ -46,14 +46,14 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
                 ),
                 child: Column(
                   children: [
-                    _buildFormHeader(viewModel),
+                    _buildFormHeader(context, viewModel),
                     verticalSpaceMedium,
                     if (viewModel.busy(kbProfilesKey))
                       const Center(
                         child: CircularProgressIndicator(),
                       )
                     else ...[
-                      _buildUsersTable(context, viewModel),
+                      _buildUsersTableView(context, viewModel),
                       verticalSpaceMedium,
                       _buildPaginationFooter(context, viewModel),
                     ],
@@ -68,12 +68,13 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
   }
 
   Widget _buildFormHeader(
+    BuildContext context,
     ProfilesViewModel viewModel,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildFilterUsernameField(viewModel),
+        _buildFilterUsernameField(context, viewModel),
         horizontalSpaceSmall,
         IconButton(
           icon: const Icon(Icons.filter_list),
@@ -86,6 +87,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
   }
 
   Widget _buildFilterUsernameField(
+    BuildContext context,
     ProfilesViewModel viewModel,
   ) {
     return Expanded(
@@ -107,7 +109,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     );
   }
 
-  Widget _buildUsersTable(
+  Widget _buildUsersTableView(
     BuildContext context,
     ProfilesViewModel viewModel,
   ) {

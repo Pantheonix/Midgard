@@ -16,6 +16,7 @@ import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
+import 'package:midgard/ui/common/app_constants.dart';
 import 'package:sentry/sentry.dart';
 
 class UserService {
@@ -45,7 +46,9 @@ class UserService {
             'username': username ?? '',
             'sortBy': sortBy ?? 'NameAsc',
             'page': page == null ? '1' : page.toString(),
-            'pageSize': pageSize == null ? '10' : pageSize.toString(),
+            'pageSize': pageSize == null
+                ? kiProfilesViewPageSize.toString()
+                : pageSize.toString(),
           },
         ),
       );
@@ -56,8 +59,12 @@ class UserService {
         final usersCount = data['totalCount'] as int;
 
         final users = usersJson
-            .map((e) => UserProfileModel.fromJson(e as Map<String, dynamic>))
-            .toList();
+            .map(
+              (userJson) =>
+                  UserProfileModel.fromJson(userJson as Map<String, dynamic>),
+            )
+            .toList()
+          ..forEach(_hiveService.saveUserProfile);
 
         return right(
           (
@@ -113,6 +120,7 @@ class UserService {
       _logger.e('Error while retrieving users: $e');
       await Sentry.captureException(
         Exception('Error while retrieving users: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
       );
 
       return left(
@@ -184,6 +192,7 @@ class UserService {
       _logger.e('Error while retrieving user: $e');
       await Sentry.captureException(
         Exception('Error while retrieving user: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
       );
 
       return left(
@@ -304,6 +313,7 @@ class UserService {
       _logger.e('Error while updating user: $e');
       await Sentry.captureException(
         Exception('Error while updating user: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
       );
 
       return left(
@@ -383,6 +393,7 @@ class UserService {
       _logger.e('Error while adding role: $e');
       await Sentry.captureException(
         Exception('Error while adding role: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
       );
 
       return left(
@@ -462,6 +473,7 @@ class UserService {
       _logger.e('Error while removing role: $e');
       await Sentry.captureException(
         Exception('Error while removing role: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
       );
 
       return left(

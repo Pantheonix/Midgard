@@ -16,11 +16,14 @@ abstract class ApiConstants {
   static const String imageUrl = '/api/identity/images';
   static const String usersUrl = '/api/identity/users';
   static const String rolesUrl = '/api/identity/users/:id/role';
+  static const String problemsUrl = '/api/problems';
 }
 
 abstract class HiveConstants {
   static const String userProfileBox = 'userProfileBox';
   static const String userAvatarBox = 'userAvatarBox';
+  static const String problemBox = 'problemBox';
+
   static const String currentUserProfile = 'currentUserProfile';
   static const String currentUserAvatarData = 'currentUserAvatarData';
 }

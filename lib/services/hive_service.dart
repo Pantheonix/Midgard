@@ -6,13 +6,34 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:http/browser_client.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/extensions/http_extensions.dart';
+import 'package:midgard/models/problem/problem_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:sentry/sentry.dart';
 
 class HiveService {
   final _logger = getLogger('HiveService');
   final _httpClient = BrowserClient()..withCredentials = true;
+
+  static Future<void> init() async {
+    if (!kIsWeb) {
+      final appDocumentDir =
+          await path_provider.getApplicationDocumentsDirectory();
+      Hive.init(appDocumentDir.path);
+    }
+
+    Hive
+      ..registerAdapter(UserProfileModelAdapter())
+      ..registerAdapter(UserRoleAdapter())
+      ..registerAdapter(ProblemModelAdapter())
+      ..registerAdapter(IoTypeAdapter())
+      ..registerAdapter(DifficultyAdapter());
+
+    await Hive.openBox<UserProfileModel>(HiveConstants.userProfileBox);
+    await Hive.openBox<Uint8List>(HiveConstants.userAvatarBox);
+    await Hive.openBox<ProblemModel>(HiveConstants.problemBox);
+  }
 
   static Future<Box<UserProfileModel>> get userProfileBoxAsync =>
       Hive.openBox<UserProfileModel>(
@@ -32,6 +53,16 @@ class HiveService {
   static ValueListenable<Box<Uint8List>> get userAvatarBox =>
       Hive.box<Uint8List>(
         HiveConstants.userAvatarBox,
+      ).listenable();
+
+  static Future<Box<ProblemModel>> get problemBoxAsync =>
+      Hive.openBox<ProblemModel>(
+        HiveConstants.problemBox,
+      );
+
+  static ValueListenable<Box<ProblemModel>> get problemBoxListenable =>
+      Hive.box<ProblemModel>(
+        HiveConstants.problemBox,
       ).listenable();
 
   Future<void> saveCurrentUserProfile(UserProfileModel userProfile) async {
@@ -108,8 +139,11 @@ class HiveService {
     );
   }
 
-  Option<UserProfileModel> getUserProfile(String userId) {
-    final box = Hive.box<UserProfileModel>(HiveConstants.userProfileBox);
+  Option<UserProfileModel> getUserProfile(
+    String userId, [
+    Box<UserProfileModel>? box,
+  ]) {
+    box ??= Hive.box<UserProfileModel>(HiveConstants.userProfileBox);
     final userProfile = box.get(userId);
 
     return switch (userProfile) {

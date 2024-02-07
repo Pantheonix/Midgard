@@ -15,6 +15,7 @@ const String kbLoginKey = 'login';
 const String kbRegisterKey = 'register';
 const String kbProfilesKey = 'profile';
 const String kbSingleProfileKey = 'singleProfile';
+const String kbProblemsKey = 'problems';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -201,12 +202,34 @@ const double kdSingleProfileViewEmailFieldValidationTextSize = 12;
 const double kdSingleProfileViewFullnameFieldValidationTextSize = 12;
 const double kdSingleProfileViewBioFieldValidationTextSize = 12;
 
+// problems view
+const double kdProblemsViewPadding = 20;
+const int kiProblemsViewPageSize = 10;
+const double kdProblemsViewProblemsListUserAvatarShapeRadius = 20;
+const double kdProblemsViewProblemsListUsernameFontSize = 10;
+const double kdProblemsViewProblemsListTitleFontSize = 20;
+const double kdProblemsViewProblemsListSubtitleFontSize = 14;
+const int kiProblemsViewProblemsListSubtitleMaxLines = 3;
+const double kdProblemsViewProblemsListTileVisualVerticalDensity = 4;
+const double kdProblemsViewProblemsListTileHeight = 150;
+const double kdProblemsViewProblemsListTilePadding = 10;
+const double kdProblemsViewProblemsListTileBorderWidth = 20;
+const String ksProblemsViewProblemsListTileForegroundKey = 'foreground';
+const String ksProblemsViewProblemsListTileBackgroundKey = 'background';
+const double kdProblemsViewProblemsListTileBackgroundLeadingIconSize = 40;
+const double kdProblemsViewProblemsListTileBackgroundTitleFontSize = 15;
+const double
+    kdProblemsViewProblemsListTileBackgroundLeadingAndTrailingFontSize = 13;
+const double kdProblemsViewProblemsListTileElevation = 6;
+const int kiHoverDurationMs = 600;
+
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
 const int kiSidebarAboutMenuIndex = 1;
 const int kiSidebarLoginMenuIndex = 2;
 const int kiSidebarRegisterMenuIndex = 3;
 const int kiSidebarProfilesMenuIndex = 3;
+const int kiSidebarProblemsMenuIndex = 4;
 
 const double kdSidebarPadding = 10;
 const double kdSidebarShapeRadius = 20;
@@ -228,3 +251,4 @@ const String ksSidebarLoginMenuText = 'Login';
 const String ksSidebarRegisterMenuText = 'Register';
 const String ksSidebarLogoutMenuText = 'Logout';
 const String ksSidebarProfilesMenuText = 'Profiles';
+const String ksSidebarProblemsMenuText = 'Problems';

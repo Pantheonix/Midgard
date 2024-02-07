@@ -110,12 +110,14 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
               viewModel,
               user.username,
             ),
-            verticalSpaceSmall,
-            _buildEmailField(
-              context,
-              viewModel,
-              user.email,
-            ),
+            if (viewModel.currentUser.userId == user.userId) ...[
+              verticalSpaceSmall,
+              _buildEmailField(
+                context,
+                viewModel,
+                user.email,
+              ),
+            ],
             verticalSpaceSmall,
             _buildFullnameField(
               context,

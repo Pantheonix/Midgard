@@ -11,9 +11,12 @@ import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
 import 'package:hive_flutter/adapters.dart' as _i14;
 import 'package:midgard/models/exceptions/identity_exception.dart' as _i17;
+import 'package:midgard/models/exceptions/problem_exception.dart' as _i20;
+import 'package:midgard/models/problem/problem_models.dart' as _i21;
 import 'package:midgard/models/user/update_user_models.dart' as _i18;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
+import 'package:midgard/services/problem_service.dart' as _i19;
 import 'package:midgard/services/user_service.dart' as _i16;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked/stacked.dart' as _i2;
@@ -673,24 +676,36 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i5.Future<void>);
 
   @override
-  _i3.Option<_i13.UserProfileModel> getUserProfile(String? userId) =>
+  _i3.Option<_i13.UserProfileModel> getUserProfile(
+    String? userId, [
+    _i14.Box<_i13.UserProfileModel>? box,
+  ]) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserProfile,
-          [userId],
+          [
+            userId,
+            box,
+          ],
         ),
         returnValue: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getUserProfile,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
         returnValueForMissingStub: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getUserProfile,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
       ) as _i3.Option<_i13.UserProfileModel>);
@@ -952,4 +967,67 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         )),
       ) as _i5
           .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+}
+
+/// A class which mocks [ProblemService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProblemService extends _i1.Mock implements _i19.ProblemService {
+  @override
+  _i5.Future<
+      _i3.Either<_i20.ProblemException,
+          ({int count, List<_i21.ProblemModel> problems})>> getAll({
+    String? name,
+    String? difficulty,
+    int? page,
+    int? pageSize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+          {
+            #name: name,
+            #difficulty: difficulty,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i20.ProblemException,
+                    ({int count, List<_i21.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i20.ProblemException,
+                ({int count, List<_i21.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i20.ProblemException,
+                    ({int count, List<_i21.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i20.ProblemException,
+                ({int count, List<_i21.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<_i20.ProblemException,
+              ({int count, List<_i21.ProblemModel> problems})>>);
 }
