@@ -76,6 +76,7 @@ class UserService {
         _logger.e('Error while retrieving users: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving users: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -108,6 +109,7 @@ class UserService {
         _logger.e('Error while retrieving users: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving users: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -134,13 +136,13 @@ class UserService {
   }
 
   Future<Either<IdentityException, UserProfileModel>> getById({
-    required String id,
+    required String userId,
   }) async {
     try {
       final response = await _httpClient.get(
         uriFromEnv(
           ApiConstants.baseUrl,
-          '${ApiConstants.usersUrl}/$id',
+          '${ApiConstants.usersUrl}/$userId',
         ),
       );
 
@@ -153,6 +155,7 @@ class UserService {
         _logger.e('Error while retrieving user: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving user: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -174,12 +177,13 @@ class UserService {
               Errors([]),
             ),
           ),
-          (r) => getById(id: id),
+          (r) => getById(userId: userId),
         );
       } else {
         _logger.e('Error while retrieving user: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving user: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -271,6 +275,7 @@ class UserService {
         _logger.e('Error while updating user: ${response.body}');
         await Sentry.captureException(
           Exception('Error while updating user: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -301,6 +306,7 @@ class UserService {
         _logger.e('Error while updating user: ${response.body}');
         await Sentry.captureException(
           Exception('Error while updating user: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -351,6 +357,7 @@ class UserService {
         _logger.e('Error while adding role: ${response.body}');
         await Sentry.captureException(
           Exception('Error while adding role: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -381,6 +388,7 @@ class UserService {
         _logger.e('Error while adding role: ${response.body}');
         await Sentry.captureException(
           Exception('Error while adding role: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -431,6 +439,7 @@ class UserService {
         _logger.e('Error while removing role: ${response.body}');
         await Sentry.captureException(
           Exception('Error while removing role: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -461,6 +470,7 @@ class UserService {
         _logger.e('Error while removing role: ${response.body}');
         await Sentry.captureException(
           Exception('Error while removing role: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(

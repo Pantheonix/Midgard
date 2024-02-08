@@ -223,6 +223,16 @@ const double
 const double kdProblemsViewProblemsListTileElevation = 6;
 const int kiHoverDurationMs = 600;
 
+// single problem view
+const double kdSingleProblemViewPadding = 20;
+const double kdSingleProblemViewDataColumnTitleFontSize = 16;
+const double kdSingleProblemViewProposerAvatarShapeRadius = 20;
+const double kdSingleProblemViewProposerUsernameFontSize = 10;
+const double kdSingleProblemViewDataTableBorderRadius = 10;
+const double kdSingleProblemViewDataTableBorderWidth = 1.5;
+const double kdSingleProblemViewTitleFontSize = 20;
+const double kdSingleProblemViewDescriptionPadding = 10;
+
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
 const int kiSidebarAboutMenuIndex = 1;

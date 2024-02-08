@@ -60,7 +60,7 @@ class SingleProfileViewModel extends FormViewModel {
   SidebarXController get sidebarController => _sidebarController;
 
   Future<Option<UserProfileModel>> getUser(String id) async {
-    final result = await _userService.getById(id: id);
+    final result = await _userService.getById(userId: id);
 
     return result.fold(
       (IdentityException error) {
@@ -140,6 +140,7 @@ class SingleProfileViewModel extends FormViewModel {
         _logger.e('Error while updating user: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while updating user: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
         );
 
         throw Exception(
@@ -183,6 +184,7 @@ class SingleProfileViewModel extends FormViewModel {
         _logger.e('Error while adding role: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while adding role: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
         );
 
         throw Exception('Unable to add role: ${error.errors.asString}');
@@ -222,6 +224,7 @@ class SingleProfileViewModel extends FormViewModel {
         _logger.e('Error while removing role: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while removing role: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
         );
 
         throw Exception('Unable to remove role: ${error.errors.asString}');

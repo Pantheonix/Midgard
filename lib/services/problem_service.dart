@@ -73,6 +73,7 @@ class ProblemService {
         _logger.e('Error while retrieving problems: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving problems: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -105,6 +106,7 @@ class ProblemService {
         _logger.e('Error while retrieving problems: ${response.body}');
         await Sentry.captureException(
           Exception('Error while retrieving problems: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -123,6 +125,80 @@ class ProblemService {
       return left(
         ProblemException(
           'Error getting problems',
+          null,
+          [],
+        ),
+      );
+    }
+  }
+
+  Future<Either<ProblemException, ProblemModel>> getById({
+    required String problemId,
+  }) async {
+    try {
+      final response = await _httpClient.get(
+        uriFromEnv(
+          ApiConstants.baseUrl,
+          '${ApiConstants.problemsUrl}/$problemId',
+        ),
+      );
+
+      if (response.statusCode == HttpStatus.ok) {
+        final problemJson = jsonDecode(response.body) as Map<String, dynamic>;
+        final problem = ProblemModel.fromJson(problemJson);
+
+        return right(problem);
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        _logger.e('Error while retrieving problem: ${response.body}');
+        await Sentry.captureException(
+          Exception('Error while retrieving problem: ${response.body}'),
+          stackTrace: StackTrace.current,
+        );
+
+        final userProfileBox = await HiveService.userProfileBoxAsync;
+        final currentUserId = _hiveService
+            .getCurrentUserProfile(userProfileBox)
+            .fold(() => '', (user) => user.userId);
+
+        final refreshTokenRequest = RefreshTokenRequest(
+          userId: currentUserId,
+        );
+        final refreshTokenResponse =
+            await _authService.refreshToken(refreshTokenRequest);
+
+        return refreshTokenResponse.fold(
+          (l) => left(
+            ProblemException(
+              'Session expired',
+              null,
+              [],
+            ),
+          ),
+          (r) => getById(problemId: problemId),
+        );
+      } else {
+        _logger.e('Error while retrieving problem: ${response.body}');
+        await Sentry.captureException(
+          Exception('Error while retrieving problem: ${response.body}'),
+          stackTrace: StackTrace.current,
+        );
+
+        return left(
+          ProblemException.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
+          ),
+        );
+      }
+    } catch (e) {
+      _logger.e('Error while retrieving problem: $e');
+      await Sentry.captureException(
+        Exception('Error while retrieving problem: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
+      );
+
+      return left(
+        ProblemException(
+          'Error while retrieving problem',
           null,
           [],
         ),

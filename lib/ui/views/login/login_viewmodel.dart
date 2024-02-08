@@ -71,6 +71,7 @@ class LoginViewModel extends FormViewModel with RiveBear {
         _logger.e('Error while login: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while login: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
         );
 
         failTrigger?.fire();

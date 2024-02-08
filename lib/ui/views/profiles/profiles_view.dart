@@ -119,6 +119,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
         child: ConstrainedBox(
           constraints: BoxConstraints(minWidth: constraints.maxWidth),
           child: DataTable(
+            headingRowColor: MaterialStateProperty.all(kcVeryLightGrey),
             sortColumnIndex: 1,
             sortAscending: viewModel.sortByValue == SortUsersBy.nameAsc,
             showCheckboxColumn: false,

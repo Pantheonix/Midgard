@@ -79,6 +79,7 @@ class ProblemsViewModel extends FormViewModel {
         _logger.e('Error while retrieving problems: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while retrieving problems: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
         );
         return [];
       },

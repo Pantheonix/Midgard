@@ -85,6 +85,7 @@ class RegisterViewModel extends FormViewModel with RiveBear {
         _logger.e('Error while register: ${error.toJson()}');
         await Sentry.captureException(
           Exception('Error while register: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
         );
 
         failTrigger?.fire();

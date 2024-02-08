@@ -78,6 +78,7 @@ class ProfilesViewModel extends FormViewModel {
         _logger.e('Error while retrieving users: ${error.toJson()}');
         await Sentry.captureException(
           'Error while retrieving users: ${error.toJson()}',
+          stackTrace: StackTrace.current,
         );
         return [];
       },

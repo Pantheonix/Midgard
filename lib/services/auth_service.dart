@@ -42,6 +42,7 @@ class AuthService {
         _logger.e('Error while refreshing token: ${response.body}');
         await Sentry.captureException(
           Exception('Error while refreshing token: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -94,6 +95,7 @@ class AuthService {
         _logger.e('Error while login: ${response.body}');
         await Sentry.captureException(
           Exception('Error while login: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(
@@ -149,6 +151,7 @@ class AuthService {
         _logger.e('Error while register: ${response.body}');
         await Sentry.captureException(
           Exception('Error while register: ${response.body}'),
+          stackTrace: StackTrace.current,
         );
 
         return left(

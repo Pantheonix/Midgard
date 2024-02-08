@@ -8,9 +8,11 @@ class ProblemException implements Exception {
   ProblemException.fromJson(Map<String, dynamic> json)
       : message = json['error']['message'] as String,
         details = json['error']['details'] as String?,
-        validationErrors = (json['error']['validationErrors'] as List<dynamic>)
-            .map((e) => ValidationError.fromJson(e as Map<String, dynamic>))
-            .toList();
+        validationErrors = json['error']['validationErrors'] != null
+            ? (json['error']['validationErrors'] as List<dynamic>)
+                .map((e) => ValidationError.fromJson(e as Map<String, dynamic>))
+                .toList()
+            : [];
 
   final String message;
   final String? details;

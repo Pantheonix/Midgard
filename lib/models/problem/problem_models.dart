@@ -106,11 +106,15 @@ class ProblemModel {
 
   bool get isPublic => isPublished;
 
+  String get toStringPretty => 'Problem: ${toJson()}';
+
   String get authorNamePretty => 'Author: $authorName';
 
   String get sourceNamePretty => 'Source: $sourceName';
 
   String get timeLimitPretty => 'Time: ${timeLimit.toStringAsFixed(1)}s';
+
+  String get timeLimitPrettyWithoutLabel => '${timeLimit.toStringAsFixed(1)}s';
 
   String get totalMemoryLimitPretty =>
       '${totalMemoryLimit.toStringAsFixed(1)}MB';
@@ -122,6 +126,8 @@ class ProblemModel {
       'Memory: $totalMemoryLimitPretty / $stackMemoryLimitPretty';
 
   String get createdAtPretty => 'Creation date: ${createdAt.toLocal()}';
+
+  String get createdAtPrettyWithoutLabel => '${createdAt.toLocal()}';
 }
 
 @HiveType(typeId: 3)

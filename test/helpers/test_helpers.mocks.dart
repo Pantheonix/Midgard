@@ -808,12 +808,12 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
 
   @override
   _i5.Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>> getById(
-          {required String? id}) =>
+          {required String? userId}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getById,
           [],
-          {#id: id},
+          {#userId: userId},
         ),
         returnValue: _i5.Future<
                 _i3
@@ -823,7 +823,7 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           Invocation.method(
             #getById,
             [],
-            {#id: id},
+            {#userId: userId},
           ),
         )),
         returnValueForMissingStub: _i5.Future<
@@ -834,7 +834,7 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           Invocation.method(
             #getById,
             [],
-            {#id: id},
+            {#userId: userId},
           ),
         )),
       ) as _i5
@@ -1030,4 +1030,35 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
       ) as _i5.Future<
           _i3.Either<_i20.ProblemException,
               ({int count, List<_i21.ProblemModel> problems})>>);
+
+  @override
+  _i5.Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>> getById(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>>.value(
+            _FakeEither_4<_i20.ProblemException, _i21.ProblemModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>>.value(
+            _FakeEither_4<_i20.ProblemException, _i21.ProblemModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>>);
 }

@@ -13,6 +13,7 @@ import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_view.form.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_viewmodel.dart';
+import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -63,16 +64,14 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
             controller: viewModel.sidebarController,
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(
-                  kdSingleProfileViewPadding,
-                ),
-                child: Center(
-                  child: viewModel.busy(kbSingleProfileKey)
-                      ? const CircularProgressIndicator()
-                      : _buildProfileForm(context, viewModel),
-                ),
+            child: Padding(
+              padding: const EdgeInsets.all(
+                kdSingleProfileViewPadding,
+              ),
+              child: Center(
+                child: viewModel.busy(kbSingleProfileKey)
+                    ? const CircularProgressIndicator()
+                    : _buildProfileForm(context, viewModel),
               ),
             ),
           ),
@@ -86,58 +85,67 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     SingleProfileViewModel viewModel,
   ) {
     return viewModel.user.fold(
-      () => const SizedBox.shrink(),
-      (user) => ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: kdSingleProfileViewMaxWidth,
+      () => AppErrorWidget(
+        message: 'No user found with id: $userId',
+      ),
+      (user) => ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          scrollbars: false,
         ),
-        child: Column(
-          children: [
-            _buildAvatarPicker(
-              context,
-              viewModel,
-              user.profilePictureUrl,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: kdSingleProfileViewMaxWidth,
             ),
-            verticalSpaceLarge,
-            _buildRolesChips(
-              context,
-              viewModel,
-              user.roles,
+            child: Column(
+              children: [
+                _buildAvatarPicker(
+                  context,
+                  viewModel,
+                  user.profilePictureUrl,
+                ),
+                verticalSpaceLarge,
+                _buildRolesChips(
+                  context,
+                  viewModel,
+                  user.roles,
+                ),
+                verticalSpaceMedium,
+                _buildUsernameField(
+                  context,
+                  viewModel,
+                  user.username,
+                ),
+                if (viewModel.currentUser.userId == user.userId) ...[
+                  verticalSpaceSmall,
+                  _buildEmailField(
+                    context,
+                    viewModel,
+                    user.email,
+                  ),
+                ],
+                verticalSpaceSmall,
+                _buildFullnameField(
+                  context,
+                  viewModel,
+                  user.fullname ?? '',
+                ),
+                verticalSpaceSmall,
+                _buildBioField(
+                  context,
+                  viewModel,
+                  user.bio ?? '',
+                ),
+                if (viewModel.currentUser.userId == user.userId) ...[
+                  verticalSpaceMedium,
+                  _buildSubmitButton(
+                    context,
+                    viewModel,
+                  ),
+                ],
+              ],
             ),
-            verticalSpaceMedium,
-            _buildUsernameField(
-              context,
-              viewModel,
-              user.username,
-            ),
-            if (viewModel.currentUser.userId == user.userId) ...[
-              verticalSpaceSmall,
-              _buildEmailField(
-                context,
-                viewModel,
-                user.email,
-              ),
-            ],
-            verticalSpaceSmall,
-            _buildFullnameField(
-              context,
-              viewModel,
-              user.fullname ?? '',
-            ),
-            verticalSpaceSmall,
-            _buildBioField(
-              context,
-              viewModel,
-              user.bio ?? '',
-            ),
-            if (viewModel.currentUser.userId == user.userId) ...[
-              verticalSpaceMedium,
-              _buildSubmitButton(
-                context,
-                viewModel,
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );

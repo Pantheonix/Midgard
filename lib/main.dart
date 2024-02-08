@@ -35,7 +35,10 @@ Future<void> main() async {
       runApp(const MainApp());
     },
     (error, stack) async {
-      await Sentry.captureException(error, stackTrace: stack);
+      await Sentry.captureException(
+        error,
+        stackTrace: stack,
+      );
     },
   );
 }

@@ -38,3 +38,9 @@ With the gods of code, ensuring the mortals did ascend. ''';
 const String ksAppNotLoggedInRedirectMessage =
     'You should be logged in to access this page!';
 const String ksAppAlreadyLoggedInRedirectMessage = 'You are already logged in!';
+const String ksAppErrorToastTitle = 'Error';
+const String ksAppSuccessToastTitle = 'Success';
+const String ksAppWarningToastTitle = 'Warning';
+const String ksAppProblemDescriptiveMetadataTitle =
+    'Problem descriptive metadata';
+const String ksAppProblemTechnicalMetadataTitle = 'Problem technical metadata';

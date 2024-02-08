@@ -10,6 +10,7 @@ import 'package:midgard/ui/views/login/login_view.dart';
 import 'package:midgard/ui/views/problems/problems_view.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.dart';
 import 'package:midgard/ui/views/register/register_view.dart';
+import 'package:midgard/ui/views/single_problem/single_problem_view.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_view.dart';
 import 'package:midgard/ui/views/startup/startup_view.dart';
 import 'package:midgard/ui/views/unknown/unknown_view.dart';
@@ -27,6 +28,7 @@ import 'package:stacked_services/stacked_services.dart';
     MaterialRoute(page: ProfilesView, path: '/profiles'),
     MaterialRoute(page: SingleProfileView, path: '/profiles/:userId'),
     MaterialRoute(page: ProblemsView, path: '/problems'),
+    MaterialRoute(page: SingleProblemView, path: '/problems/:problemId'),
 // @stacked-route
 
     CustomRoute(page: UnknownView, path: '/404'),

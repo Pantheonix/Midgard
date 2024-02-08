@@ -188,7 +188,11 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
                   vertical: kdProblemsViewProblemsListTilePadding,
                 ),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    viewModel.routerService.replaceWithSingleProblemView(
+                      problemId: problem.id,
+                    );
+                  },
                   onHover: (isHovering) async {
                     if (debounce != null) {
                       debounce!.cancel();
