@@ -233,6 +233,10 @@ const double kdSingleProblemViewDataTableBorderWidth = 1.5;
 const double kdSingleProblemViewTitleFontSize = 20;
 const double kdSingleProblemViewDescriptionPadding = 10;
 
+// problem proposals view
+
+// single problem proposal view
+
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
 const int kiSidebarAboutMenuIndex = 1;
@@ -240,6 +244,7 @@ const int kiSidebarLoginMenuIndex = 2;
 const int kiSidebarRegisterMenuIndex = 3;
 const int kiSidebarProfilesMenuIndex = 3;
 const int kiSidebarProblemsMenuIndex = 4;
+const int kiSidebarProblemProposalsMenuIndex = 5;
 
 const double kdSidebarPadding = 10;
 const double kdSidebarShapeRadius = 20;
@@ -262,3 +267,4 @@ const String ksSidebarRegisterMenuText = 'Register';
 const String ksSidebarLogoutMenuText = 'Logout';
 const String ksSidebarProfilesMenuText = 'Profiles';
 const String ksSidebarProblemsMenuText = 'Problems';
+const String kdSidebarProblemProposalsMenuText = 'Proposals';

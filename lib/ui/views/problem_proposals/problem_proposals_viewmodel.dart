@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/models/exceptions/problem_exception.dart';
@@ -7,20 +5,20 @@ import 'package:midgard/models/problem/problem_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:midgard/ui/views/problems/problems_view.form.dart';
+import 'package:midgard/ui/views/problem_proposals/problem_proposals_view.form.dart';
 import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class ProblemsViewModel extends FormViewModel {
+class ProblemProposalsViewModel extends FormViewModel {
   final _problemService = locator<ProblemService>();
   final _hiveService = locator<HiveService>();
   final _routerService = locator<RouterService>();
-  final _logger = getLogger('ProblemsViewModel');
+  final _logger = getLogger('ProblemProposalsViewModel');
 
   final _sidebarController = SidebarXController(
-    selectedIndex: kiSidebarProblemsMenuIndex,
+    selectedIndex: kiSidebarProblemProposalsMenuIndex,
     extended: true,
   );
 
@@ -67,7 +65,7 @@ class ProblemsViewModel extends FormViewModel {
     int? page,
     int? pageSize,
   }) async {
-    final result = await _problemService.getAll(
+    final result = await _problemService.getAllUnpublished(
       name: name,
       difficulty: difficulty,
       page: page,
@@ -76,17 +74,25 @@ class ProblemsViewModel extends FormViewModel {
 
     return result.fold(
       (ProblemException error) async {
-        _logger.e('Error while retrieving problems: ${error.toJson()}');
+        _logger.e(
+          'Error while retrieving unpublished problems: ${error.toJson()}',
+        );
         await Sentry.captureException(
-          Exception('Error while retrieving problems: ${error.toJson()}'),
+          Exception(
+            'Error while retrieving unpublished problems: ${error.toJson()}',
+          ),
           stackTrace: StackTrace.current,
         );
         return [];
       },
       (data) async {
         final (:problems, :count) = data;
-        _logger.i('Retrieved ${problems.length} problems');
-        await Sentry.captureMessage('Retrieved ${problems.length} problems');
+        _logger.i(
+          'Retrieved ${problems.length} unpublished problems',
+        );
+        await Sentry.captureMessage(
+          'Retrieved ${problems.length} unpublished problems',
+        );
 
         _count = count;
         return problems;
@@ -95,8 +101,8 @@ class ProblemsViewModel extends FormViewModel {
   }
 
   Future<void> init() async {
-    _logger.i('Problems list updated');
-    await Sentry.captureMessage('Problems list updated');
+    _logger.i('Unpublished problems list updated');
+    await Sentry.captureMessage('Unpublished problems list updated');
 
     _problems
       ..clear()

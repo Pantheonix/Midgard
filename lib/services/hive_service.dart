@@ -28,7 +28,8 @@ class HiveService {
       ..registerAdapter(UserRoleAdapter())
       ..registerAdapter(ProblemModelAdapter())
       ..registerAdapter(IoTypeAdapter())
-      ..registerAdapter(DifficultyAdapter());
+      ..registerAdapter(DifficultyAdapter())
+      ..registerAdapter(TestModelAdapter());
 
     await Hive.openBox<UserProfileModel>(HiveConstants.userProfileBox);
     await Hive.openBox<Uint8List>(HiveConstants.userAvatarBox);
@@ -152,11 +153,37 @@ class HiveService {
     };
   }
 
-  Option<Uint8List> getUserAvatarBlob(String userId) {
-    final box = Hive.box<Uint8List>(HiveConstants.userAvatarBox);
+  Option<Uint8List> getUserAvatarBlob(
+    String userId, [
+    Box<Uint8List>? box,
+  ]) {
+    box ??= Hive.box<Uint8List>(HiveConstants.userAvatarBox);
     final avatarData = box.get(userId);
 
     return switch (avatarData) {
+      final data? => some(data),
+      null => none(),
+    };
+  }
+
+  Future<void> saveProblem(
+    ProblemModel problem, [
+    Box<ProblemModel>? box,
+  ]) async {
+    box ??= await Hive.openBox<ProblemModel>(
+      HiveConstants.problemBox,
+    );
+    await box.put(problem.id, problem);
+  }
+
+  Option<ProblemModel> getProblem(
+    String problemId, [
+    Box<ProblemModel>? box,
+  ]) {
+    box ??= Hive.box<ProblemModel>(HiveConstants.problemBox);
+    final problem = box.get(problemId);
+
+    return switch (problem) {
       final data? => some(data),
       null => none(),
     };

@@ -46,17 +46,17 @@ class ProfilesViewModel extends FormViewModel {
 
   set selectedIndex(int index) {
     _selectedIndex = index;
-    notifyListeners();
+    rebuildUi();
   }
 
   set pageValue(int page) {
     _page = page;
-    notifyListeners();
+    rebuildUi();
   }
 
   set sortByValue(SortUsersBy sortBy) {
     _sortBy = sortBy;
-    notifyListeners();
+    rebuildUi();
   }
 
   Future<List<UserProfileModel>> getUsers({

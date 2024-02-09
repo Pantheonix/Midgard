@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:midgard/ui/common/app_colors.dart';
@@ -22,6 +23,7 @@ class ProblemModel {
     required this.publishedAt,
     required this.ioType,
     required this.difficulty,
+    required this.tests,
   });
 
   ProblemModel.fromJson(Map<String, dynamic> json)
@@ -39,7 +41,17 @@ class ProblemModel {
         createdAt = DateTime.parse(json['creationDate'] as String),
         publishedAt = DateTime.parse(json['publishingDate'] as String),
         ioType = IoType.fromValue(json['ioType'] as int),
-        difficulty = Difficulty.fromValue(json['difficulty'] as int);
+        difficulty = Difficulty.fromValue(json['difficulty'] as int),
+        tests = json['tests'] != null
+            ? some(
+                (json['tests'] as List<dynamic>)
+                    .map(
+                      (testJson) =>
+                          TestModel.fromJson(testJson as Map<String, dynamic>),
+                    )
+                    .toList(),
+              )
+            : none();
 
   @HiveField(0)
   final String id;
@@ -86,6 +98,9 @@ class ProblemModel {
   @HiveField(14)
   final Difficulty difficulty;
 
+  @HiveField(15)
+  late Option<List<TestModel>> tests;
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
@@ -102,6 +117,7 @@ class ProblemModel {
         'publishingDate': publishedAt.toIso8601String(),
         'ioType': ioType.index,
         'difficulty': difficulty.index,
+        'tests': tests.getOrElse(() => []).map((t) => t.toJson()).toList(),
       };
 
   bool get isPublic => isPublished;
@@ -128,6 +144,16 @@ class ProblemModel {
   String get createdAtPretty => 'Creation date: ${createdAt.toLocal()}';
 
   String get createdAtPrettyWithoutLabel => '${createdAt.toLocal()}';
+
+  void addTest(TestModel test) {
+    tests = some([...(tests.getOrElse(() => [])..add(test))]);
+  }
+
+  void removeTest(TestModel test) {
+    tests = some(
+      tests.getOrElse(() => []).where((t) => t.id != test.id).toList(),
+    );
+  }
 }
 
 @HiveType(typeId: 3)
@@ -194,4 +220,45 @@ enum Difficulty {
       };
 
   static int toValue(Difficulty difficulty) => difficulty.index;
+}
+
+@HiveType(typeId: 5)
+class TestModel {
+  TestModel({
+    required this.id,
+    required this.score,
+    required this.inputUrl,
+    required this.outputUrl,
+  });
+
+  TestModel.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int,
+        score = json['score'] as int,
+        inputUrl = json['inputDownloadUrl'] as String,
+        outputUrl = json['outputDownloadUrl'] as String;
+
+  @HiveField(0)
+  final int id;
+
+  @HiveField(1)
+  final int score;
+
+  @HiveField(2)
+  final String inputUrl;
+
+  @HiveField(3)
+  final String outputUrl;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'score': score,
+        'inputDownloadUrl': inputUrl,
+        'outputDownloadUrl': outputUrl,
+      };
+
+  String get idPretty => '$id';
+
+  String get scorePretty => '$score';
+
+  String get toStringPretty => 'Test: ${toJson()}';
 }

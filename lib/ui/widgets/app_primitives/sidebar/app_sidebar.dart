@@ -135,8 +135,8 @@ class AppSidebar extends StatelessWidget {
                 await viewModel.routerService.replaceWithAboutView();
               },
             ),
-            ...viewModel.hiveService.getCurrentUserProfile(box).isNone()
-                ? [
+            ...viewModel.hiveService.getCurrentUserProfile(box).fold(
+                  () => [
                     SidebarXItem(
                       icon: Icons.login_outlined,
                       label: ksSidebarLoginMenuText,
@@ -151,8 +151,8 @@ class AppSidebar extends StatelessWidget {
                         await viewModel.routerService.replaceWithRegisterView();
                       },
                     ),
-                  ]
-                : [
+                  ],
+                  (UserProfileModel user) => [
                     SidebarXItem(
                       icon: Icons.logout,
                       label: ksSidebarLogoutMenuText,
@@ -175,7 +175,17 @@ class AppSidebar extends StatelessWidget {
                         await viewModel.routerService.replaceWithProblemsView();
                       },
                     ),
+                    if (user.isProposer)
+                      SidebarXItem(
+                        icon: Icons.add_circle,
+                        label: kdSidebarProblemProposalsMenuText,
+                        onTap: () async {
+                          await viewModel.routerService
+                              .replaceWithProblemProposalsView();
+                        },
+                      ),
                   ],
+                ),
           ],
         ),
       ),

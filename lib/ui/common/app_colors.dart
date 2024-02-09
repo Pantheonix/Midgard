@@ -18,6 +18,7 @@ const Color kcUserBadgeColor = Colors.blueAccent;
 const Color kcOrange = Color(0xFFFFA500);
 const Color kcGreen = Color(0xFF008000);
 const Color kcBlue = Color(0xFF0000FF);
+const Color kcBlueAccent = Colors.lightBlueAccent;
 const Color kcEasyBadgeColor = Colors.tealAccent;
 const Color kcMediumBadgeColor = Colors.orangeAccent;
 const Color kcHardBadgeColor = Colors.redAccent;

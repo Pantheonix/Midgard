@@ -600,7 +600,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
     final userProfileBox = await HiveService.userProfileBoxAsync;
     if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isSome()) {
       await viewModel.routerService.replaceWithHomeView(
-        warningMessage: ksAppAlreadyLoggedInRedirectMessage,
+        warningMessage: ksAppAlreadyAuthenticatedRedirectMessage,
       );
     }
 

@@ -587,7 +587,7 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
     final userProfileBox = await HiveService.userProfileBoxAsync;
     if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
       await viewModel.routerService.replaceWithHomeView(
-        warningMessage: ksAppNotLoggedInRedirectMessage,
+        warningMessage: ksAppNotAuthenticatedRedirectMessage,
       );
     }
 

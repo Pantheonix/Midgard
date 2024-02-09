@@ -10,14 +10,14 @@ import 'dart:ui' as _i9;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
 import 'package:hive_flutter/adapters.dart' as _i14;
-import 'package:midgard/models/exceptions/identity_exception.dart' as _i17;
-import 'package:midgard/models/exceptions/problem_exception.dart' as _i20;
-import 'package:midgard/models/problem/problem_models.dart' as _i21;
-import 'package:midgard/models/user/update_user_models.dart' as _i18;
+import 'package:midgard/models/exceptions/identity_exception.dart' as _i18;
+import 'package:midgard/models/exceptions/problem_exception.dart' as _i21;
+import 'package:midgard/models/problem/problem_models.dart' as _i16;
+import 'package:midgard/models/user/update_user_models.dart' as _i19;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
-import 'package:midgard/services/problem_service.dart' as _i19;
-import 'package:midgard/services/user_service.dart' as _i16;
+import 'package:midgard/services/problem_service.dart' as _i20;
+import 'package:midgard/services/user_service.dart' as _i17;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked/stacked.dart' as _i2;
 import 'package:stacked_services/src/bottom_sheet/bottom_sheet_service.dart'
@@ -711,27 +711,91 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i3.Option<_i13.UserProfileModel>);
 
   @override
-  _i3.Option<_i15.Uint8List> getUserAvatarBlob(String? userId) =>
+  _i3.Option<_i15.Uint8List> getUserAvatarBlob(
+    String? userId, [
+    _i14.Box<_i15.Uint8List>? box,
+  ]) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserAvatarBlob,
-          [userId],
+          [
+            userId,
+            box,
+          ],
         ),
         returnValue: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getUserAvatarBlob,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
         returnValueForMissingStub: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getUserAvatarBlob,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
       ) as _i3.Option<_i15.Uint8List>);
+
+  @override
+  _i5.Future<void> saveProblem(
+    _i16.ProblemModel? problem, [
+    _i14.Box<_i16.ProblemModel>? box,
+  ]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveProblem,
+          [
+            problem,
+            box,
+          ],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i3.Option<_i16.ProblemModel> getProblem(
+    String? problemId, [
+    _i14.Box<_i16.ProblemModel>? box,
+  ]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getProblem,
+          [
+            problemId,
+            box,
+          ],
+        ),
+        returnValue: _FakeOption_3<_i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getProblem,
+            [
+              problemId,
+              box,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeOption_3<_i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getProblem,
+            [
+              problemId,
+              box,
+            ],
+          ),
+        ),
+      ) as _i3.Option<_i16.ProblemModel>);
 
   @override
   _i5.Future<void> clearCurrentUserProfile() => (super.noSuchMethod(
@@ -747,10 +811,10 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
 /// A class which mocks [UserService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserService extends _i1.Mock implements _i16.UserService {
+class MockUserService extends _i1.Mock implements _i17.UserService {
   @override
   _i5.Future<
-      _i3.Either<_i17.IdentityException,
+      _i3.Either<_i18.IdentityException,
           ({int count, List<_i13.UserProfileModel> users})>> getAll({
     String? username,
     String? sortBy,
@@ -769,9 +833,9 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           },
         ),
         returnValue: _i5.Future<
-                _i3.Either<_i17.IdentityException,
+                _i3.Either<_i18.IdentityException,
                     ({int count, List<_i13.UserProfileModel> users})>>.value(
-            _FakeEither_4<_i17.IdentityException,
+            _FakeEither_4<_i18.IdentityException,
                 ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
@@ -786,9 +850,9 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           ),
         )),
         returnValueForMissingStub: _i5.Future<
-                _i3.Either<_i17.IdentityException,
+                _i3.Either<_i18.IdentityException,
                     ({int count, List<_i13.UserProfileModel> users})>>.value(
-            _FakeEither_4<_i17.IdentityException,
+            _FakeEither_4<_i18.IdentityException,
                 ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
@@ -803,11 +867,11 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           ),
         )),
       ) as _i5.Future<
-          _i3.Either<_i17.IdentityException,
+          _i3.Either<_i18.IdentityException,
               ({int count, List<_i13.UserProfileModel> users})>>);
 
   @override
-  _i5.Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>> getById(
+  _i5.Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>> getById(
           {required String? userId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -817,8 +881,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         ),
         returnValue: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #getById,
@@ -828,8 +892,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         )),
         returnValueForMissingStub: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #getById,
@@ -838,11 +902,11 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           ),
         )),
       ) as _i5
-          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
 
   @override
-  _i5.Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>> update(
-    _i18.UpdateUserRequest? request, {
+  _i5.Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>> update(
+    _i19.UpdateUserRequest? request, {
     required String? userId,
   }) =>
       (super.noSuchMethod(
@@ -853,8 +917,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         ),
         returnValue: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #update,
@@ -864,8 +928,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         )),
         returnValueForMissingStub: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #update,
@@ -874,11 +938,11 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           ),
         )),
       ) as _i5
-          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
 
   @override
   _i5.Future<
-      _i3.Either<_i17.IdentityException, _i13.UserProfileModel>> addRole({
+      _i3.Either<_i18.IdentityException, _i13.UserProfileModel>> addRole({
     required String? userId,
     required _i13.UserRole? role,
   }) =>
@@ -893,8 +957,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         ),
         returnValue: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #addRole,
@@ -907,8 +971,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         )),
         returnValueForMissingStub: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #addRole,
@@ -920,11 +984,11 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           ),
         )),
       ) as _i5
-          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
 
   @override
   _i5.Future<
-      _i3.Either<_i17.IdentityException, _i13.UserProfileModel>> removeRole({
+      _i3.Either<_i18.IdentityException, _i13.UserProfileModel>> removeRole({
     required String? userId,
     required _i13.UserRole? role,
   }) =>
@@ -939,8 +1003,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         ),
         returnValue: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #removeRole,
@@ -953,8 +1017,8 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
         )),
         returnValueForMissingStub: _i5.Future<
                 _i3
-                .Either<_i17.IdentityException, _i13.UserProfileModel>>.value(
-            _FakeEither_4<_i17.IdentityException, _i13.UserProfileModel>(
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
           this,
           Invocation.method(
             #removeRole,
@@ -966,17 +1030,17 @@ class MockUserService extends _i1.Mock implements _i16.UserService {
           ),
         )),
       ) as _i5
-          .Future<_i3.Either<_i17.IdentityException, _i13.UserProfileModel>>);
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
 }
 
 /// A class which mocks [ProblemService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockProblemService extends _i1.Mock implements _i19.ProblemService {
+class MockProblemService extends _i1.Mock implements _i20.ProblemService {
   @override
   _i5.Future<
-      _i3.Either<_i20.ProblemException,
-          ({int count, List<_i21.ProblemModel> problems})>> getAll({
+      _i3.Either<_i21.ProblemException,
+          ({int count, List<_i16.ProblemModel> problems})>> getAll({
     String? name,
     String? difficulty,
     int? page,
@@ -994,10 +1058,10 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
           },
         ),
         returnValue: _i5.Future<
-                _i3.Either<_i20.ProblemException,
-                    ({int count, List<_i21.ProblemModel> problems})>>.value(
-            _FakeEither_4<_i20.ProblemException,
-                ({int count, List<_i21.ProblemModel> problems})>(
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
           this,
           Invocation.method(
             #getAll,
@@ -1011,10 +1075,10 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
           ),
         )),
         returnValueForMissingStub: _i5.Future<
-                _i3.Either<_i20.ProblemException,
-                    ({int count, List<_i21.ProblemModel> problems})>>.value(
-            _FakeEither_4<_i20.ProblemException,
-                ({int count, List<_i21.ProblemModel> problems})>(
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
           this,
           Invocation.method(
             #getAll,
@@ -1028,11 +1092,11 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
           ),
         )),
       ) as _i5.Future<
-          _i3.Either<_i20.ProblemException,
-              ({int count, List<_i21.ProblemModel> problems})>>);
+          _i3.Either<_i21.ProblemException,
+              ({int count, List<_i16.ProblemModel> problems})>>);
 
   @override
-  _i5.Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>> getById(
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> getById(
           {required String? problemId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1041,8 +1105,8 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
           {#problemId: problemId},
         ),
         returnValue: _i5
-            .Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>>.value(
-            _FakeEither_4<_i20.ProblemException, _i21.ProblemModel>(
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
           this,
           Invocation.method(
             #getById,
@@ -1051,8 +1115,8 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
           ),
         )),
         returnValueForMissingStub: _i5
-            .Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>>.value(
-            _FakeEither_4<_i20.ProblemException, _i21.ProblemModel>(
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
           this,
           Invocation.method(
             #getById,
@@ -1060,5 +1124,95 @@ class MockProblemService extends _i1.Mock implements _i19.ProblemService {
             {#problemId: problemId},
           ),
         )),
-      ) as _i5.Future<_i3.Either<_i20.ProblemException, _i21.ProblemModel>>);
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i21.ProblemException,
+          ({int count, List<_i16.ProblemModel> problems})>> getAllUnpublished({
+    String? name,
+    String? difficulty,
+    int? page,
+    int? pageSize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllUnpublished,
+          [],
+          {
+            #name: name,
+            #difficulty: difficulty,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAllUnpublished,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAllUnpublished,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<_i21.ProblemException,
+              ({int count, List<_i16.ProblemModel> problems})>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i21.ProblemException, _i16.ProblemModel>> getByIdUnpublished(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getByIdUnpublished,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getByIdUnpublished,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getByIdUnpublished,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
 }

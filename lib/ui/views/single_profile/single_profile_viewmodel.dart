@@ -50,7 +50,7 @@ class SingleProfileViewModel extends FormViewModel {
 
   set profilePicture(Option<ProfilePicture> picture) {
     _profilePicture = picture;
-    notifyListeners();
+    rebuildUi();
   }
 
   HiveService get hiveService => _hiveService;

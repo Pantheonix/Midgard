@@ -10,14 +10,15 @@ import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:midgard/ui/views/single_problem/single_problem_viewmodel.dart';
+import 'package:midgard/ui/views/single_problem_proposal/single_problem_proposal_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
-class SingleProblemView extends StackedView<SingleProblemViewModel> {
-  const SingleProblemView({
+class SingleProblemProposalView
+    extends StackedView<SingleProblemProposalViewModel> {
+  const SingleProblemProposalView({
     @PathParam('problemId') required this.problemId,
     super.key,
   });
@@ -27,7 +28,7 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
   @override
   Widget builder(
     BuildContext context,
-    SingleProblemViewModel viewModel,
+    SingleProblemProposalViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
@@ -67,7 +68,7 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
 
   Widget _buildProblemWidget(
     BuildContext context,
-    SingleProblemViewModel viewModel,
+    SingleProblemProposalViewModel viewModel,
     ProblemModel problem,
   ) {
     return SingleChildScrollView(
@@ -125,6 +126,27 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
                   _buildProblemTechnicalMetadata(context, viewModel, problem),
                 ],
               ),
+              ExpansionTile(
+                title: const Text(
+                  ksAppProblemTestCasesTitle,
+                ),
+                backgroundColor: kcVeryLightGrey,
+                collapsedBackgroundColor: kcVeryLightGrey,
+                controlAffinity: ListTileControlAffinity.leading,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    kdSingleProblemViewDataTableBorderRadius,
+                  ),
+                ),
+                collapsedShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    kdSingleProblemViewDataTableBorderRadius,
+                  ),
+                ),
+                children: [
+                  _buildProblemTestCasesTableView(context, viewModel, problem),
+                ],
+              ),
             ],
           ),
           verticalSpaceMedium,
@@ -137,7 +159,7 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
 
   Widget _buildProblemDescriptiveMetadata(
     BuildContext context,
-    SingleProblemViewModel viewModel,
+    SingleProblemProposalViewModel viewModel,
     ProblemModel problem,
   ) {
     return LayoutBuilder(
@@ -321,7 +343,7 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
 
   Widget _buildProblemTechnicalMetadata(
     BuildContext context,
-    SingleProblemViewModel viewModel,
+    SingleProblemProposalViewModel viewModel,
     ProblemModel problem,
   ) {
     return LayoutBuilder(
@@ -430,9 +452,132 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
     );
   }
 
+  Widget _buildProblemTestCasesTableView(
+    BuildContext context,
+    SingleProblemProposalViewModel viewModel,
+    ProblemModel problem,
+  ) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: constraints.maxWidth,
+          ),
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(kcVeryLightGrey),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: kdSingleProblemViewDataTableBorderWidth,
+                color: kcVeryLightGrey,
+              ),
+              borderRadius: BorderRadius.circular(
+                kdSingleProblemViewDataTableBorderRadius,
+              ),
+            ),
+            border: TableBorder.all(
+              color: kcVeryLightGrey,
+            ),
+            showCheckboxColumn: false,
+            columns: const [
+              DataColumn(
+                label: Text(
+                  'Test Id',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Score',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Input',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Output',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+            ],
+            rows: problem.tests
+                .map(
+                  (tests) => tests
+                      .map(
+                        (test) => DataRow(
+                          cells: [
+                            DataCell(
+                              Text(
+                                test.idPretty,
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                test.scorePretty,
+                              ),
+                            ),
+                            DataCell(
+                              IconButton(
+                                onPressed: () {
+                                  viewModel.downloadTestDataFromUrl(
+                                    testId: test.idPretty,
+                                    filename: ksAppTestInputFilename,
+                                    url: test.inputUrl,
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.download,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              IconButton(
+                                onPressed: () {
+                                  viewModel.downloadTestDataFromUrl(
+                                    testId: test.idPretty,
+                                    filename: ksAppTestOutputFilename,
+                                    url: test.outputUrl,
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.download,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                )
+                .getOrElse(
+                  () => <DataRow>[],
+                ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildProblemDescription(
     BuildContext context,
-    SingleProblemViewModel viewModel,
+    SingleProblemProposalViewModel viewModel,
     ProblemModel problem,
   ) {
     return LayoutBuilder(
@@ -458,26 +603,35 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
 
   @override
   Future<void> onViewModelReady(
-    SingleProblemViewModel viewModel,
+    SingleProblemProposalViewModel viewModel,
   ) async {
     super.onViewModelReady(viewModel);
 
     final userProfileBox = await HiveService.userProfileBoxAsync;
-    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
-      await viewModel.routerService.replaceWithHomeView(
-        warningMessage: ksAppNotAuthenticatedRedirectMessage,
-      );
-    }
+    await viewModel.hiveService.getCurrentUserProfile(userProfileBox).fold(
+      () async {
+        await viewModel.routerService.replaceWithHomeView(
+          warningMessage: ksAppNotAuthenticatedRedirectMessage,
+        );
+      },
+      (UserProfileModel user) async {
+        if (!user.isProposer) {
+          await viewModel.routerService.replaceWithHomeView(
+            warningMessage: ksAppNotProposerRedirectMessage,
+          );
+        }
+      },
+    );
   }
 
   @override
-  SingleProblemViewModel viewModelBuilder(
+  SingleProblemProposalViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      SingleProblemViewModel(problemId: problemId);
+      SingleProblemProposalViewModel(problemId: problemId);
 
   @override
-  void onDispose(SingleProblemViewModel viewModel) {
+  void onDispose(SingleProblemProposalViewModel viewModel) {
     super.onDispose(viewModel);
 
     viewModel.sidebarController.dispose();

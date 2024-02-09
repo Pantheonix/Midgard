@@ -376,7 +376,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
     final userProfileBox = await HiveService.userProfileBoxAsync;
     if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isSome()) {
       await viewModel.routerService.replaceWithHomeView(
-        warningMessage: ksAppAlreadyLoggedInRedirectMessage,
+        warningMessage: ksAppAlreadyAuthenticatedRedirectMessage,
       );
     }
 

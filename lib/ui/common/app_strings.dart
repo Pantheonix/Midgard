@@ -35,12 +35,20 @@ Ensuring the coders did test their skills and overwhelm
 
 And so the balade of the competitive programming platform Pantheonix did end 
 With the gods of code, ensuring the mortals did ascend. ''';
-const String ksAppNotLoggedInRedirectMessage =
-    'You should be logged in to access this page!';
-const String ksAppAlreadyLoggedInRedirectMessage = 'You are already logged in!';
+const String ksAppNotAuthenticatedRedirectMessage =
+    'You should be authenticated to access this page!';
+const String ksAppAlreadyAuthenticatedRedirectMessage =
+    'You are already authenticated!';
+const String ksAppNotProposerRedirectMessage =
+    'You should be a proposer to access this page!';
 const String ksAppErrorToastTitle = 'Error';
 const String ksAppSuccessToastTitle = 'Success';
 const String ksAppWarningToastTitle = 'Warning';
 const String ksAppProblemDescriptiveMetadataTitle =
     'Problem descriptive metadata';
 const String ksAppProblemTechnicalMetadataTitle = 'Problem technical metadata';
+const String ksAppProblemTestCasesTitle = 'Problem test cases';
+const String ksProblemProposalsViewPublishTooltip = 'Publish';
+const String ksProblemProposalsViewProposeTooltip = 'Propose new problem';
+const String ksAppTestInputFilename = 'input.txt';
+const String ksAppTestOutputFilename = 'output.txt';

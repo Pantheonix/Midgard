@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -12,8 +11,8 @@ import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:midgard/ui/views/problems/problems_view.form.dart';
-import 'package:midgard/ui/views/problems/problems_viewmodel.dart';
+import 'package:midgard/ui/views/problem_proposals/problem_proposals_view.form.dart';
+import 'package:midgard/ui/views/problem_proposals/problem_proposals_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -23,23 +22,27 @@ import 'package:stacked/stacked_annotations.dart';
     FormTextField(name: 'name'),
   ],
 )
-class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
-  ProblemsView({
-    this.debounce,
+class ProblemProposalsView extends StackedView<ProblemProposalsViewModel>
+    with $ProblemProposalsView {
+  const ProblemProposalsView({
     super.key,
   });
-
-  late Timer? debounce;
 
   @override
   Widget builder(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: kcBlueAccent,
+        tooltip: ksProblemProposalsViewProposeTooltip,
+        child: const Icon(Icons.add),
       ),
       backgroundColor: kcWhite,
       body: Row(
@@ -79,7 +82,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildFormHeader(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -100,7 +103,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildFilterProblemNameField(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
   ) {
     return Expanded(
       child: TextFormField(
@@ -126,7 +129,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildFilterDifficultyField(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
   ) {
     return Expanded(
       child: DropdownButtonFormField<Difficulty>(
@@ -159,7 +162,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildProblemsListView(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
   ) {
     return Expanded(
       child: ValueListenableBuilder(
@@ -189,25 +192,17 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
                 ),
                 child: InkWell(
                   onTap: () {
-                    viewModel.routerService.replaceWithSingleProblemView(
+                    viewModel.routerService
+                        .replaceWithSingleProblemProposalView(
                       problemId: problem.id,
                     );
                   },
-                  onHover: (isHovering) async {
-                    if (debounce != null) {
-                      debounce!.cancel();
+                  onLongPress: () {
+                    if (viewModel.selectedProblemIdValue == problem.id) {
+                      viewModel.selectedProblemIdValue = '';
+                    } else {
+                      viewModel.selectedProblemIdValue = problem.id;
                     }
-
-                    debounce = Timer(
-                      const Duration(milliseconds: kiHoverDurationMs),
-                      () {
-                        if (isHovering) {
-                          viewModel.selectedProblemIdValue = problem.id;
-                        } else {
-                          viewModel.selectedProblemIdValue = '';
-                        }
-                      },
-                    );
                   },
                   child: AnimatedSwitcher(
                     duration: const Duration(
@@ -243,7 +238,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildProblemListTileForeground(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
     ProblemModel problem,
     Option<UserProfileModel> user,
   ) {
@@ -253,49 +248,11 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
       ),
       elevation: kdProblemsViewProblemsListTileElevation,
       child: ListTile(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Flexible(
-              flex: 4,
-              child: CachedNetworkImage(
-                imageUrl: user.isSome()
-                    ? user.fold(
-                        () => '',
-                        (data) => data.profilePictureUrl,
-                      )
-                    : '',
-                placeholder: (context, url) => const FlutterLogo(
-                  size: kdProblemsViewProblemsListUserAvatarShapeRadius,
-                ),
-                errorWidget: (context, url, error) => const FlutterLogo(
-                  size: kdProblemsViewProblemsListUserAvatarShapeRadius,
-                ),
-                imageBuilder: (context, imageProvider) => CircleAvatar(
-                  radius: kdProblemsViewProblemsListUserAvatarShapeRadius,
-                  backgroundImage: imageProvider,
-                ),
-              ),
-            ),
-            const Flexible(
-              child: verticalSpaceTiny,
-            ),
-            Flexible(
-              flex: 2,
-              child: Text(
-                user.isSome()
-                    ? user.fold(
-                        () => '',
-                        (data) => data.username,
-                      )
-                    : '',
-                style: const TextStyle(
-                  fontSize: kdProblemsViewProblemsListUsernameFontSize,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.send),
+          color: kcOrange,
+          tooltip: ksProblemProposalsViewPublishTooltip,
+          onPressed: () {},
         ),
         title: Text(
           problem.name,
@@ -358,7 +315,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildProblemListTileBackground(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
     ProblemModel problem,
   ) {
     return Card(
@@ -408,7 +365,7 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
 
   Widget _buildPaginationFooter(
     BuildContext context,
-    ProblemsViewModel viewModel,
+    ProblemProposalsViewModel viewModel,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -451,28 +408,37 @@ class ProblemsView extends StackedView<ProblemsViewModel> with $ProblemsView {
   }
 
   @override
-  Future<void> onViewModelReady(ProblemsViewModel viewModel) async {
+  Future<void> onViewModelReady(ProblemProposalsViewModel viewModel) async {
     super.onViewModelReady(viewModel);
 
     final userProfileBox = await HiveService.userProfileBoxAsync;
-    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
-      await viewModel.routerService.replaceWithHomeView(
-        warningMessage: ksAppNotAuthenticatedRedirectMessage,
-      );
-    }
+    await viewModel.hiveService.getCurrentUserProfile(userProfileBox).fold(
+      () async {
+        await viewModel.routerService.replaceWithHomeView(
+          warningMessage: ksAppNotAuthenticatedRedirectMessage,
+        );
+      },
+      (UserProfileModel user) async {
+        if (!user.isProposer) {
+          await viewModel.routerService.replaceWithHomeView(
+            warningMessage: ksAppNotProposerRedirectMessage,
+          );
+        }
 
-    syncFormWithViewModel(viewModel);
-    await viewModel.init();
+        syncFormWithViewModel(viewModel);
+        await viewModel.init();
+      },
+    );
   }
 
   @override
-  ProblemsViewModel viewModelBuilder(
+  ProblemProposalsViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      ProblemsViewModel();
+      ProblemProposalsViewModel();
 
   @override
-  void onDispose(ProblemsViewModel viewModel) {
+  void onDispose(ProblemProposalsViewModel viewModel) {
     super.onDispose(viewModel);
 
     disposeForm();

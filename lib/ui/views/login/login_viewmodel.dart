@@ -96,6 +96,6 @@ class LoginViewModel extends FormViewModel with RiveBear {
 
   void togglePasswordVisibility() {
     isPasswordObscured = !isPasswordObscured;
-    notifyListeners();
+    rebuildUi();
   }
 }

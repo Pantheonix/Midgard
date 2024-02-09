@@ -61,7 +61,8 @@ class ProblemService {
               (problemJson) =>
                   ProblemModel.fromJson(problemJson as Map<String, dynamic>),
             )
-            .toList();
+            .toList()
+          ..forEach(_hiveService.saveProblem);
 
         return right(
           (
@@ -116,15 +117,15 @@ class ProblemService {
         );
       }
     } catch (e) {
-      _logger.e('Error getting problems: $e');
+      _logger.e('Error while retrieving problems: $e');
       await Sentry.captureException(
-        Exception('Error getting problems: $e'),
+        Exception('Error while retrieving problems: $e'),
         stackTrace: e is Error ? null : StackTrace.current,
       );
 
       return left(
         ProblemException(
-          'Error getting problems',
+          'Error while retrieving problems',
           null,
           [],
         ),
@@ -199,6 +200,215 @@ class ProblemService {
       return left(
         ProblemException(
           'Error while retrieving problem',
+          null,
+          [],
+        ),
+      );
+    }
+  }
+
+  Future<
+      Either<
+          ProblemException,
+          ({
+            List<ProblemModel> problems,
+            int count,
+          })>> getAllUnpublished({
+    String? name,
+    String? difficulty,
+    int? page,
+    int? pageSize,
+  }) async {
+    try {
+      final response = await _httpClient.get(
+        uriFromEnv(
+          ApiConstants.baseUrl,
+          ApiConstants.unpublishedProblemsUrl,
+          queryParams: {
+            'Name': name ?? '',
+            'Difficulty': difficulty ?? '',
+            'SkipCount': page == null
+                ? '0'
+                : ((page - 1) * kiProblemsViewPageSize).toString(),
+            'MaxResultCount': pageSize == null
+                ? kiProblemsViewPageSize.toString()
+                : pageSize.toString(),
+          },
+        ),
+      );
+
+      if (response.statusCode == HttpStatus.ok) {
+        final data = jsonDecode(response.body);
+        final problemsJson = data['items'] as List<dynamic>;
+        final problemsCount = data['totalCount'] as int;
+
+        final problems = problemsJson
+            .map(
+              (problemJson) =>
+                  ProblemModel.fromJson(problemJson as Map<String, dynamic>),
+            )
+            .toList()
+          ..forEach(_hiveService.saveProblem);
+
+        return right(
+          (
+            problems: problems,
+            count: problemsCount,
+          ),
+        );
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        _logger.e(
+          'Error while retrieving unpublished problems: ${response.body}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Error while retrieving unpublished problems: ${response.body}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        final userProfileBox = await HiveService.userProfileBoxAsync;
+        final currentUserId = _hiveService
+            .getCurrentUserProfile(userProfileBox)
+            .fold(() => '', (user) => user.userId);
+
+        final refreshTokenRequest = RefreshTokenRequest(
+          userId: currentUserId,
+        );
+        final refreshTokenResponse =
+            await _authService.refreshToken(refreshTokenRequest);
+
+        return refreshTokenResponse.fold(
+          (l) => left(
+            ProblemException(
+              'Session expired',
+              null,
+              [],
+            ),
+          ),
+          (r) => getAllUnpublished(
+            name: name,
+            difficulty: difficulty,
+            page: page,
+            pageSize: pageSize,
+          ),
+        );
+      } else {
+        _logger.e(
+          'Error while retrieving unpublished problems: ${response.body}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Error while retrieving unpublished problems: ${response.body}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        return left(
+          ProblemException.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
+          ),
+        );
+      }
+    } catch (e) {
+      _logger.e('Error while retrieving unpublished problems: $e');
+      await Sentry.captureException(
+        Exception('Error while retrieving unpublished problems: $e'),
+        stackTrace: e is Error ? null : StackTrace.current,
+      );
+
+      return left(
+        ProblemException(
+          'Error while retrieving unpublished problems',
+          null,
+          [],
+        ),
+      );
+    }
+  }
+
+  Future<Either<ProblemException, ProblemModel>> getByIdUnpublished({
+    required String problemId,
+  }) async {
+    try {
+      final response = await _httpClient.get(
+        uriFromEnv(
+          ApiConstants.baseUrl,
+          ApiConstants.unpublishedProblemUrl.replaceFirst(
+            ':id',
+            problemId,
+          ),
+        ),
+      );
+
+      if (response.statusCode == HttpStatus.ok) {
+        final problemJson = jsonDecode(response.body) as Map<String, dynamic>;
+        final problem = ProblemModel.fromJson(problemJson);
+
+        return right(problem);
+      } else if (response.statusCode == HttpStatus.unauthorized) {
+        _logger.e(
+          'Error while retrieving unpublished problem: ${response.body}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Error while retrieving unpublished problem: ${response.body}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        final userProfileBox = await HiveService.userProfileBoxAsync;
+        final currentUserId = _hiveService
+            .getCurrentUserProfile(userProfileBox)
+            .fold(() => '', (user) => user.userId);
+
+        final refreshTokenRequest = RefreshTokenRequest(
+          userId: currentUserId,
+        );
+        final refreshTokenResponse =
+            await _authService.refreshToken(refreshTokenRequest);
+
+        return refreshTokenResponse.fold(
+          (l) => left(
+            ProblemException(
+              'Session expired',
+              null,
+              [],
+            ),
+          ),
+          (r) => getByIdUnpublished(problemId: problemId),
+        );
+      } else {
+        _logger.e(
+          'Error while retrieving unpublished problem: ${response.body}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Error while retrieving unpublished problem: ${response.body}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        return left(
+          ProblemException.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>,
+          ),
+        );
+      }
+    } catch (e) {
+      _logger.e(
+        'Error while retrieving unpublished problem: $e',
+      );
+      await Sentry.captureException(
+        Exception(
+          'Error while retrieving unpublished problem: $e',
+        ),
+        stackTrace: e is Error ? null : StackTrace.current,
+      );
+
+      return left(
+        ProblemException(
+          'Error while retrieving unpublished problem',
           null,
           [],
         ),

@@ -259,7 +259,7 @@ class ProfilesView extends StackedView<ProfilesViewModel> with $ProfilesView {
     final userProfileBox = await HiveService.userProfileBoxAsync;
     if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
       await viewModel.routerService.replaceWithHomeView(
-        warningMessage: ksAppNotLoggedInRedirectMessage,
+        warningMessage: ksAppNotAuthenticatedRedirectMessage,
       );
     }
 

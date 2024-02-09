@@ -17,6 +17,8 @@ abstract class ApiConstants {
   static const String usersUrl = '/api/identity/users';
   static const String rolesUrl = '/api/identity/users/:id/role';
   static const String problemsUrl = '/api/problems';
+  static const String unpublishedProblemsUrl = '/api/problems/unpublished';
+  static const String unpublishedProblemUrl = '/api/problems/:id/unpublished';
 }
 
 abstract class HiveConstants {
