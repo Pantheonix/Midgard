@@ -88,7 +88,7 @@ class UserService {
           userId: currentUserId,
         );
         final refreshTokenResponse =
-            await _authService.refreshToken(refreshTokenRequest);
+            await _authService.refreshToken(request: refreshTokenRequest);
 
         return refreshTokenResponse.fold(
           (l) => left(
@@ -167,7 +167,7 @@ class UserService {
           userId: currentUserId,
         );
         final refreshTokenResponse =
-            await _authService.refreshToken(refreshTokenRequest);
+            await _authService.refreshToken(request: refreshTokenRequest);
 
         return refreshTokenResponse.fold(
           (l) => left(
@@ -209,9 +209,9 @@ class UserService {
     }
   }
 
-  Future<Either<IdentityException, UserProfileModel>> update(
-    UpdateUserRequest request, {
+  Future<Either<IdentityException, UserProfileModel>> update({
     required String userId,
+    required UpdateUserRequest request,
   }) async {
     try {
       final multipartRequest = MultipartRequest(
@@ -287,7 +287,7 @@ class UserService {
           userId: currentUserId,
         );
         final refreshTokenResponse =
-            await _authService.refreshToken(refreshTokenRequest);
+            await _authService.refreshToken(request: refreshTokenRequest);
 
         return refreshTokenResponse.fold(
           (l) => left(
@@ -298,8 +298,8 @@ class UserService {
             ),
           ),
           (r) => update(
-            request,
             userId: userId,
+            request: request,
           ),
         );
       } else {
@@ -343,7 +343,7 @@ class UserService {
           ApiConstants.rolesUrl.replaceFirst(':id', userId),
         ),
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
         },
         body: jsonEncode(role.toJson()),
       );
@@ -369,7 +369,7 @@ class UserService {
           userId: currentUserId,
         );
         final refreshTokenResponse =
-            await _authService.refreshToken(refreshTokenRequest);
+            await _authService.refreshToken(request: refreshTokenRequest);
 
         return refreshTokenResponse.fold(
           (l) => left(
@@ -425,7 +425,7 @@ class UserService {
           ApiConstants.rolesUrl.replaceFirst(':id', userId),
         ),
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
         },
         body: jsonEncode(role.toJson()),
       );
@@ -451,7 +451,7 @@ class UserService {
           userId: currentUserId,
         );
         final refreshTokenResponse =
-            await _authService.refreshToken(refreshTokenRequest);
+            await _authService.refreshToken(request: refreshTokenRequest);
 
         return refreshTokenResponse.fold(
           (l) => left(

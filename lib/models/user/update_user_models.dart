@@ -1,12 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:dartz/dartz.dart';
-
-typedef ProfilePicture = ({
-  Uint8List bytes,
-  String mimeType,
-  String filename,
-});
+import 'package:midgard/models/core/file_data.dart';
 
 class UpdateUserRequest {
   UpdateUserRequest({
@@ -21,5 +14,5 @@ class UpdateUserRequest {
   final Option<String> email;
   final Option<String> fullname;
   final Option<String> bio;
-  final Option<ProfilePicture> profilePicture;
+  final Option<FileData> profilePicture;
 }

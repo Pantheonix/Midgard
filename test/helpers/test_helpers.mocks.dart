@@ -12,7 +12,9 @@ import 'package:flutter/material.dart' as _i6;
 import 'package:hive_flutter/adapters.dart' as _i14;
 import 'package:midgard/models/exceptions/identity_exception.dart' as _i18;
 import 'package:midgard/models/exceptions/problem_exception.dart' as _i21;
+import 'package:midgard/models/problem/create_problem_models.dart' as _i22;
 import 'package:midgard/models/problem/problem_models.dart' as _i16;
+import 'package:midgard/models/problem/update_problem_models.dart' as _i23;
 import 'package:midgard/models/user/update_user_models.dart' as _i19;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
@@ -905,15 +907,18 @@ class MockUserService extends _i1.Mock implements _i17.UserService {
           .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
 
   @override
-  _i5.Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>> update(
-    _i19.UpdateUserRequest? request, {
+  _i5.Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>> update({
     required String? userId,
+    required _i19.UpdateUserRequest? request,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
           #update,
-          [request],
-          {#userId: userId},
+          [],
+          {
+            #userId: userId,
+            #request: request,
+          },
         ),
         returnValue: _i5.Future<
                 _i3
@@ -922,8 +927,11 @@ class MockUserService extends _i1.Mock implements _i17.UserService {
           this,
           Invocation.method(
             #update,
-            [request],
-            {#userId: userId},
+            [],
+            {
+              #userId: userId,
+              #request: request,
+            },
           ),
         )),
         returnValueForMissingStub: _i5.Future<
@@ -933,8 +941,11 @@ class MockUserService extends _i1.Mock implements _i17.UserService {
           this,
           Invocation.method(
             #update,
-            [request],
-            {#userId: userId},
+            [],
+            {
+              #userId: userId,
+              #request: request,
+            },
           ),
         )),
       ) as _i5
@@ -1215,4 +1226,227 @@ class MockProblemService extends _i1.Mock implements _i20.ProblemService {
           ),
         )),
       ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> create(
+          {required _i22.CreateProblemRequest? request}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [],
+          {#request: request},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> addTest({
+    required String? problemId,
+    required _i22.AddTestRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addTest,
+          [],
+          {
+            #problemId: problemId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #addTest,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #addTest,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> update({
+    required String? problemId,
+    required _i23.UpdateProblemRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #update,
+          [],
+          {
+            #problemId: problemId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #update,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #update,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> updateTest({
+    required String? problemId,
+    required int? testId,
+    required _i23.UpdateTestRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateTest,
+          [],
+          {
+            #problemId: problemId,
+            #testId: testId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #updateTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #updateTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>> publish(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #publish,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #publish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #publish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>> unpublish(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unpublish,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #unpublish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #unpublish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>);
 }

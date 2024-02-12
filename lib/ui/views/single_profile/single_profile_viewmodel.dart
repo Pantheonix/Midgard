@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/models/core/file_data.dart';
 import 'package:midgard/models/exceptions/identity_exception.dart';
 import 'package:midgard/models/user/update_user_models.dart';
 import 'package:midgard/models/user/user_models.dart';
@@ -32,7 +33,7 @@ class SingleProfileViewModel extends FormViewModel {
   );
 
   late Option<UserProfileModel> _user = none();
-  late Option<ProfilePicture> _profilePicture = none();
+  late Option<FileData> _profilePicture = none();
 
   Option<UserProfileModel> get user => _user;
 
@@ -46,9 +47,9 @@ class SingleProfileViewModel extends FormViewModel {
             ),
           );
 
-  Option<ProfilePicture> get profilePicture => _profilePicture;
+  Option<FileData> get profilePicture => _profilePicture;
 
-  set profilePicture(Option<ProfilePicture> picture) {
+  set profilePicture(Option<FileData> picture) {
     _profilePicture = picture;
     rebuildUi();
   }
@@ -127,12 +128,9 @@ class SingleProfileViewModel extends FormViewModel {
       profilePicture: profilePicture,
     );
 
-    final result = await runBusyFuture(
-      _userService.update(
-        updateUserRequest,
-        userId: userId,
-      ),
-      busyObject: kbSingleProfileKey,
+    final result = await _userService.update(
+      userId: userId,
+      request: updateUserRequest,
     );
 
     await result.fold(

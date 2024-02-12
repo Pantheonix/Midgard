@@ -16,6 +16,9 @@ const String kbRegisterKey = 'register';
 const String kbProfilesKey = 'profile';
 const String kbSingleProfileKey = 'singleProfile';
 const String kbProblemsKey = 'problems';
+const String kbSingleProblemKey = 'singleProblem';
+const String kbProblemProposalsKey = 'problemProposals';
+const String kbSingleProblemProposalKey = 'singleProblemProposal';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -268,3 +271,7 @@ const String ksSidebarLogoutMenuText = 'Logout';
 const String ksSidebarProfilesMenuText = 'Profiles';
 const String ksSidebarProblemsMenuText = 'Problems';
 const String kdSidebarProblemProposalsMenuText = 'Proposals';
+
+// general
+
+const double kdFabDistance = 100;

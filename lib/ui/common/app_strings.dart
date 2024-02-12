@@ -48,7 +48,11 @@ const String ksAppProblemDescriptiveMetadataTitle =
     'Problem descriptive metadata';
 const String ksAppProblemTechnicalMetadataTitle = 'Problem technical metadata';
 const String ksAppProblemTestCasesTitle = 'Problem test cases';
-const String ksProblemProposalsViewPublishTooltip = 'Publish';
-const String ksProblemProposalsViewProposeTooltip = 'Propose new problem';
+const String ksAppPublishTooltip = 'Publish';
+const String ksAppUnpublishTooltip = 'Unpublish';
+const String ksAppProposeTooltip = 'Propose new problem';
+const String ksAppEditTooltip = 'Edit problem';
 const String ksAppTestInputFilename = 'input.txt';
 const String ksAppTestOutputFilename = 'output.txt';
+const String ksAppNonProposerForbiddenMessage =
+    'You should be a proposer to perform this action!';

@@ -44,7 +44,7 @@ class LoginViewModel extends FormViewModel with RiveBear {
 
     final res = await runBusyFuture(
       _authService.login(
-        LoginRequest(
+        request: LoginRequest(
           email: emailValue ?? '',
           password: passwordValue ?? '',
         ),

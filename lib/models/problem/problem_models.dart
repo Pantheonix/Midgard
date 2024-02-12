@@ -39,19 +39,23 @@ class ProblemModel {
         stackMemoryLimit = json['stackMemory'] as double,
         proposerId = json['proposerId'] as String,
         createdAt = DateTime.parse(json['creationDate'] as String),
-        publishedAt = DateTime.parse(json['publishingDate'] as String),
+        publishedAt = switch (json['publishingDate']) {
+          final data? => DateTime.parse(data as String),
+          null => null,
+        },
         ioType = IoType.fromValue(json['ioType'] as int),
         difficulty = Difficulty.fromValue(json['difficulty'] as int),
-        tests = json['tests'] != null
-            ? some(
-                (json['tests'] as List<dynamic>)
-                    .map(
-                      (testJson) =>
-                          TestModel.fromJson(testJson as Map<String, dynamic>),
-                    )
-                    .toList(),
-              )
-            : none();
+        tests = switch (json['tests']) {
+          final data? => some(
+              (data as List<dynamic>)
+                  .map(
+                    (testJson) =>
+                        TestModel.fromJson(testJson as Map<String, dynamic>),
+                  )
+                  .toList(),
+            ),
+          null => none(),
+        };
 
   @HiveField(0)
   final String id;
@@ -90,7 +94,7 @@ class ProblemModel {
   final DateTime createdAt;
 
   @HiveField(12)
-  final DateTime publishedAt;
+  final DateTime? publishedAt;
 
   @HiveField(13)
   final IoType ioType;
@@ -114,7 +118,7 @@ class ProblemModel {
         'stackMemory': stackMemoryLimit,
         'proposerId': proposerId,
         'creationDate': createdAt.toIso8601String(),
-        'publishingDate': publishedAt.toIso8601String(),
+        'publishingDate': publishedAt?.toIso8601String(),
         'ioType': ioType.index,
         'difficulty': difficulty.index,
         'tests': tests.getOrElse(() => []).map((t) => t.toJson()).toList(),

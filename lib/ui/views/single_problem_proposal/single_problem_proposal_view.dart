@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hive/hive.dart';
@@ -12,6 +14,7 @@ import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/single_problem_proposal/single_problem_proposal_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
+import 'package:midgard/ui/widgets/app_primitives/expandable_fab/expandable_fab.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -35,8 +38,49 @@ class SingleProblemProposalView
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
       ),
+      floatingActionButton: ExpandableFab(
+        distance: kdFabDistance,
+        children: [
+          Tooltip(
+            message: ksAppPublishTooltip,
+            child: ActionButton(
+              icon: const Icon(Icons.send),
+              onPressed: () async {
+                await viewModel.publishProblem(problemId: problemId);
+
+                if (!context.mounted) return;
+
+                if (viewModel.hasErrorForKey(kbSingleProblemProposalKey)) {
+                  await context.showErrorBar(
+                    position: FlashPosition.top,
+                    indicatorColor: kcRed,
+                    content: Text(
+                      viewModel.error(kbSingleProblemProposalKey).message
+                          as String,
+                    ),
+                    primaryActionBuilder: (context, controller) {
+                      return IconButton(
+                        onPressed: controller.dismiss,
+                        icon: const Icon(Icons.close),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ),
+          Tooltip(
+            message: ksAppEditTooltip,
+            child: ActionButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
       backgroundColor: kcWhite,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
@@ -50,15 +94,15 @@ class SingleProblemProposalView
                   ? AppErrorWidget(
                       message: viewModel.modelError.toString(),
                     )
-                  : Center(
-                      child: viewModel.isBusy
-                          ? const CircularProgressIndicator()
-                          : _buildProblemWidget(
-                              context,
-                              viewModel,
-                              viewModel.data!,
-                            ),
-                    ),
+                  : viewModel.isBusy
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : _buildProblemWidget(
+                          context,
+                          viewModel,
+                          viewModel.data!,
+                        ),
             ),
           ),
         ],

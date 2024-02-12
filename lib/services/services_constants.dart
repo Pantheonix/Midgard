@@ -19,6 +19,7 @@ abstract class ApiConstants {
   static const String problemsUrl = '/api/problems';
   static const String unpublishedProblemsUrl = '/api/problems/unpublished';
   static const String unpublishedProblemUrl = '/api/problems/:id/unpublished';
+  static const String testsUrl = '/api/problems/:id/test';
 }
 
 abstract class HiveConstants {

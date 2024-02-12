@@ -25,3 +25,4 @@ const Color kcHardBadgeColor = Colors.redAccent;
 const Color kcOlympiadBadgeColor = Colors.purpleAccent;
 const Color kcStandardIoBadgeColor = Colors.greenAccent;
 const Color kcFileIoBadgeColor = Colors.deepOrangeAccent;
+const Color kcOrangeAccent = Colors.orangeAccent;

@@ -41,7 +41,7 @@ class ProblemProposalsView extends StackedView<ProblemProposalsViewModel>
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: kcBlueAccent,
-        tooltip: ksProblemProposalsViewProposeTooltip,
+        tooltip: ksAppProposeTooltip,
         child: const Icon(Icons.add),
       ),
       backgroundColor: kcWhite,
@@ -248,12 +248,6 @@ class ProblemProposalsView extends StackedView<ProblemProposalsViewModel>
       ),
       elevation: kdProblemsViewProblemsListTileElevation,
       child: ListTile(
-        leading: IconButton(
-          icon: const Icon(Icons.send),
-          color: kcOrange,
-          tooltip: ksProblemProposalsViewPublishTooltip,
-          onPressed: () {},
-        ),
         title: Text(
           problem.name,
         ),

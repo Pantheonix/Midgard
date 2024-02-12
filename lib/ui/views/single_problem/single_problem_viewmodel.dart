@@ -1,5 +1,6 @@
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/exceptions/problem_exception.dart';
 import 'package:midgard/models/problem/problem_models.dart';
 import 'package:midgard/services/hive_service.dart';
@@ -55,6 +56,46 @@ class SingleProblemViewModel extends FutureViewModel<ProblemModel> {
 
         return problem;
       },
+    );
+  }
+
+  Future<void> _unpublishProblem({
+    required String problemId,
+  }) async {
+    final result = await _problemService.unpublish(
+      problemId: problemId,
+    );
+
+    await result.fold(
+      (ProblemException error) async {
+        _logger.e(
+          'Error while unpublishing problem: ${error.toJson()}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Error while unpublishing problem: ${error.toJson()}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        throw Exception(error.message);
+      },
+      (_) async {
+        _logger.i('Problem unpublished successfully');
+        await Sentry.captureMessage('Problem unpublished successfully');
+        await _routerService.replaceWithProblemProposalsView();
+      },
+    );
+  }
+
+  Future<void> unpublishProblem({
+    required String problemId,
+  }) async {
+    await runBusyFuture(
+      _unpublishProblem(
+        problemId: problemId,
+      ),
+      busyObject: kbSingleProblemKey,
     );
   }
 }

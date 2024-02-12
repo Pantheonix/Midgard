@@ -1,7 +1,6 @@
-import 'dart:html';
-
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/exceptions/problem_exception.dart';
 import 'package:midgard/models/problem/problem_models.dart';
 import 'package:midgard/services/hive_service.dart';
@@ -11,6 +10,7 @@ import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:universal_html/html.dart';
 
 class SingleProblemProposalViewModel extends FutureViewModel<ProblemModel> {
   SingleProblemProposalViewModel({
@@ -65,6 +65,46 @@ class SingleProblemProposalViewModel extends FutureViewModel<ProblemModel> {
 
         return problem;
       },
+    );
+  }
+
+  Future<void> _publishProblem({
+    required String problemId,
+  }) async {
+    final result = await _problemService.publish(
+      problemId: problemId,
+    );
+
+    await result.fold(
+      (ProblemException error) async {
+        _logger.e(
+          'Error while publishing problem: ${error.toJson()}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Error while publishing problem: ${error.toJson()}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        throw Exception(error.message);
+      },
+      (_) async {
+        _logger.i('Problem published successfully');
+        await Sentry.captureMessage('Problem published successfully');
+        await _routerService.replaceWithProblemsView();
+      },
+    );
+  }
+
+  Future<void> publishProblem({
+    required String problemId,
+  }) async {
+    await runBusyFuture(
+      _publishProblem(
+        problemId: problemId,
+      ),
+      busyObject: kbSingleProblemProposalKey,
     );
   }
 

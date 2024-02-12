@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hive/hive.dart';
@@ -13,6 +15,7 @@ import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/single_problem/single_problem_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -34,8 +37,65 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
       ),
+      floatingActionButton: MultiValueListenableBuilder(
+        valueListenables: [
+          HiveService.userProfileBoxListenable,
+          HiveService.problemBoxListenable,
+        ],
+        builder: (context, values, child) {
+          if (viewModel.isBusy) return const SizedBox.shrink();
+
+          final userBox = values.elementAt(0) as Box<UserProfileModel>;
+          final problemBox = values.elementAt(1) as Box<ProblemModel>;
+
+          final currentUser = viewModel.hiveService.getCurrentUserProfile(
+            userBox,
+          );
+          // final problem = viewModel.hiveService.getProblem(
+          //   problemId,
+          //   problemBox,
+          // );
+          final problem = viewModel.data!;
+
+          final isVisible = currentUser.fold(
+            () => false,
+            (UserProfileModel user) => user.userId == problem.proposerId,
+          );
+
+          return Visibility(
+            visible: isVisible,
+            child: FloatingActionButton(
+              onPressed: () async {
+                await viewModel.unpublishProblem(problemId: problemId);
+
+                if (!context.mounted) return;
+
+                if (viewModel.hasErrorForKey(kbSingleProblemKey)) {
+                  await context.showErrorBar(
+                    position: FlashPosition.top,
+                    indicatorColor: kcRed,
+                    content: Text(
+                      viewModel.error(kbSingleProblemKey).message as String,
+                    ),
+                    primaryActionBuilder: (context, controller) {
+                      return IconButton(
+                        onPressed: controller.dismiss,
+                        icon: const Icon(Icons.close),
+                      );
+                    },
+                  );
+                }
+              },
+              backgroundColor: kcBlueAccent,
+              tooltip: ksAppUnpublishTooltip,
+              child: const Icon(Icons.redo),
+            ),
+          );
+        },
+      ),
       backgroundColor: kcWhite,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
@@ -49,15 +109,15 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
                   ? AppErrorWidget(
                       message: viewModel.modelError.toString(),
                     )
-                  : Center(
-                      child: viewModel.isBusy
-                          ? const CircularProgressIndicator()
-                          : _buildProblemWidget(
-                              context,
-                              viewModel,
-                              viewModel.data!,
-                            ),
-                    ),
+                  : viewModel.isBusy
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : _buildProblemWidget(
+                          context,
+                          viewModel,
+                          viewModel.data!,
+                        ),
             ),
           ),
         ],

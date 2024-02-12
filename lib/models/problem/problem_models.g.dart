@@ -29,7 +29,7 @@ class ProblemModelAdapter extends TypeAdapter<ProblemModel> {
       stackMemoryLimit: fields[9] as double,
       proposerId: fields[10] as String,
       createdAt: fields[11] as DateTime,
-      publishedAt: fields[12] as DateTime,
+      publishedAt: fields[12] as DateTime?,
       ioType: fields[13] as IoType,
       difficulty: fields[14] as Difficulty,
       tests: fields[15] as Option<List<TestModel>>,

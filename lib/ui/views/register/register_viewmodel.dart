@@ -57,7 +57,7 @@ class RegisterViewModel extends FormViewModel with RiveBear {
 
     final res = await runBusyFuture(
       _authService.register(
-        RegisterRequest(
+        request: RegisterRequest(
           username: usernameValue ?? '',
           email: emailValue ?? '',
           password: passwordValue ?? '',
