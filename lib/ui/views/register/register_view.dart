@@ -90,6 +90,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                                 _buildFormHeader(),
                                 verticalSpaceSmall,
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _buildUsernameField(viewModel),
                                     horizontalSpaceMedium,
@@ -98,6 +99,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                                 ),
                                 verticalSpaceSmall,
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _buildPasswordField(viewModel),
                                     horizontalSpaceMedium,

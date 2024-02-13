@@ -5,17 +5,19 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i17;
+import 'dart:async' as _i18;
 
-import 'package:flutter/foundation.dart' as _i16;
-import 'package:flutter/material.dart' as _i15;
-import 'package:stacked/stacked.dart' as _i14;
-import 'package:stacked_services/stacked_services.dart' as _i13;
+import 'package:flutter/foundation.dart' as _i17;
+import 'package:flutter/material.dart' as _i16;
+import 'package:stacked/stacked.dart' as _i15;
+import 'package:stacked_services/stacked_services.dart' as _i14;
 
 import '../ui/views/about/about_view.dart' as _i5;
 import '../ui/views/home/home_view.dart' as _i2;
 import '../ui/views/login/login_view.dart' as _i3;
 import '../ui/views/problem_proposals/problem_proposals_view.dart' as _i10;
+import '../ui/views/problem_proposals_dashboard/problem_proposals_dashboard_view.dart'
+    as _i12;
 import '../ui/views/problems/problems_view.dart' as _i8;
 import '../ui/views/profiles/profiles_view.dart' as _i6;
 import '../ui/views/register/register_view.dart' as _i4;
@@ -24,19 +26,19 @@ import '../ui/views/single_problem_proposal/single_problem_proposal_view.dart'
     as _i11;
 import '../ui/views/single_profile/single_profile_view.dart' as _i7;
 import '../ui/views/startup/startup_view.dart' as _i1;
-import '../ui/views/unknown/unknown_view.dart' as _i12;
+import '../ui/views/unknown/unknown_view.dart' as _i13;
 
 final stackedRouter =
-    StackedRouterWeb(navigatorKey: _i13.StackedService.navigatorKey);
+    StackedRouterWeb(navigatorKey: _i14.StackedService.navigatorKey);
 
-class StackedRouterWeb extends _i14.RootStackRouter {
-  StackedRouterWeb({_i15.GlobalKey<_i15.NavigatorState>? navigatorKey})
+class StackedRouterWeb extends _i15.RootStackRouter {
+  StackedRouterWeb({_i16.GlobalKey<_i16.NavigatorState>? navigatorKey})
       : super(navigatorKey);
 
   @override
-  final Map<String, _i14.PageFactory> pagesMap = {
+  final Map<String, _i15.PageFactory> pagesMap = {
     StartupViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.StartupView(),
       );
@@ -44,7 +46,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
     HomeViewRoute.name: (routeData) {
       final args =
           routeData.argsAs<HomeViewArgs>(orElse: () => const HomeViewArgs());
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i2.HomeView(
           warningMessage: args.warningMessage,
@@ -53,25 +55,25 @@ class StackedRouterWeb extends _i14.RootStackRouter {
       );
     },
     LoginViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i3.LoginView(),
       );
     },
     RegisterViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i4.RegisterView(),
       );
     },
     AboutViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i5.AboutView(),
       );
     },
     ProfilesViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i6.ProfilesView(),
       );
@@ -81,7 +83,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
       final args = routeData.argsAs<SingleProfileViewArgs>(
           orElse: () =>
               SingleProfileViewArgs(userId: pathParams.getString('userId')));
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i7.SingleProfileView(
           userId: args.userId,
@@ -92,7 +94,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
     ProblemsViewRoute.name: (routeData) {
       final args = routeData.argsAs<ProblemsViewArgs>(
           orElse: () => const ProblemsViewArgs());
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i8.ProblemsView(
           debounce: args.debounce,
@@ -105,7 +107,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
       final args = routeData.argsAs<SingleProblemViewArgs>(
           orElse: () => SingleProblemViewArgs(
               problemId: pathParams.getString('problemId')));
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i9.SingleProblemView(
           problemId: args.problemId,
@@ -114,7 +116,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
       );
     },
     ProblemProposalsViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i10.ProblemProposalsView(),
       );
@@ -124,7 +126,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
       final args = routeData.argsAs<SingleProblemProposalViewArgs>(
           orElse: () => SingleProblemProposalViewArgs(
               problemId: pathParams.getString('problemId')));
-      return _i14.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i11.SingleProblemProposalView(
           problemId: args.problemId,
@@ -132,65 +134,80 @@ class StackedRouterWeb extends _i14.RootStackRouter {
         ),
       );
     },
-    UnknownViewRoute.name: (routeData) {
-      return _i14.MaterialPageX<dynamic>(
+    ProblemProposalsDashboardViewRoute.name: (routeData) {
+      final args = routeData.argsAs<ProblemProposalsDashboardViewArgs>(
+          orElse: () => const ProblemProposalsDashboardViewArgs());
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i12.UnknownView(),
+        child: _i12.ProblemProposalsDashboardView(
+          problemId: args.problemId,
+          key: args.key,
+        ),
+      );
+    },
+    UnknownViewRoute.name: (routeData) {
+      return _i15.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i13.UnknownView(),
       );
     },
   };
 
   @override
-  List<_i14.RouteConfig> get routes => [
-        _i14.RouteConfig(
+  List<_i15.RouteConfig> get routes => [
+        _i15.RouteConfig(
           StartupViewRoute.name,
           path: '/',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           HomeViewRoute.name,
           path: '/home',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           LoginViewRoute.name,
           path: '/login',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           RegisterViewRoute.name,
           path: '/register',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           AboutViewRoute.name,
           path: '/about',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           ProfilesViewRoute.name,
           path: '/profiles',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           SingleProfileViewRoute.name,
           path: '/profiles/:userId',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           ProblemsViewRoute.name,
           path: '/problems',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           SingleProblemViewRoute.name,
           path: '/problems/:problemId',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           ProblemProposalsViewRoute.name,
           path: '/proposals',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           SingleProblemProposalViewRoute.name,
           path: '/proposals/:problemId',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
+          ProblemProposalsDashboardViewRoute.name,
+          path: '/dashboard',
+        ),
+        _i15.RouteConfig(
           UnknownViewRoute.name,
           path: '/404',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           '*#redirect',
           path: '*',
           redirectTo: '/404',
@@ -201,7 +218,7 @@ class StackedRouterWeb extends _i14.RootStackRouter {
 
 /// generated route for
 /// [_i1.StartupView]
-class StartupViewRoute extends _i14.PageRouteInfo<void> {
+class StartupViewRoute extends _i15.PageRouteInfo<void> {
   const StartupViewRoute()
       : super(
           StartupViewRoute.name,
@@ -213,10 +230,10 @@ class StartupViewRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomeView]
-class HomeViewRoute extends _i14.PageRouteInfo<HomeViewArgs> {
+class HomeViewRoute extends _i15.PageRouteInfo<HomeViewArgs> {
   HomeViewRoute({
     String? warningMessage,
-    _i16.Key? key,
+    _i17.Key? key,
   }) : super(
           HomeViewRoute.name,
           path: '/home',
@@ -237,7 +254,7 @@ class HomeViewArgs {
 
   final String? warningMessage;
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   @override
   String toString() {
@@ -247,7 +264,7 @@ class HomeViewArgs {
 
 /// generated route for
 /// [_i3.LoginView]
-class LoginViewRoute extends _i14.PageRouteInfo<void> {
+class LoginViewRoute extends _i15.PageRouteInfo<void> {
   const LoginViewRoute()
       : super(
           LoginViewRoute.name,
@@ -259,7 +276,7 @@ class LoginViewRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.RegisterView]
-class RegisterViewRoute extends _i14.PageRouteInfo<void> {
+class RegisterViewRoute extends _i15.PageRouteInfo<void> {
   const RegisterViewRoute()
       : super(
           RegisterViewRoute.name,
@@ -271,7 +288,7 @@ class RegisterViewRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.AboutView]
-class AboutViewRoute extends _i14.PageRouteInfo<void> {
+class AboutViewRoute extends _i15.PageRouteInfo<void> {
   const AboutViewRoute()
       : super(
           AboutViewRoute.name,
@@ -283,7 +300,7 @@ class AboutViewRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.ProfilesView]
-class ProfilesViewRoute extends _i14.PageRouteInfo<void> {
+class ProfilesViewRoute extends _i15.PageRouteInfo<void> {
   const ProfilesViewRoute()
       : super(
           ProfilesViewRoute.name,
@@ -295,10 +312,10 @@ class ProfilesViewRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.SingleProfileView]
-class SingleProfileViewRoute extends _i14.PageRouteInfo<SingleProfileViewArgs> {
+class SingleProfileViewRoute extends _i15.PageRouteInfo<SingleProfileViewArgs> {
   SingleProfileViewRoute({
     required String userId,
-    _i16.Key? key,
+    _i17.Key? key,
   }) : super(
           SingleProfileViewRoute.name,
           path: '/profiles/:userId',
@@ -320,7 +337,7 @@ class SingleProfileViewArgs {
 
   final String userId;
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   @override
   String toString() {
@@ -330,10 +347,10 @@ class SingleProfileViewArgs {
 
 /// generated route for
 /// [_i8.ProblemsView]
-class ProblemsViewRoute extends _i14.PageRouteInfo<ProblemsViewArgs> {
+class ProblemsViewRoute extends _i15.PageRouteInfo<ProblemsViewArgs> {
   ProblemsViewRoute({
-    _i17.Timer? debounce,
-    _i16.Key? key,
+    _i18.Timer? debounce,
+    _i17.Key? key,
   }) : super(
           ProblemsViewRoute.name,
           path: '/problems',
@@ -352,9 +369,9 @@ class ProblemsViewArgs {
     this.key,
   });
 
-  final _i17.Timer? debounce;
+  final _i18.Timer? debounce;
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   @override
   String toString() {
@@ -364,10 +381,10 @@ class ProblemsViewArgs {
 
 /// generated route for
 /// [_i9.SingleProblemView]
-class SingleProblemViewRoute extends _i14.PageRouteInfo<SingleProblemViewArgs> {
+class SingleProblemViewRoute extends _i15.PageRouteInfo<SingleProblemViewArgs> {
   SingleProblemViewRoute({
     required String problemId,
-    _i16.Key? key,
+    _i17.Key? key,
   }) : super(
           SingleProblemViewRoute.name,
           path: '/problems/:problemId',
@@ -389,7 +406,7 @@ class SingleProblemViewArgs {
 
   final String problemId;
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   @override
   String toString() {
@@ -399,7 +416,7 @@ class SingleProblemViewArgs {
 
 /// generated route for
 /// [_i10.ProblemProposalsView]
-class ProblemProposalsViewRoute extends _i14.PageRouteInfo<void> {
+class ProblemProposalsViewRoute extends _i15.PageRouteInfo<void> {
   const ProblemProposalsViewRoute()
       : super(
           ProblemProposalsViewRoute.name,
@@ -412,10 +429,10 @@ class ProblemProposalsViewRoute extends _i14.PageRouteInfo<void> {
 /// generated route for
 /// [_i11.SingleProblemProposalView]
 class SingleProblemProposalViewRoute
-    extends _i14.PageRouteInfo<SingleProblemProposalViewArgs> {
+    extends _i15.PageRouteInfo<SingleProblemProposalViewArgs> {
   SingleProblemProposalViewRoute({
     required String problemId,
-    _i16.Key? key,
+    _i17.Key? key,
   }) : super(
           SingleProblemProposalViewRoute.name,
           path: '/proposals/:problemId',
@@ -437,7 +454,7 @@ class SingleProblemProposalViewArgs {
 
   final String problemId;
 
-  final _i16.Key? key;
+  final _i17.Key? key;
 
   @override
   String toString() {
@@ -446,8 +463,43 @@ class SingleProblemProposalViewArgs {
 }
 
 /// generated route for
-/// [_i12.UnknownView]
-class UnknownViewRoute extends _i14.PageRouteInfo<void> {
+/// [_i12.ProblemProposalsDashboardView]
+class ProblemProposalsDashboardViewRoute
+    extends _i15.PageRouteInfo<ProblemProposalsDashboardViewArgs> {
+  ProblemProposalsDashboardViewRoute({
+    String? problemId,
+    _i17.Key? key,
+  }) : super(
+          ProblemProposalsDashboardViewRoute.name,
+          path: '/dashboard',
+          args: ProblemProposalsDashboardViewArgs(
+            problemId: problemId,
+            key: key,
+          ),
+        );
+
+  static const String name = 'ProblemProposalsDashboardView';
+}
+
+class ProblemProposalsDashboardViewArgs {
+  const ProblemProposalsDashboardViewArgs({
+    this.problemId,
+    this.key,
+  });
+
+  final String? problemId;
+
+  final _i17.Key? key;
+
+  @override
+  String toString() {
+    return 'ProblemProposalsDashboardViewArgs{problemId: $problemId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i13.UnknownView]
+class UnknownViewRoute extends _i15.PageRouteInfo<void> {
   const UnknownViewRoute()
       : super(
           UnknownViewRoute.name,
@@ -457,9 +509,9 @@ class UnknownViewRoute extends _i14.PageRouteInfo<void> {
   static const String name = 'UnknownView';
 }
 
-extension RouterStateExtension on _i13.RouterService {
+extension RouterStateExtension on _i14.RouterService {
   Future<dynamic> navigateToStartupView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const StartupViewRoute(),
       onFailure: onFailure,
@@ -468,8 +520,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> navigateToHomeView({
     String? warningMessage,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return navigateTo(
       HomeViewRoute(
@@ -481,7 +533,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> navigateToLoginView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const LoginViewRoute(),
       onFailure: onFailure,
@@ -489,7 +541,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> navigateToRegisterView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const RegisterViewRoute(),
       onFailure: onFailure,
@@ -497,7 +549,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> navigateToAboutView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const AboutViewRoute(),
       onFailure: onFailure,
@@ -505,7 +557,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> navigateToProfilesView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const ProfilesViewRoute(),
       onFailure: onFailure,
@@ -514,8 +566,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> navigateToSingleProfileView({
     required String userId,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return navigateTo(
       SingleProfileViewRoute(
@@ -527,9 +579,9 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> navigateToProblemsView({
-    _i17.Timer? debounce,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i18.Timer? debounce,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return navigateTo(
       ProblemsViewRoute(
@@ -542,8 +594,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> navigateToSingleProblemView({
     required String problemId,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return navigateTo(
       SingleProblemViewRoute(
@@ -555,7 +607,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> navigateToProblemProposalsView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const ProblemProposalsViewRoute(),
       onFailure: onFailure,
@@ -564,8 +616,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> navigateToSingleProblemProposalView({
     required String problemId,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return navigateTo(
       SingleProblemProposalViewRoute(
@@ -576,8 +628,22 @@ extension RouterStateExtension on _i13.RouterService {
     );
   }
 
+  Future<dynamic> navigateToProblemProposalsDashboardView({
+    String? problemId,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
+  }) async {
+    return navigateTo(
+      ProblemProposalsDashboardViewRoute(
+        problemId: problemId,
+        key: key,
+      ),
+      onFailure: onFailure,
+    );
+  }
+
   Future<dynamic> navigateToUnknownView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return navigateTo(
       const UnknownViewRoute(),
       onFailure: onFailure,
@@ -585,7 +651,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithStartupView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const StartupViewRoute(),
       onFailure: onFailure,
@@ -594,8 +660,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> replaceWithHomeView({
     String? warningMessage,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return replaceWith(
       HomeViewRoute(
@@ -607,7 +673,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithLoginView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const LoginViewRoute(),
       onFailure: onFailure,
@@ -615,7 +681,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithRegisterView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const RegisterViewRoute(),
       onFailure: onFailure,
@@ -623,7 +689,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithAboutView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const AboutViewRoute(),
       onFailure: onFailure,
@@ -631,7 +697,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithProfilesView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const ProfilesViewRoute(),
       onFailure: onFailure,
@@ -640,8 +706,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> replaceWithSingleProfileView({
     required String userId,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return replaceWith(
       SingleProfileViewRoute(
@@ -653,9 +719,9 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithProblemsView({
-    _i17.Timer? debounce,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i18.Timer? debounce,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return replaceWith(
       ProblemsViewRoute(
@@ -668,8 +734,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> replaceWithSingleProblemView({
     required String problemId,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return replaceWith(
       SingleProblemViewRoute(
@@ -681,7 +747,7 @@ extension RouterStateExtension on _i13.RouterService {
   }
 
   Future<dynamic> replaceWithProblemProposalsView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const ProblemProposalsViewRoute(),
       onFailure: onFailure,
@@ -690,8 +756,8 @@ extension RouterStateExtension on _i13.RouterService {
 
   Future<dynamic> replaceWithSingleProblemProposalView({
     required String problemId,
-    _i16.Key? key,
-    void Function(_i14.NavigationFailure)? onFailure,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
   }) async {
     return replaceWith(
       SingleProblemProposalViewRoute(
@@ -702,8 +768,22 @@ extension RouterStateExtension on _i13.RouterService {
     );
   }
 
+  Future<dynamic> replaceWithProblemProposalsDashboardView({
+    String? problemId,
+    _i17.Key? key,
+    void Function(_i15.NavigationFailure)? onFailure,
+  }) async {
+    return replaceWith(
+      ProblemProposalsDashboardViewRoute(
+        problemId: problemId,
+        key: key,
+      ),
+      onFailure: onFailure,
+    );
+  }
+
   Future<dynamic> replaceWithUnknownView(
-      {void Function(_i14.NavigationFailure)? onFailure}) async {
+      {void Function(_i15.NavigationFailure)? onFailure}) async {
     return replaceWith(
       const UnknownViewRoute(),
       onFailure: onFailure,

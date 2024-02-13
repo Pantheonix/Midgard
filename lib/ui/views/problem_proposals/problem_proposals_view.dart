@@ -39,7 +39,10 @@ class ProblemProposalsView extends StackedView<ProblemProposalsViewModel>
         controller: viewModel.sidebarController,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          await viewModel.routerService
+              .replaceWithProblemProposalsDashboardView();
+        },
         backgroundColor: kcBlueAccent,
         tooltip: ksAppProposeTooltip,
         child: const Icon(Icons.add),

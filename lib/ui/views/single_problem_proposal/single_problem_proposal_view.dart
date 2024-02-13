@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hive/hive.dart';
+import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/problem/problem_models.dart';
 import 'package:midgard/models/user/user_models.dart';
@@ -73,7 +73,12 @@ class SingleProblemProposalView
             message: ksAppEditTooltip,
             child: ActionButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {},
+              onPressed: () async {
+                await viewModel.routerService
+                    .replaceWithProblemProposalsDashboardView(
+                  problemId: problemId,
+                );
+              },
             ),
           ),
         ],
@@ -624,22 +629,16 @@ class SingleProblemProposalView
     SingleProblemProposalViewModel viewModel,
     ProblemModel problem,
   ) {
-    return LayoutBuilder(
-      builder: (context, constraints) => SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minWidth: constraints.maxWidth),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(
-                kdSingleProblemViewDescriptionPadding,
-              ),
-              child: MarkdownBody(
-                data: problem.description,
-                selectable: true,
-              ),
-            ),
-          ),
+    return Card(
+      color: kcVeryLightGrey,
+      child: Padding(
+        padding: const EdgeInsets.all(
+          kdSingleProblemViewDescriptionPadding,
+        ),
+        child: MarkdownParse(
+          data: problem.description,
+          selectable: true,
+          shrinkWrap: true,
         ),
       ),
     );

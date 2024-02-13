@@ -8,6 +8,7 @@ import 'package:midgard/ui/views/about/about_view.dart';
 import 'package:midgard/ui/views/home/home_view.dart';
 import 'package:midgard/ui/views/login/login_view.dart';
 import 'package:midgard/ui/views/problem_proposals/problem_proposals_view.dart';
+import 'package:midgard/ui/views/problem_proposals_dashboard/problem_proposals_dashboard_view.dart';
 import 'package:midgard/ui/views/problems/problems_view.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.dart';
 import 'package:midgard/ui/views/register/register_view.dart';
@@ -33,7 +34,13 @@ import 'package:stacked_services/stacked_services.dart';
     MaterialRoute(page: SingleProblemView, path: '/problems/:problemId'),
     MaterialRoute(page: ProblemProposalsView, path: '/proposals'),
     MaterialRoute(
-        page: SingleProblemProposalView, path: '/proposals/:problemId'),
+      page: SingleProblemProposalView,
+      path: '/proposals/:problemId',
+    ),
+    MaterialRoute(
+      page: ProblemProposalsDashboardView,
+      path: '/dashboard',
+    ),
 // @stacked-route
 
     MaterialRoute(page: UnknownView, path: '/404'),

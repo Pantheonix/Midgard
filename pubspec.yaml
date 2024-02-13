@@ -16,13 +16,13 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.1.1+1
   flutter_hooks: ^0.20.3
-  flutter_markdown: ^0.6.18+3
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   http: ^1.1.0
   http_parser: ^4.0.2
   json_annotation: ^4.0.1
   logger: ^1.1.0
+  markdown_editor_plus: ^0.2.13
   multi_value_listenable_builder: ^0.0.2
   path_provider: ^2.0.2
   redacted: ^1.0.11

@@ -36,6 +36,28 @@ const List<String> kAllowedProfilePictureTypes = [
   'jpg',
 ];
 
+const int kMinProblemNameLength = 2;
+const int kMaxProblemNameLength = 128;
+const int kMinProblemBriefLength = 4;
+const int kMaxProblemBriefLength = 256;
+const int kMinProblemDescriptionLength = 16;
+const int kMaxProblemDescriptionLength = 4096;
+const int kMinProblemSourceNameLength = 2;
+const int kMaxProblemSourceNameLength = 128;
+const int kMinProblemAuthorNameLength = 2;
+const int kMaxProblemAuthorNameLength = 128;
+const double kMinProblemTimeLimit = 0.1;
+const double kMaxProblemTimeLimit = 5;
+const double kMinProblemTotalMemoryLimit = 0.1;
+const double kMaxProblemTotalMemoryLimit = 512;
+const double kMinProblemStackMemoryLimit = 0.1;
+const double kMaxProblemStackMemoryLimit = 64;
+const int kMaxNumberOfTests = 20;
+const int kMinTestScore = 0;
+const int kMaxTestScore = 100;
+const int kMaxTotalTestsScore = 100;
+const kLimitDecimalRegex = r'^\d+\.?\d?';
+
 // placeholders
 const String kRiveMoveEyesPadding = '--------------------------';
 
@@ -240,6 +262,14 @@ const double kdSingleProblemViewDescriptionPadding = 10;
 
 // single problem proposal view
 
+// problem proposals dashboard view
+const double kdProblemProposalsDashboardViewPadding = 20;
+const double kdProblemProposalsDashboardViewDescriptionMinHeight = 200;
+const double kdProblemProposalsDashboardViewDescriptionMaxHeight = 500;
+const double kdProblemProposalsDashboardViewFieldBorderRadius = 20;
+const double kdProblemProposalsDashboardViewFieldPadding = 10;
+const double kdProblemProposalsDashboardViewFieldValidationTextSize = 12;
+
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
 const int kiSidebarAboutMenuIndex = 1;
@@ -248,6 +278,7 @@ const int kiSidebarRegisterMenuIndex = 3;
 const int kiSidebarProfilesMenuIndex = 3;
 const int kiSidebarProblemsMenuIndex = 4;
 const int kiSidebarProblemProposalsMenuIndex = 5;
+const int kiSidebarProblemProposalsDashboardMenuIndex = 6;
 
 const double kdSidebarPadding = 10;
 const double kdSidebarShapeRadius = 20;
@@ -271,6 +302,7 @@ const String ksSidebarLogoutMenuText = 'Logout';
 const String ksSidebarProfilesMenuText = 'Profiles';
 const String ksSidebarProblemsMenuText = 'Problems';
 const String kdSidebarProblemProposalsMenuText = 'Proposals';
+const String kdSidebarProblemProposalsDashboardMenuText = 'Dashboard';
 
 // general
 

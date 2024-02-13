@@ -175,7 +175,7 @@ class AppSidebar extends StatelessWidget {
                         await viewModel.routerService.replaceWithProblemsView();
                       },
                     ),
-                    if (user.isProposer)
+                    if (user.isProposer) ...[
                       SidebarXItem(
                         icon: Icons.add_circle,
                         label: kdSidebarProblemProposalsMenuText,
@@ -184,6 +184,15 @@ class AppSidebar extends StatelessWidget {
                               .replaceWithProblemProposalsView();
                         },
                       ),
+                      SidebarXItem(
+                        icon: Icons.dashboard,
+                        label: kdSidebarProblemProposalsDashboardMenuText,
+                        onTap: () async {
+                          await viewModel.routerService
+                              .replaceWithProblemProposalsDashboardView();
+                        },
+                      ),
+                    ],
                   ],
                 ),
           ],
