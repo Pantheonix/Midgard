@@ -22,12 +22,12 @@ const String TotalMemoryLimitValueKey = 'totalMemoryLimit';
 const String StackMemoryLimitValueKey = 'stackMemoryLimit';
 
 final Map<String, TextEditingController>
-    _ProblemProposalsDashboardViewTextEditingControllers = {};
+    _UpdateProposalDashboardViewTextEditingControllers = {};
 
-final Map<String, FocusNode> _ProblemProposalsDashboardViewFocusNodes = {};
+final Map<String, FocusNode> _UpdateProposalDashboardViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?>
-    _ProblemProposalsDashboardViewTextValidations = {
+    _UpdateProposalDashboardViewTextValidations = {
   NameValueKey: ProblemValidators.validateName,
   BriefValueKey: ProblemValidators.validateBrief,
   DescriptionValueKey: ProblemValidators.validateDescription,
@@ -38,7 +38,7 @@ final Map<String, String? Function(String?)?>
   StackMemoryLimitValueKey: ProblemValidators.validateStackMemoryLimit,
 };
 
-mixin $ProblemProposalsDashboardView {
+mixin $UpdateProposalDashboardView {
   TextEditingController get nameController =>
       _getFormTextEditingController(NameValueKey);
   TextEditingController get briefController =>
@@ -71,21 +71,21 @@ mixin $ProblemProposalsDashboardView {
     String key, {
     String? initialValue,
   }) {
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(key)) {
-      return _ProblemProposalsDashboardViewTextEditingControllers[key]!;
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(key)) {
+      return _UpdateProposalDashboardViewTextEditingControllers[key]!;
     }
 
-    _ProblemProposalsDashboardViewTextEditingControllers[key] =
+    _UpdateProposalDashboardViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
-    return _ProblemProposalsDashboardViewTextEditingControllers[key]!;
+    return _UpdateProposalDashboardViewTextEditingControllers[key]!;
   }
 
   FocusNode _getFormFocusNode(String key) {
-    if (_ProblemProposalsDashboardViewFocusNodes.containsKey(key)) {
-      return _ProblemProposalsDashboardViewFocusNodes[key]!;
+    if (_UpdateProposalDashboardViewFocusNodes.containsKey(key)) {
+      return _UpdateProposalDashboardViewFocusNodes[key]!;
     }
-    _ProblemProposalsDashboardViewFocusNodes[key] = FocusNode();
-    return _ProblemProposalsDashboardViewFocusNodes[key]!;
+    _UpdateProposalDashboardViewFocusNodes[key] = FocusNode();
+    return _UpdateProposalDashboardViewFocusNodes[key]!;
   }
 
   /// Registers a listener on every generated controller that calls [model.setData()]
@@ -153,15 +153,15 @@ mixin $ProblemProposalsDashboardView {
     // The dispose function for a TextEditingController sets all listeners to null
 
     for (var controller
-        in _ProblemProposalsDashboardViewTextEditingControllers.values) {
+        in _UpdateProposalDashboardViewTextEditingControllers.values) {
       controller.dispose();
     }
-    for (var focusNode in _ProblemProposalsDashboardViewFocusNodes.values) {
+    for (var focusNode in _UpdateProposalDashboardViewFocusNodes.values) {
       focusNode.dispose();
     }
 
-    _ProblemProposalsDashboardViewTextEditingControllers.clear();
-    _ProblemProposalsDashboardViewFocusNodes.clear();
+    _UpdateProposalDashboardViewTextEditingControllers.clear();
+    _UpdateProposalDashboardViewFocusNodes.clear();
   }
 }
 
@@ -196,9 +196,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({NameValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         NameValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[NameValueKey]?.text =
+      _UpdateProposalDashboardViewTextEditingControllers[NameValueKey]?.text =
           value ?? '';
     }
   }
@@ -208,10 +208,10 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({BriefValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         BriefValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[BriefValueKey]
-          ?.text = value ?? '';
+      _UpdateProposalDashboardViewTextEditingControllers[BriefValueKey]?.text =
+          value ?? '';
     }
   }
 
@@ -220,9 +220,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({DescriptionValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         DescriptionValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[DescriptionValueKey]
+      _UpdateProposalDashboardViewTextEditingControllers[DescriptionValueKey]
           ?.text = value ?? '';
     }
   }
@@ -232,9 +232,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({SourceNameValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         SourceNameValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[SourceNameValueKey]
+      _UpdateProposalDashboardViewTextEditingControllers[SourceNameValueKey]
           ?.text = value ?? '';
     }
   }
@@ -244,9 +244,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({AuthorNameValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         AuthorNameValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[AuthorNameValueKey]
+      _UpdateProposalDashboardViewTextEditingControllers[AuthorNameValueKey]
           ?.text = value ?? '';
     }
   }
@@ -256,9 +256,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({TimeLimitValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         TimeLimitValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[TimeLimitValueKey]
+      _UpdateProposalDashboardViewTextEditingControllers[TimeLimitValueKey]
           ?.text = value ?? '';
     }
   }
@@ -268,9 +268,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({TotalMemoryLimitValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         TotalMemoryLimitValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[
+      _UpdateProposalDashboardViewTextEditingControllers[
               TotalMemoryLimitValueKey]
           ?.text = value ?? '';
     }
@@ -281,9 +281,9 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap..addAll({StackMemoryLimitValueKey: value}),
     );
 
-    if (_ProblemProposalsDashboardViewTextEditingControllers.containsKey(
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
         StackMemoryLimitValueKey)) {
-      _ProblemProposalsDashboardViewTextEditingControllers[
+      _UpdateProposalDashboardViewTextEditingControllers[
               StackMemoryLimitValueKey]
           ?.text = value ?? '';
     }
@@ -400,11 +400,11 @@ extension Methods on FormStateHelper {
 
 /// Returns the validation message for the given key
 String? getValidationMessage(String key) {
-  final validatorForKey = _ProblemProposalsDashboardViewTextValidations[key];
+  final validatorForKey = _UpdateProposalDashboardViewTextValidations[key];
   if (validatorForKey == null) return null;
 
   String? validationMessageForKey = validatorForKey(
-    _ProblemProposalsDashboardViewTextEditingControllers[key]!.text,
+    _UpdateProposalDashboardViewTextEditingControllers[key]!.text,
   );
 
   return validationMessageForKey;

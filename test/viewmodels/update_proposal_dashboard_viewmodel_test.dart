@@ -4,7 +4,7 @@ import 'package:midgard/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('ProblemProposalsDashboardViewModel Tests -', () {
+  group('UpdateProposalDashboardViewModel Tests -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });

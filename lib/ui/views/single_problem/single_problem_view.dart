@@ -46,7 +46,7 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
           if (viewModel.isBusy) return const SizedBox.shrink();
 
           final userBox = values.elementAt(0) as Box<UserProfileModel>;
-          final problemBox = values.elementAt(1) as Box<ProblemModel>;
+          // final problemBox = values.elementAt(1) as Box<ProblemModel>;
 
           final currentUser = viewModel.hiveService.getCurrentUserProfile(
             userBox,

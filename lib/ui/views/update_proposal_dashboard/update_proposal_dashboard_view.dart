@@ -1,13 +1,20 @@
+import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
+import 'package:markdown_editor_plus/widgets/splitted_markdown_form_field.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/problem/problem_models.dart';
+import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/models/validators/problem_validators.dart';
+import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
+import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
-import 'package:midgard/ui/views/problem_proposals_dashboard/problem_proposals_dashboard_view.form.dart';
-import 'package:midgard/ui/views/problem_proposals_dashboard/problem_proposals_dashboard_viewmodel.dart';
+import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_view.form.dart';
+import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_viewmodel.dart';
+import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -48,25 +55,64 @@ import 'package:stacked/stacked_annotations.dart';
     ),
   ],
 )
-class ProblemProposalsDashboardView
-    extends StackedView<ProblemProposalsDashboardViewModel>
-    with $ProblemProposalsDashboardView {
-  ProblemProposalsDashboardView({
-    this.problemId,
+class UpdateProposalDashboardView
+    extends StackedView<UpdateProposalDashboardViewModel>
+    with $UpdateProposalDashboardView {
+  const UpdateProposalDashboardView({
+    @PathParam('problemId') required this.problemId,
     super.key,
   });
 
-  late String? problemId;
+  final String problemId;
 
   @override
   Widget builder(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await viewModel.updateProblem();
+
+          if (!context.mounted) return;
+
+          if (viewModel.hasErrorForKey(kbUpdateProposalDashboardKey)) {
+            await context.showErrorBar(
+              position: FlashPosition.top,
+              indicatorColor: kcRed,
+              content: Text(
+                viewModel.error(kbUpdateProposalDashboardKey).message as String,
+              ),
+              primaryActionBuilder: (context, controller) {
+                return IconButton(
+                  onPressed: controller.dismiss,
+                  icon: const Icon(Icons.close),
+                );
+              },
+            );
+          } else {
+            await context.showSuccessBar(
+              position: FlashPosition.top,
+              indicatorColor: kcGreen,
+              content: const Text('Problem updated successfully!'),
+              primaryActionBuilder: (context, controller) {
+                return IconButton(
+                  onPressed: controller.dismiss,
+                  icon: const Icon(Icons.close),
+                );
+              },
+            );
+          }
+        },
+        backgroundColor: kcBlueAccent,
+        splashColor: kcGreenAccent,
+        tooltip: ksAppUpdateTooltip,
+        child: const Icon(Icons.save),
       ),
       backgroundColor: kcWhite,
       body: Row(
@@ -78,12 +124,16 @@ class ProblemProposalsDashboardView
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(
-                kdProblemProposalsDashboardViewPadding,
+                kdUpdateProposalDashboardViewPadding,
               ),
-              child: _buildProblemForm(
-                context,
-                viewModel,
-              ),
+              child: viewModel.busy(kbUpdateProposalDashboardKey)
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _buildProblemForm(
+                      context,
+                      viewModel,
+                    ),
             ),
           ),
         ],
@@ -93,102 +143,107 @@ class ProblemProposalsDashboardView
 
   Widget _buildProblemForm(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(
-        scrollbars: false,
+    return viewModel.problem.fold(
+      () => AppErrorWidget(
+        message: 'No problem found with id: $problemId',
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            verticalSpaceMedium,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  flex: 4,
-                  child: _buildNameField(
-                    context,
-                    viewModel,
+      (problem) => ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          scrollbars: false,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              verticalSpaceMedium,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 4,
+                    child: _buildNameField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-                const Flexible(child: horizontalSpaceSmall),
-                Flexible(
-                  flex: 4,
-                  child: _buildSourceNameField(
-                    context,
-                    viewModel,
+                  const Flexible(child: horizontalSpaceSmall),
+                  Flexible(
+                    flex: 4,
+                    child: _buildSourceNameField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-                const Flexible(child: horizontalSpaceSmall),
-                Flexible(
-                  flex: 4,
-                  child: _buildAuthorNameField(
-                    context,
-                    viewModel,
+                  const Flexible(child: horizontalSpaceSmall),
+                  Flexible(
+                    flex: 4,
+                    child: _buildAuthorNameField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-                const Flexible(child: horizontalSpaceSmall),
-                Flexible(
-                  flex: 4,
-                  child: _buildDifficultyField(
-                    context,
-                    viewModel,
+                  const Flexible(child: horizontalSpaceSmall),
+                  Flexible(
+                    flex: 4,
+                    child: _buildDifficultyField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            verticalSpaceMedium,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  flex: 4,
-                  child: _buildTimeLimitField(
-                    context,
-                    viewModel,
+                ],
+              ),
+              verticalSpaceMedium,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 4,
+                    child: _buildTimeLimitField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-                const Flexible(child: horizontalSpaceSmall),
-                Flexible(
-                  flex: 4,
-                  child: _buildTotalMemoryLimitField(
-                    context,
-                    viewModel,
+                  const Flexible(child: horizontalSpaceSmall),
+                  Flexible(
+                    flex: 4,
+                    child: _buildTotalMemoryLimitField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-                const Flexible(child: horizontalSpaceSmall),
-                Flexible(
-                  flex: 4,
-                  child: _buildStackMemoryLimitField(
-                    context,
-                    viewModel,
+                  const Flexible(child: horizontalSpaceSmall),
+                  Flexible(
+                    flex: 4,
+                    child: _buildStackMemoryLimitField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-                const Flexible(child: horizontalSpaceSmall),
-                Flexible(
-                  flex: 4,
-                  child: _buildIoTypeField(
-                    context,
-                    viewModel,
+                  const Flexible(child: horizontalSpaceSmall),
+                  Flexible(
+                    flex: 4,
+                    child: _buildIoTypeField(
+                      context,
+                      viewModel,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            verticalSpaceMedium,
-            _buildBriefField(
-              context,
-              viewModel,
-            ),
-            verticalSpaceMedium,
-            _buildDescriptionField(
-              context,
-              viewModel,
-            ),
-          ],
+                ],
+              ),
+              verticalSpaceMedium,
+              _buildBriefField(
+                context,
+                viewModel,
+              ),
+              verticalSpaceMedium,
+              _buildDescriptionField(
+                context,
+                viewModel,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -196,7 +251,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildNameField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -204,7 +259,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Problem name',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -212,7 +267,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -230,7 +285,7 @@ class ProblemProposalsDashboardView
             viewModel.nameValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -241,7 +296,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildBriefField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -249,7 +304,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Brief',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -257,7 +312,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -275,7 +330,7 @@ class ProblemProposalsDashboardView
             viewModel.briefValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -286,7 +341,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildSourceNameField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -294,7 +349,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Source name',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -302,7 +357,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -320,7 +375,7 @@ class ProblemProposalsDashboardView
             viewModel.sourceNameValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -331,7 +386,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildAuthorNameField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -339,7 +394,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Author name',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -347,7 +402,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -365,7 +420,7 @@ class ProblemProposalsDashboardView
             viewModel.authorNameValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -376,7 +431,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildTimeLimitField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -384,7 +439,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Time limit (sec)',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -392,7 +447,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -412,7 +467,7 @@ class ProblemProposalsDashboardView
             viewModel.timeLimitValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -423,7 +478,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildTotalMemoryLimitField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -431,7 +486,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Total memory limit (MB)',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -439,7 +494,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -459,7 +514,7 @@ class ProblemProposalsDashboardView
             viewModel.totalMemoryLimitValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -470,7 +525,7 @@ class ProblemProposalsDashboardView
 
   Widget _buildStackMemoryLimitField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return Column(
       children: [
@@ -478,7 +533,7 @@ class ProblemProposalsDashboardView
           decoration: const InputDecoration(
             hintText: 'Stack memory limit (MB)',
             contentPadding: EdgeInsets.all(
-              kdProblemProposalsDashboardViewFieldPadding,
+              kdUpdateProposalDashboardViewFieldPadding,
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             focusedBorder: OutlineInputBorder(),
@@ -486,7 +541,7 @@ class ProblemProposalsDashboardView
               borderSide: BorderSide(color: kcLightGrey),
               borderRadius: BorderRadius.all(
                 Radius.circular(
-                  kdProblemProposalsDashboardViewFieldBorderRadius,
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
                 ),
               ),
             ),
@@ -506,7 +561,7 @@ class ProblemProposalsDashboardView
             viewModel.stackMemoryLimitValidationMessage!,
             style: const TextStyle(
               color: kcRed,
-              fontSize: kdProblemProposalsDashboardViewFieldValidationTextSize,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -517,13 +572,13 @@ class ProblemProposalsDashboardView
 
   Widget _buildDifficultyField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return DropdownButtonFormField<Difficulty>(
       decoration: const InputDecoration(
         hintText: 'Difficulty',
         contentPadding: EdgeInsets.all(
-          kdProblemProposalsDashboardViewFieldPadding,
+          kdUpdateProposalDashboardViewFieldPadding,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         focusedBorder: OutlineInputBorder(),
@@ -531,12 +586,12 @@ class ProblemProposalsDashboardView
           borderSide: BorderSide(color: kcLightGrey),
           borderRadius: BorderRadius.all(
             Radius.circular(
-              kdProblemProposalsDashboardViewFieldBorderRadius,
+              kdUpdateProposalDashboardViewFieldBorderRadius,
             ),
           ),
         ),
       ),
-      // value: viewModel.difficultyValue,
+      value: viewModel.difficultyValue,
       items: Difficulty.values
           .where(
             (difficulty) => difficulty != Difficulty.all,
@@ -549,20 +604,20 @@ class ProblemProposalsDashboardView
           )
           .toList(),
       onChanged: (difficulty) {
-        viewModel.difficultyValue = difficulty!;
+        viewModel.difficultyValue = difficulty;
       },
     );
   }
 
   Widget _buildIoTypeField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return DropdownButtonFormField<IoType>(
       decoration: const InputDecoration(
         hintText: 'I/O type',
         contentPadding: EdgeInsets.all(
-          kdProblemProposalsDashboardViewFieldPadding,
+          kdUpdateProposalDashboardViewFieldPadding,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         focusedBorder: OutlineInputBorder(),
@@ -570,12 +625,12 @@ class ProblemProposalsDashboardView
           borderSide: BorderSide(color: kcLightGrey),
           borderRadius: BorderRadius.all(
             Radius.circular(
-              kdProblemProposalsDashboardViewFieldBorderRadius,
+              kdUpdateProposalDashboardViewFieldBorderRadius,
             ),
           ),
         ),
       ),
-      // value: viewModel.ioTypeValue,
+      value: viewModel.ioTypeValue,
       items: IoType.values
           .map(
             (ioType) => DropdownMenuItem<IoType>(
@@ -586,25 +641,25 @@ class ProblemProposalsDashboardView
           )
           .toList(),
       onChanged: (ioType) {
-        viewModel.ioTypeValue = ioType!;
+        viewModel.ioTypeValue = ioType;
       },
     );
   }
 
   Widget _buildDescriptionField(
     BuildContext context,
-    ProblemProposalsDashboardViewModel viewModel,
+    UpdateProposalDashboardViewModel viewModel,
   ) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxHeight: kdProblemProposalsDashboardViewDescriptionMaxHeight,
+        maxHeight: kdUpdateProposalDashboardViewDescriptionMaxHeight,
       ),
       child: Card(
         color: kcVeryLightGrey,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: kdProblemProposalsDashboardViewFieldPadding,
+              horizontal: kdUpdateProposalDashboardViewFieldPadding,
             ),
             child: SplittedMarkdownFormField(
               controller: descriptionController,
@@ -624,24 +679,39 @@ class ProblemProposalsDashboardView
   }
 
   @override
-  void onViewModelReady(
-    ProblemProposalsDashboardViewModel viewModel,
-  ) {
+  Future<void> onViewModelReady(
+    UpdateProposalDashboardViewModel viewModel,
+  ) async {
     super.onViewModelReady(viewModel);
 
-    syncFormWithViewModel(viewModel);
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    await viewModel.hiveService.getCurrentUserProfile(userProfileBox).fold(
+      () async {
+        await viewModel.routerService.replaceWithHomeView(
+          warningMessage: ksAppNotAuthenticatedRedirectMessage,
+        );
+      },
+      (UserProfileModel user) async {
+        if (!user.isProposer) {
+          await viewModel.routerService.replaceWithHomeView(
+            warningMessage: ksAppNotProposerRedirectMessage,
+          );
+        } else {
+          syncFormWithViewModel(viewModel);
+          await viewModel.init();
+        }
+      },
+    );
   }
 
   @override
-  ProblemProposalsDashboardViewModel viewModelBuilder(
+  UpdateProposalDashboardViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      ProblemProposalsDashboardViewModel(
-        problemId: problemId,
-      );
+      UpdateProposalDashboardViewModel(problemId: problemId);
 
   @override
-  void onDispose(ProblemProposalsDashboardViewModel viewModel) {
+  void onDispose(UpdateProposalDashboardViewModel viewModel) {
     super.onDispose(viewModel);
 
     disposeForm();

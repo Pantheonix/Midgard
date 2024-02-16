@@ -19,6 +19,8 @@ const String kbProblemsKey = 'problems';
 const String kbSingleProblemKey = 'singleProblem';
 const String kbProblemProposalsKey = 'problemProposals';
 const String kbSingleProblemProposalKey = 'singleProblemProposal';
+const String kbCreateProposalDashboardKey = 'createProposalDashboard';
+const String kbUpdateProposalDashboardKey = 'updateProposalDashboard';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -262,13 +264,21 @@ const double kdSingleProblemViewDescriptionPadding = 10;
 
 // single problem proposal view
 
-// problem proposals dashboard view
-const double kdProblemProposalsDashboardViewPadding = 20;
-const double kdProblemProposalsDashboardViewDescriptionMinHeight = 200;
-const double kdProblemProposalsDashboardViewDescriptionMaxHeight = 500;
-const double kdProblemProposalsDashboardViewFieldBorderRadius = 20;
-const double kdProblemProposalsDashboardViewFieldPadding = 10;
-const double kdProblemProposalsDashboardViewFieldValidationTextSize = 12;
+// create proposal dashboard view
+const double kdCreateProposalDashboardViewPadding = 20;
+const double kdCreateProposalDashboardViewDescriptionMinHeight = 200;
+const double kdCreateProposalDashboardViewDescriptionMaxHeight = 500;
+const double kdCreateProposalDashboardViewFieldBorderRadius = 20;
+const double kdCreateProposalDashboardViewFieldPadding = 10;
+const double kdCreateProposalDashboardViewFieldValidationTextSize = 12;
+
+// update proposal dashboard view
+const double kdUpdateProposalDashboardViewPadding = 20;
+const double kdUpdateProposalDashboardViewDescriptionMinHeight = 200;
+const double kdUpdateProposalDashboardViewDescriptionMaxHeight = 500;
+const double kdUpdateProposalDashboardViewFieldBorderRadius = 20;
+const double kdUpdateProposalDashboardViewFieldPadding = 10;
+const double kdUpdateProposalDashboardViewFieldValidationTextSize = 12;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
@@ -278,7 +288,7 @@ const int kiSidebarRegisterMenuIndex = 3;
 const int kiSidebarProfilesMenuIndex = 3;
 const int kiSidebarProblemsMenuIndex = 4;
 const int kiSidebarProblemProposalsMenuIndex = 5;
-const int kiSidebarProblemProposalsDashboardMenuIndex = 6;
+const int kiSidebarProposalDashboardMenuIndex = 6;
 
 const double kdSidebarPadding = 10;
 const double kdSidebarShapeRadius = 20;
@@ -302,7 +312,7 @@ const String ksSidebarLogoutMenuText = 'Logout';
 const String ksSidebarProfilesMenuText = 'Profiles';
 const String ksSidebarProblemsMenuText = 'Problems';
 const String kdSidebarProblemProposalsMenuText = 'Proposals';
-const String kdSidebarProblemProposalsDashboardMenuText = 'Dashboard';
+const String kdSidebarProposalDashboardMenuText = 'Dashboard';
 
 // general
 

@@ -75,7 +75,7 @@ class SingleProblemProposalView
               icon: const Icon(Icons.edit),
               onPressed: () async {
                 await viewModel.routerService
-                    .replaceWithProblemProposalsDashboardView(
+                    .replaceWithUpdateProposalDashboardView(
                   problemId: problemId,
                 );
               },

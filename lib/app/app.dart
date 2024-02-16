@@ -5,10 +5,10 @@ import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:midgard/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:midgard/ui/views/about/about_view.dart';
+import 'package:midgard/ui/views/create_proposal_dashboard/create_proposal_dashboard_view.dart';
 import 'package:midgard/ui/views/home/home_view.dart';
 import 'package:midgard/ui/views/login/login_view.dart';
 import 'package:midgard/ui/views/problem_proposals/problem_proposals_view.dart';
-import 'package:midgard/ui/views/problem_proposals_dashboard/problem_proposals_dashboard_view.dart';
 import 'package:midgard/ui/views/problems/problems_view.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.dart';
 import 'package:midgard/ui/views/register/register_view.dart';
@@ -17,6 +17,7 @@ import 'package:midgard/ui/views/single_problem_proposal/single_problem_proposal
 import 'package:midgard/ui/views/single_profile/single_profile_view.dart';
 import 'package:midgard/ui/views/startup/startup_view.dart';
 import 'package:midgard/ui/views/unknown/unknown_view.dart';
+import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 // @stacked-import
@@ -38,8 +39,12 @@ import 'package:stacked_services/stacked_services.dart';
       path: '/proposals/:problemId',
     ),
     MaterialRoute(
-      page: ProblemProposalsDashboardView,
-      path: '/dashboard',
+      page: CreateProposalDashboardView,
+      path: '/dashboard/create',
+    ),
+    MaterialRoute(
+      page: UpdateProposalDashboardView,
+      path: '/dashboard/update/:problemId',
     ),
 // @stacked-route
 

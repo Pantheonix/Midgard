@@ -186,10 +186,10 @@ class AppSidebar extends StatelessWidget {
                       ),
                       SidebarXItem(
                         icon: Icons.dashboard,
-                        label: kdSidebarProblemProposalsDashboardMenuText,
+                        label: kdSidebarProposalDashboardMenuText,
                         onTap: () async {
                           await viewModel.routerService
-                              .replaceWithProblemProposalsDashboardView();
+                              .replaceWithCreateProposalDashboardView();
                         },
                       ),
                     ],

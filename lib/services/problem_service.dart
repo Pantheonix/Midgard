@@ -18,7 +18,6 @@ import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:midgard/ui/common/app_strings.dart';
 import 'package:sentry/sentry.dart';
 
 class ProblemService {
@@ -470,24 +469,6 @@ class ProblemService {
           ),
           (r) => create(request: request),
         );
-      } else if (response.statusCode == HttpStatus.forbidden) {
-        _logger.e(
-          'Error while creating problem: $ksAppNonProposerForbiddenMessage',
-        );
-        await Sentry.captureException(
-          Exception(
-            'Error while creating problem: $ksAppNonProposerForbiddenMessage',
-          ),
-          stackTrace: StackTrace.current,
-        );
-
-        return left(
-          ProblemException(
-            ksAppNonProposerForbiddenMessage,
-            null,
-            [],
-          ),
-        );
       } else {
         _logger.e('Error while creating problem: ${response.body}');
         await Sentry.captureException(
@@ -580,24 +561,6 @@ class ProblemService {
             request: request,
           ),
         );
-      } else if (response.statusCode == HttpStatus.forbidden) {
-        _logger.e(
-          'Error while adding test: $ksAppNonProposerForbiddenMessage',
-        );
-        await Sentry.captureException(
-          Exception(
-            'Error while adding test: $ksAppNonProposerForbiddenMessage',
-          ),
-          stackTrace: StackTrace.current,
-        );
-
-        return left(
-          ProblemException(
-            ksAppNonProposerForbiddenMessage,
-            null,
-            [],
-          ),
-        );
       } else {
         _logger.e('Error while adding test: ${response.body}');
         await Sentry.captureException(
@@ -678,24 +641,6 @@ class ProblemService {
           (r) => update(
             problemId: problemId,
             request: request,
-          ),
-        );
-      } else if (response.statusCode == HttpStatus.forbidden) {
-        _logger.e(
-          'Error while updating problem: $ksAppNonProposerForbiddenMessage',
-        );
-        await Sentry.captureException(
-          Exception(
-            'Error while updating problem: $ksAppNonProposerForbiddenMessage',
-          ),
-          stackTrace: StackTrace.current,
-        );
-
-        return left(
-          ProblemException(
-            ksAppNonProposerForbiddenMessage,
-            null,
-            [],
           ),
         );
       } else {
@@ -805,24 +750,6 @@ class ProblemService {
             problemId: problemId,
             testId: testId,
             request: request,
-          ),
-        );
-      } else if (response.statusCode == HttpStatus.forbidden) {
-        _logger.e(
-          'Error while updating test: $ksAppNonProposerForbiddenMessage',
-        );
-        await Sentry.captureException(
-          Exception(
-            'Error while updating test: $ksAppNonProposerForbiddenMessage',
-          ),
-          stackTrace: StackTrace.current,
-        );
-
-        return left(
-          ProblemException(
-            ksAppNonProposerForbiddenMessage,
-            null,
-            [],
           ),
         );
       } else {

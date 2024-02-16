@@ -70,8 +70,13 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
               ),
               child: Center(
                 child: viewModel.busy(kbSingleProfileKey)
-                    ? const CircularProgressIndicator()
-                    : _buildProfileForm(context, viewModel),
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : _buildProfileForm(
+                        context,
+                        viewModel,
+                      ),
               ),
             ),
           ),
@@ -114,27 +119,23 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
                 _buildUsernameField(
                   context,
                   viewModel,
-                  user.username,
                 ),
                 if (viewModel.currentUser.userId == user.userId) ...[
                   verticalSpaceSmall,
                   _buildEmailField(
                     context,
                     viewModel,
-                    user.email,
                   ),
                 ],
                 verticalSpaceSmall,
                 _buildFullnameField(
                   context,
                   viewModel,
-                  user.fullname ?? '',
                 ),
                 verticalSpaceSmall,
                 _buildBioField(
                   context,
                   viewModel,
-                  user.bio ?? '',
                 ),
                 if (viewModel.currentUser.userId == user.userId) ...[
                   verticalSpaceMedium,
@@ -226,7 +227,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
   Widget _buildUsernameField(
     BuildContext context,
     SingleProfileViewModel viewModel,
-    String username,
   ) {
     return Column(
       children: [
@@ -273,7 +273,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
   Widget _buildEmailField(
     BuildContext context,
     SingleProfileViewModel viewModel,
-    String email,
   ) {
     return Column(
       children: [
@@ -321,7 +320,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
   Widget _buildFullnameField(
     BuildContext context,
     SingleProfileViewModel viewModel,
-    String fullname,
   ) {
     return Column(
       children: [
@@ -370,7 +368,6 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
   Widget _buildBioField(
     BuildContext context,
     SingleProfileViewModel viewModel,
-    String bio,
   ) {
     return Column(
       children: [

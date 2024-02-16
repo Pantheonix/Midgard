@@ -60,16 +60,23 @@ class SingleProfileViewModel extends FormViewModel {
 
   SidebarXController get sidebarController => _sidebarController;
 
-  Future<Option<UserProfileModel>> getUser(String id) async {
+  Future<Option<UserProfileModel>> _getUser(String id) async {
     final result = await _userService.getById(userId: id);
 
-    return result.fold(
-      (IdentityException error) {
+    return await result.fold(
+      (IdentityException error) async {
         _logger.e('Error while retrieving user: ${error.toJson()}');
+        await Sentry.captureException(
+          Exception('Error while retrieving user: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
+        );
+
         return none();
       },
-      (UserProfileModel user) {
+      (UserProfileModel user) async {
         _logger.i('User retrieved successfully');
+        await Sentry.captureMessage('User retrieved successfully');
+
         return some(user);
       },
     );
@@ -265,7 +272,7 @@ class SingleProfileViewModel extends FormViewModel {
     _logger.i('Updating user');
 
     _user = await runBusyFuture(
-      getUser(userId),
+      _getUser(userId),
       busyObject: kbSingleProfileKey,
     );
 
