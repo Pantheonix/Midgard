@@ -83,7 +83,9 @@ class SingleProblemViewModel extends FutureViewModel<ProblemModel> {
       (_) async {
         _logger.i('Problem unpublished successfully');
         await Sentry.captureMessage('Problem unpublished successfully');
-        await _routerService.replaceWithProblemProposalsView();
+        await _routerService.replaceWithSingleProblemProposalView(
+          problemId: problemId,
+        );
       },
     );
   }

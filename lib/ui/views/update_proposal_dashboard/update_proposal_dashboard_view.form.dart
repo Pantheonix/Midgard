@@ -20,6 +20,7 @@ const String AuthorNameValueKey = 'authorName';
 const String TimeLimitValueKey = 'timeLimit';
 const String TotalMemoryLimitValueKey = 'totalMemoryLimit';
 const String StackMemoryLimitValueKey = 'stackMemoryLimit';
+const String TestScoreValueKey = 'testScore';
 
 final Map<String, TextEditingController>
     _UpdateProposalDashboardViewTextEditingControllers = {};
@@ -36,6 +37,7 @@ final Map<String, String? Function(String?)?>
   TimeLimitValueKey: ProblemValidators.validateTimeLimit,
   TotalMemoryLimitValueKey: ProblemValidators.validateTotalMemoryLimit,
   StackMemoryLimitValueKey: ProblemValidators.validateStackMemoryLimit,
+  TestScoreValueKey: ProblemValidators.validateTestScore,
 };
 
 mixin $UpdateProposalDashboardView {
@@ -55,6 +57,8 @@ mixin $UpdateProposalDashboardView {
       _getFormTextEditingController(TotalMemoryLimitValueKey);
   TextEditingController get stackMemoryLimitController =>
       _getFormTextEditingController(StackMemoryLimitValueKey);
+  TextEditingController get testScoreController =>
+      _getFormTextEditingController(TestScoreValueKey);
 
   FocusNode get nameFocusNode => _getFormFocusNode(NameValueKey);
   FocusNode get briefFocusNode => _getFormFocusNode(BriefValueKey);
@@ -66,6 +70,7 @@ mixin $UpdateProposalDashboardView {
       _getFormFocusNode(TotalMemoryLimitValueKey);
   FocusNode get stackMemoryLimitFocusNode =>
       _getFormFocusNode(StackMemoryLimitValueKey);
+  FocusNode get testScoreFocusNode => _getFormFocusNode(TestScoreValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
@@ -99,6 +104,7 @@ mixin $UpdateProposalDashboardView {
     timeLimitController.addListener(() => _updateFormData(model));
     totalMemoryLimitController.addListener(() => _updateFormData(model));
     stackMemoryLimitController.addListener(() => _updateFormData(model));
+    testScoreController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -118,6 +124,7 @@ mixin $UpdateProposalDashboardView {
     timeLimitController.addListener(() => _updateFormData(model));
     totalMemoryLimitController.addListener(() => _updateFormData(model));
     stackMemoryLimitController.addListener(() => _updateFormData(model));
+    testScoreController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -135,6 +142,7 @@ mixin $UpdateProposalDashboardView {
           TimeLimitValueKey: timeLimitController.text,
           TotalMemoryLimitValueKey: totalMemoryLimitController.text,
           StackMemoryLimitValueKey: stackMemoryLimitController.text,
+          TestScoreValueKey: testScoreController.text,
         }),
     );
 
@@ -190,6 +198,7 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap[TotalMemoryLimitValueKey] as String?;
   String? get stackMemoryLimitValue =>
       this.formValueMap[StackMemoryLimitValueKey] as String?;
+  String? get testScoreValue => this.formValueMap[TestScoreValueKey] as String?;
 
   set nameValue(String? value) {
     this.setData(
@@ -289,6 +298,18 @@ extension ValueProperties on FormStateHelper {
     }
   }
 
+  set testScoreValue(String? value) {
+    this.setData(
+      this.formValueMap..addAll({TestScoreValueKey: value}),
+    );
+
+    if (_UpdateProposalDashboardViewTextEditingControllers.containsKey(
+        TestScoreValueKey)) {
+      _UpdateProposalDashboardViewTextEditingControllers[TestScoreValueKey]
+          ?.text = value ?? '';
+    }
+  }
+
   bool get hasName =>
       this.formValueMap.containsKey(NameValueKey) &&
       (nameValue?.isNotEmpty ?? false);
@@ -313,6 +334,9 @@ extension ValueProperties on FormStateHelper {
   bool get hasStackMemoryLimit =>
       this.formValueMap.containsKey(StackMemoryLimitValueKey) &&
       (stackMemoryLimitValue?.isNotEmpty ?? false);
+  bool get hasTestScore =>
+      this.formValueMap.containsKey(TestScoreValueKey) &&
+      (testScoreValue?.isNotEmpty ?? false);
 
   bool get hasNameValidationMessage =>
       this.fieldsValidationMessages[NameValueKey]?.isNotEmpty ?? false;
@@ -332,6 +356,8 @@ extension ValueProperties on FormStateHelper {
   bool get hasStackMemoryLimitValidationMessage =>
       this.fieldsValidationMessages[StackMemoryLimitValueKey]?.isNotEmpty ??
       false;
+  bool get hasTestScoreValidationMessage =>
+      this.fieldsValidationMessages[TestScoreValueKey]?.isNotEmpty ?? false;
 
   String? get nameValidationMessage =>
       this.fieldsValidationMessages[NameValueKey];
@@ -349,6 +375,8 @@ extension ValueProperties on FormStateHelper {
       this.fieldsValidationMessages[TotalMemoryLimitValueKey];
   String? get stackMemoryLimitValidationMessage =>
       this.fieldsValidationMessages[StackMemoryLimitValueKey];
+  String? get testScoreValidationMessage =>
+      this.fieldsValidationMessages[TestScoreValueKey];
 }
 
 extension Methods on FormStateHelper {
@@ -370,6 +398,8 @@ extension Methods on FormStateHelper {
   setStackMemoryLimitValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[StackMemoryLimitValueKey] =
           validationMessage;
+  setTestScoreValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[TestScoreValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
@@ -381,6 +411,7 @@ extension Methods on FormStateHelper {
     timeLimitValue = '';
     totalMemoryLimitValue = '';
     stackMemoryLimitValue = '';
+    testScoreValue = '';
   }
 
   /// Validates text input fields on the Form
@@ -394,6 +425,7 @@ extension Methods on FormStateHelper {
       TimeLimitValueKey: getValidationMessage(TimeLimitValueKey),
       TotalMemoryLimitValueKey: getValidationMessage(TotalMemoryLimitValueKey),
       StackMemoryLimitValueKey: getValidationMessage(StackMemoryLimitValueKey),
+      TestScoreValueKey: getValidationMessage(TestScoreValueKey),
     });
   }
 }
@@ -421,4 +453,5 @@ void updateValidationData(FormStateHelper model) =>
       TimeLimitValueKey: getValidationMessage(TimeLimitValueKey),
       TotalMemoryLimitValueKey: getValidationMessage(TotalMemoryLimitValueKey),
       StackMemoryLimitValueKey: getValidationMessage(StackMemoryLimitValueKey),
+      TestScoreValueKey: getValidationMessage(TestScoreValueKey),
     });

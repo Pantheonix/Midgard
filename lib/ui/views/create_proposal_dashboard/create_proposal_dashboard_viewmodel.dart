@@ -90,12 +90,14 @@ class CreateProposalDashboardViewModel extends FormViewModel {
           stackTrace: StackTrace.current,
         );
 
-        throw Exception('Error while creating problem: ${error.toJson()}');
+        throw Exception('Error while creating problem: ${error.message}');
       },
       (ProblemModel problem) async {
         _logger.i('Problem created successfully');
 
-        await _routerService.replaceWithProblemProposalsView();
+        await _routerService.replaceWithUpdateProposalDashboardView(
+          problemId: problem.id,
+        );
       },
     );
   }

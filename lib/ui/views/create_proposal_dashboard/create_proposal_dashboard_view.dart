@@ -130,6 +130,14 @@ class CreateProposalDashboardView
       child: SingleChildScrollView(
         child: Column(
           children: [
+            const Text(
+              'Create problem',
+              style: TextStyle(
+                color: kcBlack,
+                fontSize: kdUpdateProposalDashboardViewTitleTextSize,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             verticalSpaceMedium,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

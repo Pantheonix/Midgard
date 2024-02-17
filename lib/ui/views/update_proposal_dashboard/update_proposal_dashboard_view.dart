@@ -15,6 +15,7 @@ import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_view.form.dart';
 import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
+import 'package:midgard/ui/widgets/app_primitives/expandable_fab/expandable_fab.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -53,6 +54,10 @@ import 'package:stacked/stacked_annotations.dart';
       name: 'stackMemoryLimit',
       validator: ProblemValidators.validateStackMemoryLimit,
     ),
+    FormTextField(
+      name: 'testScore',
+      validator: ProblemValidators.validateTestScore,
+    ),
   ],
 )
 class UpdateProposalDashboardView
@@ -75,44 +80,77 @@ class UpdateProposalDashboardView
       drawer: AppSidebar(
         controller: viewModel.sidebarController,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await viewModel.updateProblem();
+      floatingActionButton: ExpandableFab(
+        distance: kdFabDistance,
+        children: [
+          Tooltip(
+            message: ksAppUpdateTooltip,
+            child: ActionButton(
+              onPressed: () async {
+                await viewModel.updateProblem();
 
-          if (!context.mounted) return;
+                if (!context.mounted) return;
 
-          if (viewModel.hasErrorForKey(kbUpdateProposalDashboardKey)) {
-            await context.showErrorBar(
-              position: FlashPosition.top,
-              indicatorColor: kcRed,
-              content: Text(
-                viewModel.error(kbUpdateProposalDashboardKey).message as String,
-              ),
-              primaryActionBuilder: (context, controller) {
-                return IconButton(
-                  onPressed: controller.dismiss,
-                  icon: const Icon(Icons.close),
-                );
+                if (viewModel.hasErrorForKey(kbUpdateProposalDashboardKey)) {
+                  await context.showErrorBar(
+                    position: FlashPosition.top,
+                    indicatorColor: kcRed,
+                    content: Text(
+                      viewModel.error(kbUpdateProposalDashboardKey).message
+                          as String,
+                    ),
+                    primaryActionBuilder: (context, controller) {
+                      return IconButton(
+                        onPressed: controller.dismiss,
+                        icon: const Icon(Icons.close),
+                      );
+                    },
+                  );
+                } else {
+                  await context.showSuccessBar(
+                    position: FlashPosition.top,
+                    indicatorColor: kcGreen,
+                    content: const Text('Problem updated successfully!'),
+                    primaryActionBuilder: (context, controller) {
+                      return IconButton(
+                        onPressed: controller.dismiss,
+                        icon: const Icon(Icons.close),
+                      );
+                    },
+                  );
+                }
               },
-            );
-          } else {
-            await context.showSuccessBar(
-              position: FlashPosition.top,
-              indicatorColor: kcGreen,
-              content: const Text('Problem updated successfully!'),
-              primaryActionBuilder: (context, controller) {
-                return IconButton(
-                  onPressed: controller.dismiss,
-                  icon: const Icon(Icons.close),
-                );
+              icon: const Icon(Icons.save),
+            ),
+          ),
+          Tooltip(
+            message: ksAppPublishTooltip,
+            child: ActionButton(
+              icon: const Icon(Icons.send),
+              onPressed: () async {
+                await viewModel.publishProblem();
+
+                if (!context.mounted) return;
+
+                if (viewModel.hasErrorForKey(kbPublishProblemKey)) {
+                  await context.showErrorBar(
+                    position: FlashPosition.top,
+                    indicatorColor: kcRed,
+                    content: Text(
+                      viewModel.error(kbPublishProblemKey).message as String,
+                    ),
+                    primaryActionBuilder: (context, controller) {
+                      return IconButton(
+                        onPressed: controller.dismiss,
+                        icon: const Icon(Icons.close),
+                      );
+                    },
+                  );
+                }
               },
-            );
-          }
-        },
-        backgroundColor: kcBlueAccent,
-        splashColor: kcGreenAccent,
-        tooltip: ksAppUpdateTooltip,
-        child: const Icon(Icons.save),
+            ),
+          ),
+        ],
       ),
       backgroundColor: kcWhite,
       body: Row(
@@ -156,6 +194,14 @@ class UpdateProposalDashboardView
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const Text(
+                'Update problem',
+                style: TextStyle(
+                  color: kcBlack,
+                  fontSize: kdUpdateProposalDashboardViewTitleTextSize,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               verticalSpaceMedium,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,6 +288,37 @@ class UpdateProposalDashboardView
                 context,
                 viewModel,
               ),
+              verticalSpaceLarge,
+              ExpansionTile(
+                title: const Text(
+                  'Update problem test cases',
+                  style: TextStyle(
+                    color: kcBlack,
+                    fontSize: kdUpdateProposalDashboardViewSubtitleTextSize,
+                  ),
+                ),
+                initiallyExpanded: true,
+                backgroundColor: kcVeryLightGrey,
+                collapsedBackgroundColor: kcVeryLightGrey,
+                controlAffinity: ListTileControlAffinity.leading,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    kdSingleProblemViewDataTableBorderRadius,
+                  ),
+                ),
+                collapsedShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    kdSingleProblemViewDataTableBorderRadius,
+                  ),
+                ),
+                children: [
+                  _buildTestForm(
+                    context,
+                    viewModel,
+                  ),
+                ],
+              ),
+              verticalSpaceMedium,
             ],
           ),
         ),
@@ -672,6 +749,389 @@ class UpdateProposalDashboardView
               validator: ProblemValidators.validateDescription,
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTestForm(
+    BuildContext context,
+    UpdateProposalDashboardViewModel viewModel,
+  ) {
+    return Column(
+      children: [
+        const Text(
+          'Add new test case',
+          style: TextStyle(
+            color: kcBlack,
+            fontSize: kdUpdateProposalDashboardViewSubtitleTextSize,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        verticalSpaceMedium,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              flex: 4,
+              child: _buildTestScoreField(
+                context,
+                viewModel,
+              ),
+            ),
+            const Flexible(child: horizontalSpaceTiny),
+            Flexible(
+              flex: 4,
+              child: _buildTestFilePicker(
+                context,
+                viewModel,
+              ),
+            ),
+            const Flexible(child: horizontalSpaceTiny),
+            Flexible(
+              flex: 4,
+              child: IconButton(
+                onPressed: () async {
+                  await viewModel.addTest();
+
+                  if (!context.mounted) return;
+
+                  if (viewModel.hasErrorForKey(kbAddTestKey)) {
+                    await context.showErrorBar(
+                      position: FlashPosition.top,
+                      indicatorColor: kcRed,
+                      content: Text(
+                        viewModel.error(kbAddTestKey).message as String,
+                      ),
+                      primaryActionBuilder: (context, controller) {
+                        return IconButton(
+                          onPressed: controller.dismiss,
+                          icon: const Icon(Icons.close),
+                        );
+                      },
+                    );
+                  } else {
+                    await context.showSuccessBar(
+                      position: FlashPosition.top,
+                      indicatorColor: kcGreen,
+                      content: const Text('Test case added successfully!'),
+                      primaryActionBuilder: (context, controller) {
+                        return IconButton(
+                          onPressed: controller.dismiss,
+                          icon: const Icon(Icons.close),
+                        );
+                      },
+                    );
+                  }
+                },
+                icon: const CircleAvatar(
+                  backgroundColor: kcGreenAccent,
+                  child: Icon(
+                    Icons.add,
+                  ),
+                ),
+                tooltip: ksAppAddTestTooltip,
+                iconSize: kdUpdateProposalDashboardViewIconSize,
+              ),
+            ),
+          ],
+        ),
+        verticalSpaceMedium,
+        _buildTestsTableView(
+          context,
+          viewModel,
+          viewModel.problem.fold(
+            () => [],
+            (problem) => problem.tests.getOrElse(() => []),
+          ),
+        ),
+        verticalSpaceMedium,
+        if (viewModel.busy(kbAddTestKey) || viewModel.busy(kbDeleteTestKey))
+          const LinearProgressIndicator(),
+        verticalSpaceMedium,
+      ],
+    );
+  }
+
+  Widget _buildTestScoreField(
+    BuildContext context,
+    UpdateProposalDashboardViewModel viewModel,
+  ) {
+    return Column(
+      children: [
+        TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Test score',
+            contentPadding: EdgeInsets.all(
+              kdUpdateProposalDashboardViewFieldPadding,
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            focusedBorder: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kcLightGrey),
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  kdUpdateProposalDashboardViewFieldBorderRadius,
+                ),
+              ),
+            ),
+          ),
+          focusNode: testScoreFocusNode,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          textInputAction: TextInputAction.next,
+          controller: testScoreController,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+          ],
+        ),
+        if (viewModel.hasTestScoreValidationMessage) ...[
+          verticalSpaceTiny,
+          Text(
+            viewModel.testScoreValidationMessage!,
+            style: const TextStyle(
+              color: kcRed,
+              fontSize: kdUpdateProposalDashboardViewFieldValidationTextSize,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildTestFilePicker(
+    BuildContext context,
+    UpdateProposalDashboardViewModel viewModel,
+  ) {
+    return ListTile(
+      title: Text(
+        'Filename: ${viewModel.newTestArchiveFile.fold(
+          () => 'Select test archive file',
+          (file) => file.filename,
+        )}',
+      ),
+      titleTextStyle: const TextStyle(
+        color: kcBlack,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w500,
+      ),
+      leading: const Icon(
+        Icons.attach_file,
+        color: kcOrangeAccent,
+        size: kdUpdateProposalDashboardViewIconSize,
+      ),
+      onTap: () async {
+        await viewModel.updateTestArchiveFile();
+      },
+    );
+  }
+
+  Widget _buildTestsTableView(
+    BuildContext context,
+    UpdateProposalDashboardViewModel viewModel,
+    List<TestModel> tests,
+  ) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: constraints.maxWidth,
+          ),
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(kcVeryLightGrey),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: kdSingleProblemViewDataTableBorderWidth,
+                color: kcVeryLightGrey,
+              ),
+              borderRadius: BorderRadius.circular(
+                kdSingleProblemViewDataTableBorderRadius,
+              ),
+            ),
+            border: TableBorder.all(
+              color: kcVeryLightGrey,
+            ),
+            showCheckboxColumn: false,
+            columns: const [
+              DataColumn(
+                label: Text(
+                  'Test Id',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Score',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Input',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Output',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              // DataColumn(
+              //   label: Text(
+              //     'Update',
+              //     style: TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+              //     ),
+              //   ),
+              // ),
+              DataColumn(
+                label: Text(
+                  'Delete',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+            ],
+            rows: tests
+                .map(
+                  (test) => DataRow(
+                    cells: [
+                      DataCell(
+                        Text(
+                          test.idPretty,
+                        ),
+                      ),
+                      DataCell(
+                        Text(
+                          test.scorePretty,
+                        ),
+                      ),
+                      DataCell(
+                        IconButton(
+                          onPressed: () {
+                            viewModel.downloadTestDataFromUrl(
+                              testId: test.idPretty,
+                              filename: ksAppTestInputFilename,
+                              url: test.inputUrl,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.download,
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        IconButton(
+                          onPressed: () {
+                            viewModel.downloadTestDataFromUrl(
+                              testId: test.idPretty,
+                              filename: ksAppTestOutputFilename,
+                              url: test.outputUrl,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.download,
+                          ),
+                        ),
+                      ),
+                      // DataCell(
+                      //   IconButton(
+                      //     onPressed: () {
+                      //       AwesomeDialog(
+                      //         context: context,
+                      //         enableEnterKey: true,
+                      //         customHeader: const Center(
+                      //           child: Icon(
+                      //             Icons.info,
+                      //             color: kcBlueAccent,
+                      //             size:
+                      //                 kdUpdateProposalDashboardViewDialogIconSize,
+                      //           ),
+                      //         ),
+                      //         animType: AnimType.bottomSlide,
+                      //         body: UpdateTestTile(
+                      //           test: test,
+                      //         ),
+                      //         btnOkIcon: Icons.check,
+                      //         btnOkOnPress: () {},
+                      //         btnCancelIcon: Icons.cancel,
+                      //         btnCancelOnPress: () {},
+                      //       ).show();
+                      //     },
+                      //     icon: const Icon(
+                      //       Icons.edit,
+                      //     ),
+                      //   ),
+                      // ),
+                      DataCell(
+                        IconButton(
+                          onPressed: () async {
+                            await viewModel.deleteTest(
+                              testId: test.id,
+                            );
+
+                            if (!context.mounted) return;
+
+                            if (viewModel.hasErrorForKey(kbDeleteTestKey)) {
+                              await context.showErrorBar(
+                                position: FlashPosition.top,
+                                indicatorColor: kcRed,
+                                content: Text(
+                                  viewModel.error(kbDeleteTestKey).message
+                                      as String,
+                                ),
+                                primaryActionBuilder: (context, controller) {
+                                  return IconButton(
+                                    onPressed: controller.dismiss,
+                                    icon: const Icon(Icons.close),
+                                  );
+                                },
+                              );
+                            } else {
+                              await context.showSuccessBar(
+                                position: FlashPosition.top,
+                                indicatorColor: kcGreen,
+                                content: const Text(
+                                  'Test case deleted successfully!',
+                                ),
+                                primaryActionBuilder: (context, controller) {
+                                  return IconButton(
+                                    onPressed: controller.dismiss,
+                                    icon: const Icon(Icons.close),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                .toList(),
           ),
         ),
       ),

@@ -1393,6 +1393,48 @@ class MockProblemService extends _i1.Mock implements _i20.ProblemService {
       ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
 
   @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> deleteTest({
+    required String? problemId,
+    required int? testId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteTest,
+          [],
+          {
+            #problemId: problemId,
+            #testId: testId,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #deleteTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #deleteTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
   _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>> publish(
           {required String? problemId}) =>
       (super.noSuchMethod(

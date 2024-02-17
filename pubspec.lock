@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  awesome_dialog:
+    dependency: "direct main"
+    description:
+      name: awesome_dialog
+      sha256: c5bccfc0cd94f2025ba6af324e723b99241859e49d9951933d0e1a7952f4f8bb
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   badges:
     dependency: "direct main"
     description:

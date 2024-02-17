@@ -21,6 +21,10 @@ const String kbProblemProposalsKey = 'problemProposals';
 const String kbSingleProblemProposalKey = 'singleProblemProposal';
 const String kbCreateProposalDashboardKey = 'createProposalDashboard';
 const String kbUpdateProposalDashboardKey = 'updateProposalDashboard';
+const String kbAddTestKey = 'addTest';
+const String kbUpdateTestKey = 'updateTest';
+const String kbDeleteTestKey = 'deleteTest';
+const String kbPublishProblemKey = 'publishProblem';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -36,6 +40,9 @@ const List<String> kAllowedProfilePictureTypes = [
   'jpeg',
   'png',
   'jpg',
+];
+const List<String> kAllowedTestArchiveTypes = [
+  'zip',
 ];
 
 const int kMinProblemNameLength = 2;
@@ -54,10 +61,11 @@ const double kMinProblemTotalMemoryLimit = 0.1;
 const double kMaxProblemTotalMemoryLimit = 512;
 const double kMinProblemStackMemoryLimit = 0.1;
 const double kMaxProblemStackMemoryLimit = 64;
-const int kMaxNumberOfTests = 20;
-const int kMinTestScore = 0;
-const int kMaxTestScore = 100;
-const int kMaxTotalTestsScore = 100;
+const int kMaxProblemNumberOfTests = 20;
+const int kMinProblemTestScore = 0;
+const int kMaxProblemTestScore = 100;
+const int kMaxProblemTotalTestsScore = 100;
+const int kMaxProblemTestArchiveSize = 1000000;
 const kLimitDecimalRegex = r'^\d+\.?\d?';
 
 // placeholders
@@ -279,6 +287,10 @@ const double kdUpdateProposalDashboardViewDescriptionMaxHeight = 500;
 const double kdUpdateProposalDashboardViewFieldBorderRadius = 20;
 const double kdUpdateProposalDashboardViewFieldPadding = 10;
 const double kdUpdateProposalDashboardViewFieldValidationTextSize = 12;
+const double kdUpdateProposalDashboardViewDialogIconSize = 100;
+const double kdUpdateProposalDashboardViewTitleTextSize = 25;
+const double kdUpdateProposalDashboardViewSubtitleTextSize = 20;
+const double kdUpdateProposalDashboardViewIconSize = 35;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

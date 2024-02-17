@@ -119,4 +119,22 @@ class ProblemValidators {
 
     return null;
   }
+
+  static String? validateTestScore(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Test score is required!';
+    }
+
+    if (double.tryParse(value) == null ||
+        RegExp(kLimitDecimalRegex).hasMatch(value) == false) {
+      return 'Test score must be a number!';
+    }
+
+    if (double.parse(value) < kMinProblemTestScore ||
+        double.parse(value) > kMaxProblemTestScore) {
+      return 'Test score must be between $kMinProblemTestScore-$kMaxProblemTestScore!';
+    }
+
+    return null;
+  }
 }

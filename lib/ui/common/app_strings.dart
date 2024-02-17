@@ -54,6 +54,7 @@ const String ksAppProposeTooltip = 'Propose new problem';
 const String ksAppEditTooltip = 'Edit problem';
 const String ksAppSaveTooltip = 'Save problem';
 const String ksAppUpdateTooltip = 'Update problem';
+const String ksAppAddTestTooltip = 'Add test case';
 const String ksAppTestInputFilename = 'input.txt';
 const String ksAppTestOutputFilename = 'output.txt';
 const String ksAppNonProposerForbiddenMessage =

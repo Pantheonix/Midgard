@@ -92,7 +92,9 @@ class SingleProblemProposalViewModel extends FutureViewModel<ProblemModel> {
       (_) async {
         _logger.i('Problem published successfully');
         await Sentry.captureMessage('Problem published successfully');
-        await _routerService.replaceWithProblemsView();
+        await _routerService.replaceWithSingleProblemView(
+          problemId: problemId,
+        );
       },
     );
   }
