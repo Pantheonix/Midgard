@@ -1,6 +1,7 @@
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
+import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:midgard/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -61,6 +62,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton<HiveService>(classType: HiveService),
     LazySingleton<UserService>(classType: UserService),
     LazySingleton<ProblemService>(classType: ProblemService),
+    LazySingleton<SubmissionService>(classType: SubmissionService),
 // @stacked-service
   ],
   bottomsheets: [

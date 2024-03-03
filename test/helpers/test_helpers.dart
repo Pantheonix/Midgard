@@ -6,6 +6,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/services/problem_service.dart';
+import 'package:midgard/services/submission_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -17,6 +18,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<HiveService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<UserService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ProblemService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<SubmissionService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -26,6 +28,7 @@ void registerServices() {
   getAndRegisterHiveService();
   getAndRegisterUserService();
   getAndRegisterProblemService();
+  getAndRegisterSubmissionService();
 // @stacked-mock-register
 }
 

@@ -19,6 +19,7 @@ import 'package:midgard/models/user/update_user_models.dart' as _i19;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
 import 'package:midgard/services/problem_service.dart' as _i20;
+import 'package:midgard/services/submission_service.dart' as _i24;
 import 'package:midgard/services/user_service.dart' as _i17;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked/stacked.dart' as _i2;
@@ -1496,3 +1497,9 @@ class MockProblemService extends _i1.Mock implements _i20.ProblemService {
         )),
       ) as _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>);
 }
+
+/// A class which mocks [SubmissionService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSubmissionService extends _i1.Mock
+    implements _i24.SubmissionService {}

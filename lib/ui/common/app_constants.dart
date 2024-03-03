@@ -25,6 +25,7 @@ const String kbAddTestKey = 'addTest';
 const String kbUpdateTestKey = 'updateTest';
 const String kbDeleteTestKey = 'deleteTest';
 const String kbPublishProblemKey = 'publishProblem';
+const String kbSendSubmissionKey = 'sendSubmission';
 
 // validation constants
 const int kMinUsernameLength = 3;
@@ -67,6 +68,8 @@ const int kMaxProblemTestScore = 100;
 const int kMaxProblemTotalTestsScore = 100;
 const int kMaxProblemTestArchiveSize = 1000000;
 const kLimitDecimalRegex = r'^\d+\.?\d?';
+
+const int kMaxSubmissionSourceCodeSize = 10000;
 
 // placeholders
 const String kRiveMoveEyesPadding = '--------------------------';
@@ -292,6 +295,11 @@ const double kdUpdateProposalDashboardViewTitleTextSize = 25;
 const double kdUpdateProposalDashboardViewSubtitleTextSize = 20;
 const double kdUpdateProposalDashboardViewIconSize = 35;
 
+// submission proposal widget
+const double kdSubmissionProposalWidgetPadding = 20;
+const double kdSubmissionProposalWidgetShapeRadius = 20;
+const double kdSubmissionProposalWidgetSendButtonFontSize = 16;
+
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
 const int kiSidebarAboutMenuIndex = 1;
@@ -327,5 +335,4 @@ const String kdSidebarProblemProposalsMenuText = 'Proposals';
 const String kdSidebarProposalDashboardMenuText = 'Dashboard';
 
 // general
-
 const double kdFabDistance = 100;

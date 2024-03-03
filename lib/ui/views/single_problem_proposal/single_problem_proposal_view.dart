@@ -16,6 +16,7 @@ import 'package:midgard/ui/views/single_problem_proposal/single_problem_proposal
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/expandable_fab/expandable_fab.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
+import 'package:midgard/ui/widgets/submission/submission_proposal_widget.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -200,6 +201,8 @@ class SingleProblemProposalView
           ),
           verticalSpaceMedium,
           _buildProblemDescription(context, viewModel, problem),
+          verticalSpaceMedium,
+          SubmissionProposal(problemId: problemId),
           verticalSpaceMedium,
         ],
       ),

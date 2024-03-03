@@ -59,3 +59,58 @@ const String ksAppTestInputFilename = 'input.txt';
 const String ksAppTestOutputFilename = 'output.txt';
 const String ksAppNonProposerForbiddenMessage =
     'You should be a proposer to perform this action!';
+
+const String ksAppCPlaceholder = '''
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!");
+    return 0;
+}''';
+const String ksAppCppPlaceholder = '''
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!";
+    return 0;
+}''';
+const String ksAppJavaPlaceholder = '''
+class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}''';
+const String ksAppPythonPlaceholder = '''
+print("Hello, World!")''';
+const String ksAppRustPlaceholder = '''
+fn main() {
+    println!("Hello, World!");
+}''';
+const String ksAppKotlinPlaceholder = '''
+fun main() {
+    println("Hello, World!")
+}''';
+const String ksAppLuaPlaceholder = '''
+print("Hello, World!")''';
+const String ksAppHaskellPlaceholder = '''
+main = putStrLn "Hello, World!"''';
+const String ksAppGoPlaceholder = '''
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}''';
+const String ksAppJavaScriptPlaceholder = '''
+console.log("Hello, World!");''';
+const String ksAppCSharpPlaceholder = '''
+using System;
+
+class Program {
+    static void Main() {
+        Console.WriteLine("Hello, World!");
+    }
+}''';
+const String ksAppOCamlPlaceholder = '''
+print_endline "Hello, World!"''';

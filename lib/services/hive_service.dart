@@ -7,6 +7,7 @@ import 'package:http/browser_client.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/extensions/http_extensions.dart';
 import 'package:midgard/models/problem/problem_models.dart';
+import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -29,7 +30,12 @@ class HiveService {
       ..registerAdapter(ProblemModelAdapter())
       ..registerAdapter(IoTypeAdapter())
       ..registerAdapter(DifficultyAdapter())
-      ..registerAdapter(TestModelAdapter());
+      ..registerAdapter(TestModelAdapter())
+      ..registerAdapter(SubmissionModelAdapter())
+      ..registerAdapter(SubmissionStatusAdapter())
+      ..registerAdapter(LanguageAdapter())
+      ..registerAdapter(TestCaseModelAdapter())
+      ..registerAdapter(TestCaseStatusAdapter());
 
     await Hive.openBox<UserProfileModel>(HiveConstants.userProfileBox);
     await Hive.openBox<Uint8List>(HiveConstants.userAvatarBox);

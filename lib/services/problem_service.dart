@@ -125,7 +125,7 @@ class ProblemService {
       _logger.e('Error while retrieving problems: $e');
       await Sentry.captureException(
         Exception('Error while retrieving problems: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -199,7 +199,7 @@ class ProblemService {
       _logger.e('Error while retrieving problem: $e');
       await Sentry.captureException(
         Exception('Error while retrieving problem: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -319,7 +319,7 @@ class ProblemService {
       _logger.e('Error while retrieving unpublished problems: $e');
       await Sentry.captureException(
         Exception('Error while retrieving unpublished problems: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -408,7 +408,7 @@ class ProblemService {
         Exception(
           'Error while retrieving unpublished problem: $e',
         ),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -486,7 +486,7 @@ class ProblemService {
       _logger.e('Error while creating problem: $e');
       await Sentry.captureException(
         Exception('Error while creating problem: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -578,7 +578,7 @@ class ProblemService {
       _logger.e('Error while adding test: $e');
       await Sentry.captureException(
         Exception('Error while adding test: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -660,7 +660,7 @@ class ProblemService {
       _logger.e('Error while updating problem: $e');
       await Sentry.captureException(
         Exception('Error while updating problem: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -769,7 +769,7 @@ class ProblemService {
       _logger.e('Error while updating test: $e');
       await Sentry.captureException(
         Exception('Error while updating test: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -847,7 +847,7 @@ class ProblemService {
       _logger.e('Error while deleting test: $e');
       await Sentry.captureException(
         Exception('Error while deleting test: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -944,7 +944,7 @@ class ProblemService {
       _logger.e('Error while updating problem: $e');
       await Sentry.captureException(
         Exception('Error while updating problem: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(

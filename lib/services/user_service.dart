@@ -122,7 +122,7 @@ class UserService {
       _logger.e('Error while retrieving users: $e');
       await Sentry.captureException(
         Exception('Error while retrieving users: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -196,7 +196,7 @@ class UserService {
       _logger.e('Error while retrieving user: $e');
       await Sentry.captureException(
         Exception('Error while retrieving user: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -319,7 +319,7 @@ class UserService {
       _logger.e('Error while updating user: $e');
       await Sentry.captureException(
         Exception('Error while updating user: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -401,7 +401,7 @@ class UserService {
       _logger.e('Error while adding role: $e');
       await Sentry.captureException(
         Exception('Error while adding role: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -483,7 +483,7 @@ class UserService {
       _logger.e('Error while removing role: $e');
       await Sentry.captureException(
         Exception('Error while removing role: $e'),
-        stackTrace: e is Error ? null : StackTrace.current,
+        stackTrace: StackTrace.current,
       );
 
       return left(
