@@ -16,20 +16,21 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:sentry/sentry.dart';
 
+typedef PaginatedSubmissions = ({
+  List<SubmissionModel> submissions,
+  int count,
+  int totalPages,
+});
+
 class SubmissionService {
   final _hiveService = locator<HiveService>();
   final _authService = locator<AuthService>();
   final _logger = getLogger('SubmissionService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
-  Future<
-      Either<
-          EvalException,
-          ({
-            List<SubmissionModel> submissions,
-            int count,
-            int totalPages,
-          })>> getAll({
+  Future<Either<EvalException, PaginatedSubmissions>> getAll({
+    String? userId,
+    String? problemId,
     String? sortBy,
     String? language,
     String? status,
@@ -45,25 +46,75 @@ class SubmissionService {
     int? pageSize,
   }) async {
     try {
+      final queryParams = <String, dynamic>{};
+
+      if (userId != null) {
+        queryParams['user_id'] = userId;
+      }
+
+      if (problemId != null) {
+        queryParams['problem_id'] = problemId;
+      }
+
+      if (sortBy != null) {
+        queryParams['sort_by'] = sortBy;
+      }
+
+      if (language != null) {
+        queryParams['language'] = language;
+      }
+
+      if (status != null) {
+        queryParams['status'] = status;
+      }
+
+      if (ltScore != null) {
+        queryParams['lt_score'] = ltScore.toString();
+      }
+
+      if (gtScore != null) {
+        queryParams['gt_score'] = gtScore.toString();
+      }
+
+      if (ltExecutionTime != null) {
+        queryParams['lt_avg_time'] = ltExecutionTime.toString();
+      }
+
+      if (gtExecutionTime != null) {
+        queryParams['gt_avg_time'] = gtExecutionTime.toString();
+      }
+
+      if (ltMemoryUsage != null) {
+        queryParams['lt_avg_memory'] = ltMemoryUsage.toString();
+      }
+
+      if (gtMemoryUsage != null) {
+        queryParams['gt_avg_memory'] = gtMemoryUsage.toString();
+      }
+
+      if (startDate != null) {
+        queryParams['start_date'] =
+            (startDate.millisecondsSinceEpoch / 1000).toString();
+      }
+
+      if (endDate != null) {
+        queryParams['end_date'] =
+            (endDate.millisecondsSinceEpoch / 1000).toString();
+      }
+
+      if (page != null) {
+        queryParams['page'] = page.toString();
+      }
+
+      if (pageSize != null) {
+        queryParams['per_page'] = pageSize.toString();
+      }
+
       final response = await _httpClient.get(
         uriFromEnv(
           ApiConstants.baseUrl,
           ApiConstants.submissionsUrl,
-          queryParams: {
-            'sort_by': sortBy ?? '',
-            'language': language ?? '',
-            'status': status ?? '',
-            'lt_score': ltScore ?? '',
-            'gt_score': gtScore ?? '',
-            'lt_avg_time': ltExecutionTime ?? '',
-            'gt_avg_time': gtExecutionTime ?? '',
-            'lt_avg_memory': ltMemoryUsage ?? '',
-            'gt_avg_memory': gtMemoryUsage ?? '',
-            'start_date': startDate?.millisecondsSinceEpoch ?? '',
-            'end_date': endDate?.millisecondsSinceEpoch ?? '',
-            'page': page ?? '',
-            'per_page': pageSize ?? '',
-          },
+          queryParams: queryParams,
         ),
       );
 

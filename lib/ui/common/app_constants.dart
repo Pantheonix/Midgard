@@ -299,6 +299,13 @@ const double kdUpdateProposalDashboardViewIconSize = 35;
 const double kdSubmissionProposalWidgetPadding = 20;
 const double kdSubmissionProposalWidgetShapeRadius = 20;
 const double kdSubmissionProposalWidgetSendButtonFontSize = 16;
+const double kdSubmissionProposalWidgetInfoIconSize = 30;
+const double kdSubmissionProposalWidgetFieldBorderRadius = 20;
+const double kdSubmissionProposalWidgetTitleFontSize = 20;
+const double kdSubmissionProposalWidgetSubtitleFontSize = 14;
+
+// submissions view
+const int kiSubmissionsViewPageSize = 10;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

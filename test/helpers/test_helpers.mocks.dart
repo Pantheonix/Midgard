@@ -10,11 +10,17 @@ import 'dart:ui' as _i9;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
 import 'package:hive_flutter/adapters.dart' as _i14;
+import 'package:midgard/models/exceptions/eval_exception.dart' as _i25;
 import 'package:midgard/models/exceptions/identity_exception.dart' as _i18;
 import 'package:midgard/models/exceptions/problem_exception.dart' as _i21;
 import 'package:midgard/models/problem/create_problem_models.dart' as _i22;
 import 'package:midgard/models/problem/problem_models.dart' as _i16;
 import 'package:midgard/models/problem/update_problem_models.dart' as _i23;
+import 'package:midgard/models/submission/create_submission_models.dart'
+    as _i27;
+import 'package:midgard/models/submission/highest_score_submission_models.dart'
+    as _i28;
+import 'package:midgard/models/submission/submission_models.dart' as _i26;
 import 'package:midgard/models/user/update_user_models.dart' as _i19;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
@@ -1501,5 +1507,227 @@ class MockProblemService extends _i1.Mock implements _i20.ProblemService {
 /// A class which mocks [SubmissionService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSubmissionService extends _i1.Mock
-    implements _i24.SubmissionService {}
+class MockSubmissionService extends _i1.Mock implements _i24.SubmissionService {
+  @override
+  _i5.Future<
+      _i3.Either<
+          _i25.EvalException,
+          ({
+            int count,
+            List<_i26.SubmissionModel> submissions,
+            int totalPages
+          })>> getAll({
+    String? sortBy,
+    String? language,
+    String? status,
+    int? ltScore,
+    int? gtScore,
+    double? ltExecutionTime,
+    double? gtExecutionTime,
+    double? ltMemoryUsage,
+    double? gtMemoryUsage,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? page,
+    int? pageSize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+          {
+            #sortBy: sortBy,
+            #language: language,
+            #status: status,
+            #ltScore: ltScore,
+            #gtScore: gtScore,
+            #ltExecutionTime: ltExecutionTime,
+            #gtExecutionTime: gtExecutionTime,
+            #ltMemoryUsage: ltMemoryUsage,
+            #gtMemoryUsage: gtMemoryUsage,
+            #startDate: startDate,
+            #endDate: endDate,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+            _i3.Either<
+                _i25.EvalException,
+                ({
+                  int count,
+                  List<_i26.SubmissionModel> submissions,
+                  int totalPages
+                })>>.value(_FakeEither_4<
+            _i25.EvalException,
+            ({
+              int count,
+              List<_i26.SubmissionModel> submissions,
+              int totalPages
+            })>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #sortBy: sortBy,
+              #language: language,
+              #status: status,
+              #ltScore: ltScore,
+              #gtScore: gtScore,
+              #ltExecutionTime: ltExecutionTime,
+              #gtExecutionTime: gtExecutionTime,
+              #ltMemoryUsage: ltMemoryUsage,
+              #gtMemoryUsage: gtMemoryUsage,
+              #startDate: startDate,
+              #endDate: endDate,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+            _i3.Either<
+                _i25.EvalException,
+                ({
+                  int count,
+                  List<_i26.SubmissionModel> submissions,
+                  int totalPages
+                })>>.value(_FakeEither_4<
+            _i25.EvalException,
+            ({
+              int count,
+              List<_i26.SubmissionModel> submissions,
+              int totalPages
+            })>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #sortBy: sortBy,
+              #language: language,
+              #status: status,
+              #ltScore: ltScore,
+              #gtScore: gtScore,
+              #ltExecutionTime: ltExecutionTime,
+              #gtExecutionTime: gtExecutionTime,
+              #ltMemoryUsage: ltMemoryUsage,
+              #gtMemoryUsage: gtMemoryUsage,
+              #startDate: startDate,
+              #endDate: endDate,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<
+              _i25.EvalException,
+              ({
+                int count,
+                List<_i26.SubmissionModel> submissions,
+                int totalPages
+              })>>);
+
+  @override
+  _i5.Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>> getById(
+          {required String? submissionId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [],
+          {#submissionId: submissionId},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>>.value(
+            _FakeEither_4<_i25.EvalException, _i26.SubmissionModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#submissionId: submissionId},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>>.value(
+            _FakeEither_4<_i25.EvalException, _i26.SubmissionModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#submissionId: submissionId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i25.EvalException, ({String submissionId})>> create(
+          {required _i27.CreateSubmissionRequest? request}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [],
+          {#request: request},
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i25.EvalException, ({String submissionId})>>.value(
+            _FakeEither_4<_i25.EvalException, ({String submissionId})>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i25.EvalException, ({String submissionId})>>.value(
+            _FakeEither_4<_i25.EvalException, ({String submissionId})>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i25.EvalException, ({String submissionId})>>);
+
+  @override
+  _i5.Future<
+          _i3
+          .Either<_i25.EvalException, List<_i28.HighestScoreSubmissionModel>>>
+      getHighestScoreSubmissionsByUserId({required String? userId}) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #getHighestScoreSubmissionsByUserId,
+              [],
+              {#userId: userId},
+            ),
+            returnValue: _i5.Future<
+                    _i3.Either<_i25.EvalException,
+                        List<_i28.HighestScoreSubmissionModel>>>.value(
+                _FakeEither_4<_i25.EvalException,
+                    List<_i28.HighestScoreSubmissionModel>>(
+              this,
+              Invocation.method(
+                #getHighestScoreSubmissionsByUserId,
+                [],
+                {#userId: userId},
+              ),
+            )),
+            returnValueForMissingStub: _i5.Future<
+                    _i3.Either<_i25.EvalException,
+                        List<_i28.HighestScoreSubmissionModel>>>.value(
+                _FakeEither_4<_i25.EvalException,
+                    List<_i28.HighestScoreSubmissionModel>>(
+              this,
+              Invocation.method(
+                #getHighestScoreSubmissionsByUserId,
+                [],
+                {#userId: userId},
+              ),
+            )),
+          ) as _i5.Future<
+              _i3.Either<_i25.EvalException,
+                  List<_i28.HighestScoreSubmissionModel>>>);
+}

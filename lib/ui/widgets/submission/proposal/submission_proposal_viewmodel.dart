@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/src/painting/text_style.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/darcula.dart';
@@ -44,6 +45,8 @@ class SubmissionProposalViewModel extends BaseViewModel {
 
   final String problemId;
 
+  late Option<String> _submissionId = none();
+
   final _submissionService = locator<SubmissionService>();
   final _hiveService = locator<HiveService>();
   final _routerService = locator<RouterService>();
@@ -89,6 +92,8 @@ class SubmissionProposalViewModel extends BaseViewModel {
     language: rust,
   );
 
+  Option<String> get submissionId => _submissionId;
+
   HiveService get hiveService => _hiveService;
 
   RouterService get routerService => _routerService;
@@ -100,6 +105,11 @@ class SubmissionProposalViewModel extends BaseViewModel {
   SourceCodeTheme get selectedSourceCodeTheme => _selectedSourceCodeTheme;
 
   CodeController get sourceCodeController => _sourceCodeController;
+
+  set submissionId(Option<String> value) {
+    _submissionId = value;
+    rebuildUi();
+  }
 
   set isLoading(bool value) {
     _isLoading = value;
@@ -118,6 +128,10 @@ class SubmissionProposalViewModel extends BaseViewModel {
   set selectedSourceCodeTheme(SourceCodeTheme sourceCodeTheme) {
     _selectedSourceCodeTheme = sourceCodeTheme;
     rebuildUi();
+  }
+
+  void clearCurrentSubmission() {
+    submissionId = none();
   }
 
   Future<void> _submitSolution() async {
@@ -158,6 +172,8 @@ class SubmissionProposalViewModel extends BaseViewModel {
         _logger
           ..i('Solution submitted successfully')
           ..d('Submission ID: ${result.submissionId}');
+
+        submissionId = some(result.submissionId);
       },
     );
   }

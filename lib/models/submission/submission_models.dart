@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_strings.dart';
 
 part 'submission_models.g.dart';
@@ -9,6 +11,7 @@ class SubmissionModel {
   SubmissionModel({
     required this.id,
     required this.problemId,
+    required this.problemName,
     required this.userId,
     required this.language,
     required this.sourceCode,
@@ -23,6 +26,7 @@ class SubmissionModel {
   SubmissionModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
         problemId = json['problem_id'] as String,
+        problemName = json['problem_name'] as String,
         userId = json['user_id'] as String,
         language = Language.fromString(json['language'] as String),
         sourceCode = switch (json['source_code']) {
@@ -32,10 +36,10 @@ class SubmissionModel {
         status = SubmissionStatus.fromString(json['status'] as String),
         score = json['score'] as int,
         createdAt = DateTime.fromMillisecondsSinceEpoch(
-          json['created_at'] as int,
+          (json['created_at'] as int) * 1000,
         ),
         executionTime = json['avg_time'] as double,
-        memoryUsage = json['avg_memory'] as double,
+        memoryUsage = (json['avg_memory'] as double) / 1000.0,
         testCases = switch (json['test_cases']) {
           final data? => some(
               (data as List<dynamic>)
@@ -54,6 +58,9 @@ class SubmissionModel {
 
   @HiveField(1)
   final String problemId;
+
+  @HiveField(11)
+  final String problemName;
 
   @HiveField(2)
   final String userId;
@@ -98,6 +105,34 @@ class SubmissionModel {
             .map((testCase) => testCase.toJson())
             .toList(),
       };
+
+  String get languagePretty => language.displayName;
+
+  String get statusPretty => status.value;
+
+  String get scorePretty => score.toString();
+
+  String get executionTimePretty => '${executionTime.toStringAsFixed(2)}s';
+
+  String get memoryUsagePretty => '${memoryUsage.toStringAsFixed(2)}MB';
+
+  String get createdAtPretty => createdAt.toLocal().toString();
+
+  Color get statusColor => switch (status) {
+        SubmissionStatus.accepted => switch (score) {
+            final score when 0 <= score && score <= 30 =>
+              kcSubmissionScoreAcceptedLow,
+            final score when 31 <= score && score <= 60 =>
+              kcSubmissionScoreAcceptedMedium,
+            final score when 61 <= score && score <= 90 =>
+              kcSubmissionScoreAcceptedHigh,
+            _ => kcSubmissionScoreAccepted,
+          },
+        SubmissionStatus.rejected => kcSubmissionScoreRejected,
+        _ => kcSubmissionScoreEvaluating,
+      };
+
+  bool get isEvaluating => status == SubmissionStatus.evaluating;
 }
 
 @HiveType(typeId: 7)
@@ -242,7 +277,7 @@ class TestCaseModel {
       : id = json['id'] as int,
         status = TestCaseStatus.fromString(json['status'] as String),
         executionTime = json['time'] as double,
-        memoryUsage = json['memory'] as double,
+        memoryUsage = (json['memory'] as double) / 1000.0,
         expectedScore = json['expected_score'] as int,
         evaluationMessage = switch (json['eval_message']) {
           final data? => some(data as String),
@@ -299,6 +334,33 @@ class TestCaseModel {
         'stdout': stdout.getOrElse(() => ''),
         'stderr': stderr.getOrElse(() => ''),
       };
+
+  String get idPretty => id.toString();
+
+  String get statusPretty => status.value;
+
+  String get executionTimePretty => '${executionTime.toStringAsFixed(2)}s';
+
+  String get memoryUsagePretty => '${memoryUsage.toStringAsFixed(2)}MB';
+
+  Color get statusColor => switch (status) {
+        TestCaseStatus.accepted => kcSubmissionScoreAccepted,
+        TestCaseStatus.wrongAnswer => kcSubmissionScoreRejected,
+        TestCaseStatus.sigsegv => kcSubmissionScoreRejected,
+        TestCaseStatus.sigxfsz => kcSubmissionScoreRejected,
+        TestCaseStatus.sigfpe => kcSubmissionScoreRejected,
+        TestCaseStatus.sigabrt => kcSubmissionScoreRejected,
+        TestCaseStatus.nzec => kcSubmissionScoreRejected,
+        TestCaseStatus.internalError => kcSubmissionScoreRejected,
+        TestCaseStatus.execFormatError => kcSubmissionScoreRejected,
+        TestCaseStatus.runtimeError => kcSubmissionScoreRejected,
+        TestCaseStatus.compilationError => kcSubmissionScoreRejected,
+        TestCaseStatus.timeLimitExceeded => kcSubmissionScoreRejected,
+        _ => kcSubmissionScoreEvaluating,
+      };
+
+  bool get isEvaluating =>
+      status == TestCaseStatus.pending || status == TestCaseStatus.running;
 }
 
 @HiveType(typeId: 10)
