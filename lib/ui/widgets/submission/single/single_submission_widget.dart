@@ -10,6 +10,7 @@ import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/widgets/submission/single/single_submission_viewmodel.dart';
+import 'package:pulsator/pulsator.dart';
 import 'package:stacked/stacked.dart';
 
 class SingleSubmissionWidget extends StatelessWidget {
@@ -46,9 +47,12 @@ class SingleSubmissionWidget extends StatelessWidget {
     return Tooltip(
       message: 'Refresh submission details',
       triggerMode: TooltipTriggerMode.tap,
-      child: IconButton.outlined(
+      child: IconButton(
         color: kcBlueAccent,
-        icon: const Icon(Icons.refresh),
+        icon: const PulseIcon(
+          icon: Icons.refresh,
+          pulseColor: kcBlueAccent,
+        ),
         onPressed: () async {
           await viewModel.refresh();
         },

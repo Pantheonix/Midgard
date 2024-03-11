@@ -201,6 +201,10 @@ const double kdAboutViewPadding = 20;
 const double kdAboutViewTextSize = 15;
 const double kdAboutViewTextLetterSpacing = 1;
 const double kdAboutViewTextPadding = 15;
+const double kdAboutViewBorderRadius = 20;
+const double kdAboutViewShadowOpacity = 0.5;
+const double kdAboutViewShadowOffset = 5;
+const double kdAboutViewShadowBlurRadius = 10;
 
 // profiles view
 const double kdProfilesViewDataColumnTitleFontSize = 16;
