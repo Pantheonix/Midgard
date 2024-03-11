@@ -1,5 +1,6 @@
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/models/exceptions/eval_exception.dart';
 import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/submission_service.dart';
@@ -55,10 +56,10 @@ class SubmissionsListViewModel extends FutureViewModel<PaginatedSubmissions> {
     );
 
     return result.fold(
-      (error) {
-        _logger.e('Error retrieving submissions: $error');
+      (EvalException error) {
+        _logger.e('Error retrieving submissions: ${error.message}');
         throw Exception(
-          'Error retrieving submissions: $error',
+          'Error retrieving submissions: ${error.message}',
         );
       },
       (submissions) {

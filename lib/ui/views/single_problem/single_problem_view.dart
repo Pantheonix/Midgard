@@ -15,6 +15,7 @@ import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/single_problem/single_problem_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
+import 'package:midgard/ui/widgets/submission/list/submissions_list_widget.dart';
 import 'package:midgard/ui/widgets/submission/proposal/submission_proposal_widget.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:stacked/stacked.dart';
@@ -187,6 +188,14 @@ class SingleProblemView extends StackedView<SingleProblemViewModel> {
                 ],
               ),
             ],
+          ),
+          verticalSpaceMedium,
+          viewModel.currentUser.fold(
+            () => const SizedBox.shrink(),
+            (user) => SubmissionsListWidget(
+              userId: user.userId,
+              problemId: problemId,
+            ),
           ),
           verticalSpaceMedium,
           _buildProblemDescription(context, viewModel, problem),

@@ -1,8 +1,10 @@
+import 'package:dartz/dartz.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/exceptions/problem_exception.dart';
 import 'package:midgard/models/problem/problem_models.dart';
+import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -33,6 +35,9 @@ class SingleProblemViewModel extends FutureViewModel<ProblemModel> {
   RouterService get routerService => _routerService;
 
   SidebarXController get sidebarController => _sidebarController;
+
+  Option<UserProfileModel> get currentUser =>
+      _hiveService.getCurrentUserProfile();
 
   @override
   Future<ProblemModel> futureToRun() => _getProblem(problemId);
