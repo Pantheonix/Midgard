@@ -4,6 +4,7 @@ import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:midgard/app/app.router.dart';
+import 'package:midgard/models/submission/highest_score_submission_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/models/validators/user_validators.dart';
 import 'package:midgard/services/hive_service.dart';
@@ -103,6 +104,7 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
               maxWidth: kdSingleProfileViewMaxWidth,
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 _buildAvatarPicker(
                   context,
@@ -114,6 +116,11 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
                   context,
                   viewModel,
                   user.roles,
+                ),
+                verticalSpaceLarge,
+                _buildSolvedProblemsGrid(
+                  context,
+                  viewModel,
                 ),
                 verticalSpaceMedium,
                 _buildUsernameField(
@@ -509,6 +516,68 @@ class SingleProfileView extends StackedView<SingleProfileViewModel>
           ),
         ),
         backgroundColor: role.color,
+      ),
+    );
+  }
+
+  Widget _buildSolvedProblemsGrid(
+    BuildContext context,
+    SingleProfileViewModel viewModel,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Solved problems:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: kdSingleProfileViewSubtitleFontSize,
+          ),
+        ),
+        verticalSpaceTiny,
+        GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5,
+            childAspectRatio: 16 / 5,
+          ),
+          itemCount:
+              viewModel.solvedProblemsSubmissions.getOrElse(() => []).length,
+          itemBuilder: (context, index) {
+            return _buildSolvedProblemCard(
+              context,
+              viewModel,
+              viewModel.solvedProblemsSubmissions
+                  .getOrElse(() => [])
+                  .elementAt(index),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSolvedProblemCard(
+    BuildContext context,
+    SingleProfileViewModel viewModel,
+    HighestScoreSubmissionModel submission,
+  ) {
+    return Chip(
+      label: Text(
+        submission.thumbnailPretty,
+        style: const TextStyle(
+          color: kcBlack,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      backgroundColor: submission.scoreColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          kdSingleProfileViewRoleBadgeShapeRadius,
+        ),
+      ),
+      side: BorderSide(
+        color: submission.scoreColor,
       ),
     );
   }

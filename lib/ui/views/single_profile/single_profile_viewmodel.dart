@@ -3,10 +3,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
 import 'package:midgard/models/core/file_data.dart';
+import 'package:midgard/models/exceptions/eval_exception.dart';
 import 'package:midgard/models/exceptions/identity_exception.dart';
+import 'package:midgard/models/submission/highest_score_submission_models.dart';
 import 'package:midgard/models/user/update_user_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
+import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_view.form.dart';
@@ -23,6 +26,7 @@ class SingleProfileViewModel extends FormViewModel {
   final String userId;
 
   final _userService = locator<UserService>();
+  final _submissionService = locator<SubmissionService>();
   final _hiveService = locator<HiveService>();
   final _routerService = locator<RouterService>();
   final _logger = getLogger('SingleProfileViewModel');
@@ -34,6 +38,8 @@ class SingleProfileViewModel extends FormViewModel {
 
   late Option<UserProfileModel> _user = none();
   late Option<FileData> _profilePicture = none();
+  late Option<List<HighestScoreSubmissionModel>> _solvedProblemsSubmissions =
+      none();
 
   Option<UserProfileModel> get user => _user;
 
@@ -49,8 +55,18 @@ class SingleProfileViewModel extends FormViewModel {
 
   Option<FileData> get profilePicture => _profilePicture;
 
+  Option<List<HighestScoreSubmissionModel>> get solvedProblemsSubmissions =>
+      _solvedProblemsSubmissions;
+
   set profilePicture(Option<FileData> picture) {
     _profilePicture = picture;
+    rebuildUi();
+  }
+
+  set solvedProblemsSubmissions(
+    Option<List<HighestScoreSubmissionModel>> submissions,
+  ) {
+    _solvedProblemsSubmissions = submissions;
     rebuildUi();
   }
 
@@ -59,6 +75,32 @@ class SingleProfileViewModel extends FormViewModel {
   RouterService get routerService => _routerService;
 
   SidebarXController get sidebarController => _sidebarController;
+
+  Future<Option<List<HighestScoreSubmissionModel>>>
+      _getSolvedProblemsSubmissionsForUser() async {
+    final result = await _submissionService.getHighestScoreSubmissionsByUserId(
+      userId: userId,
+    );
+
+    return await result.fold(
+      (EvalException error) async {
+        _logger.e('Error while retrieving solved problems: ${error.toJson()}');
+        await Sentry.captureException(
+          Exception(
+              'Error while retrieving solved problems: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
+        );
+
+        return none();
+      },
+      (List<HighestScoreSubmissionModel> submissions) async {
+        _logger.i('Solved problems retrieved successfully');
+        await Sentry.captureMessage('Solved problems retrieved successfully');
+
+        return some(submissions);
+      },
+    );
+  }
 
   Future<Option<UserProfileModel>> _getUser(String id) async {
     final result = await _userService.getById(userId: id);
@@ -273,6 +315,11 @@ class SingleProfileViewModel extends FormViewModel {
 
     _user = await runBusyFuture(
       _getUser(userId),
+      busyObject: kbSingleProfileKey,
+    );
+
+    solvedProblemsSubmissions = await runBusyFuture(
+      _getSolvedProblemsSubmissionsForUser(),
       busyObject: kbSingleProfileKey,
     );
 

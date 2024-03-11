@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:midgard/ui/common/app_colors.dart';
+
 class HighestScoreSubmissionModel {
   HighestScoreSubmissionModel({
     required this.id,
@@ -16,6 +19,18 @@ class HighestScoreSubmissionModel {
   final String problemId;
   final String problemName;
   final int score;
+
+  Color get scoreColor => switch (score) {
+        final score when 0 <= score && score <= 30 =>
+          kcSubmissionScoreAcceptedLow,
+        final score when 31 <= score && score <= 60 =>
+          kcSubmissionScoreAcceptedMedium,
+        final score when 61 <= score && score <= 90 =>
+          kcSubmissionScoreAcceptedHigh,
+        _ => kcSubmissionScoreAccepted,
+      };
+
+  String get thumbnailPretty => '$problemName - $score pts';
 
   Map<String, dynamic> toJson() => {
         'id': id,

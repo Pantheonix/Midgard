@@ -218,7 +218,7 @@ const int kiProfilesViewPageSize = 10;
 // single profile view
 const double kdSingleProfileViewPadding = 20;
 const double kdSingleProfileViewAvatarShapeRadius = 100;
-const double kdSingleProfileViewMaxWidth = 600;
+const double kdSingleProfileViewMaxWidth = 800;
 const double kdSingleProfileViewNameFieldPadding = 10;
 const double kdSingleProfileViewEmailFieldPadding = 10;
 const double kdSingleProfileViewFullnameFieldPadding = 10;
@@ -234,7 +234,7 @@ const double kdSingleProfileViewSubmitButtonPadding = 10;
 const double kdSingleProfileViewSubmitButtonShapeRadius = 30;
 const double KdSingleProfileViewSubmitButtonTextSize = 18;
 const double kdSingleProfileViewSubmitButtonMinHeight = 44;
-
+const double kdSingleProfileViewSubtitleFontSize = 18;
 const double kdSingleProfileViewUsernameFieldValidationTextSize = 12;
 const double kdSingleProfileViewEmailFieldValidationTextSize = 12;
 const double kdSingleProfileViewFullnameFieldValidationTextSize = 12;

@@ -367,7 +367,7 @@ class SubmissionService {
       final response = await _httpClient.get(
         uriFromEnv(
           ApiConstants.baseUrl,
-          '${ApiConstants.submissionsUrl}/$userId',
+          '${ApiConstants.highestScoreSubmissionsPerUserUrl}/$userId',
         ),
       );
 
