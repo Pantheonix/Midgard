@@ -1517,6 +1517,8 @@ class MockSubmissionService extends _i1.Mock implements _i24.SubmissionService {
             List<_i26.SubmissionModel> submissions,
             int totalPages
           })>> getAll({
+    String? userId,
+    String? problemId,
     String? sortBy,
     String? language,
     String? status,
@@ -1536,6 +1538,8 @@ class MockSubmissionService extends _i1.Mock implements _i24.SubmissionService {
           #getAll,
           [],
           {
+            #userId: userId,
+            #problemId: problemId,
             #sortBy: sortBy,
             #language: language,
             #status: status,
@@ -1570,6 +1574,8 @@ class MockSubmissionService extends _i1.Mock implements _i24.SubmissionService {
             #getAll,
             [],
             {
+              #userId: userId,
+              #problemId: problemId,
               #sortBy: sortBy,
               #language: language,
               #status: status,
@@ -1605,6 +1611,8 @@ class MockSubmissionService extends _i1.Mock implements _i24.SubmissionService {
             #getAll,
             [],
             {
+              #userId: userId,
+              #problemId: problemId,
               #sortBy: sortBy,
               #language: language,
               #status: status,

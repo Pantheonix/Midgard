@@ -20,6 +20,7 @@ class SubmissionModelAdapter extends TypeAdapter<SubmissionModel> {
       id: fields[0] as String,
       problemId: fields[1] as String,
       problemName: fields[11] as String,
+      isPublished: fields[12] as bool,
       userId: fields[2] as String,
       language: fields[3] as Language,
       sourceCode: fields[4] as Option<String>,
@@ -35,13 +36,15 @@ class SubmissionModelAdapter extends TypeAdapter<SubmissionModel> {
   @override
   void write(BinaryWriter writer, SubmissionModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.problemId)
       ..writeByte(11)
       ..write(obj.problemName)
+      ..writeByte(12)
+      ..write(obj.isPublished)
       ..writeByte(2)
       ..write(obj.userId)
       ..writeByte(3)

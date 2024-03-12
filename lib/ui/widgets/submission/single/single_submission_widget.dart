@@ -9,6 +9,7 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
+import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/submission/single/single_submission_viewmodel.dart';
 import 'package:pulsator/pulsator.dart';
 import 'package:stacked/stacked.dart';
@@ -24,19 +25,31 @@ class SingleSubmissionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SingleSubmissionViewModel>.reactive(
-      builder: (context, viewModel, child) => viewModel.isBusy
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _refreshButton(viewModel),
-                verticalSpaceMedium,
-                _buildSubmissionDetails(context, viewModel),
-                verticalSpaceMedium,
-                _buildSubmissionTestCasesDetails(context, viewModel),
-              ],
-            ),
+      builder: (context, viewModel, child) => viewModel.hasError
+          ? AppErrorWidget(
+              message: viewModel.modelError.toString(),
+            )
+          : viewModel.isBusy
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _refreshButton(viewModel),
+                    verticalSpaceMedium,
+                    _buildSubmissionDetails(
+                      context,
+                      viewModel,
+                      viewModel.data!,
+                    ),
+                    verticalSpaceMedium,
+                    _buildSubmissionTestCasesDetails(
+                      context,
+                      viewModel,
+                      viewModel.data!,
+                    ),
+                  ],
+                ),
       viewModelBuilder: () => SingleSubmissionViewModel(
         submissionId: submissionId,
       ),
@@ -63,6 +76,7 @@ class SingleSubmissionWidget extends StatelessWidget {
   Widget _buildSubmissionDetails(
     BuildContext context,
     SingleSubmissionViewModel viewModel,
+    SubmissionModel data,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,8 +184,7 @@ class SingleSubmissionWidget extends StatelessWidget {
                 ],
                 rows: [
                   DataRow(
-                    color:
-                        MaterialStateProperty.all(viewModel.data!.statusColor),
+                    color: MaterialStateProperty.all(data.statusColor),
                     cells: [
                       DataCell(
                         ValueListenableBuilder(
@@ -179,7 +192,7 @@ class SingleSubmissionWidget extends StatelessWidget {
                           builder:
                               (context, Box<UserProfileModel> box, widget) {
                             final user = viewModel.hiveService.getUserProfile(
-                              viewModel.data!.userId,
+                              data.userId,
                               box,
                             );
 
@@ -253,8 +266,24 @@ class SingleSubmissionWidget extends StatelessWidget {
                         ),
                       ),
                       DataCell(
+                        InkWell(
+                          onTap: () async {
+                            await viewModel.navigateToProblemPage(
+                              problemId: data.problemId,
+                              isPublished: data.isPublished,
+                            );
+                          },
+                          child: Text(
+                            data.problemName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      DataCell(
                         Text(
-                          viewModel.data!.problemName,
+                          data.languagePretty,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -262,45 +291,37 @@ class SingleSubmissionWidget extends StatelessWidget {
                       ),
                       DataCell(
                         Text(
-                          viewModel.data!.languagePretty,
+                          data.statusPretty,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       DataCell(
-                        Text(
-                          viewModel.data!.statusPretty,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataCell(
-                        viewModel.data!.isEvaluating
+                        data.isEvaluating
                             ? const Center(child: CircularProgressIndicator())
                             : Text(
-                                viewModel.data!.scorePretty,
+                                data.scorePretty,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                       ),
                       DataCell(
-                        viewModel.data!.isEvaluating
+                        data.isEvaluating
                             ? const Center(child: CircularProgressIndicator())
                             : Text(
-                                viewModel.data!.executionTimePretty,
+                                data.executionTimePretty,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                       ),
                       DataCell(
-                        viewModel.data!.isEvaluating
+                        data.isEvaluating
                             ? const Center(child: CircularProgressIndicator())
                             : Text(
-                                viewModel.data!.memoryUsagePretty,
+                                data.memoryUsagePretty,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -308,7 +329,7 @@ class SingleSubmissionWidget extends StatelessWidget {
                       ),
                       DataCell(
                         Text(
-                          viewModel.data!.createdAtPretty,
+                          data.createdAtPretty,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -328,6 +349,7 @@ class SingleSubmissionWidget extends StatelessWidget {
   Widget _buildSubmissionTestCasesDetails(
     BuildContext context,
     SingleSubmissionViewModel viewModel,
+    SubmissionModel data,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,9 +428,7 @@ class SingleSubmissionWidget extends StatelessWidget {
                     ),
                   )
                 ],
-                rows: viewModel.data!.testCases
-                    .getOrElse(() => [])
-                    .map((testCase) {
+                rows: data.testCases.getOrElse(() => []).map((testCase) {
                   return DataRow(
                     color: MaterialStateProperty.all(testCase.statusColor),
                     cells: [

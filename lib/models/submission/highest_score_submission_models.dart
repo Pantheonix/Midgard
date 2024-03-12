@@ -6,6 +6,7 @@ class HighestScoreSubmissionModel {
     required this.id,
     required this.problemId,
     required this.problemName,
+    required this.isPublished,
     required this.score,
   });
 
@@ -13,11 +14,13 @@ class HighestScoreSubmissionModel {
       : id = json['id'] as String,
         problemId = json['problem_id'] as String,
         problemName = json['problem_name'] as String,
+        isPublished = json['is_published'] as bool,
         score = json['score'] as int;
 
   final String id;
   final String problemId;
   final String problemName;
+  final bool isPublished;
   final int score;
 
   Color get scoreColor => switch (score) {
@@ -36,6 +39,7 @@ class HighestScoreSubmissionModel {
         'id': id,
         'problem_id': problemId,
         'problem_name': problemName,
+        'is_published': isPublished,
         'score': score,
       };
 }

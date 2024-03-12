@@ -12,6 +12,7 @@ class SubmissionModel {
     required this.id,
     required this.problemId,
     required this.problemName,
+    required this.isPublished,
     required this.userId,
     required this.language,
     required this.sourceCode,
@@ -27,6 +28,7 @@ class SubmissionModel {
       : id = json['id'] as String,
         problemId = json['problem_id'] as String,
         problemName = json['problem_name'] as String,
+        isPublished = json['is_published'] as bool,
         userId = json['user_id'] as String,
         language = Language.fromString(json['language'] as String),
         sourceCode = switch (json['source_code']) {
@@ -62,6 +64,9 @@ class SubmissionModel {
   @HiveField(11)
   final String problemName;
 
+  @HiveField(12)
+  final bool isPublished;
+
   @HiveField(2)
   final String userId;
 
@@ -92,6 +97,7 @@ class SubmissionModel {
   Map<String, dynamic> toJson() => {
         'id': id,
         'problem_id': problemId,
+        'problem_name': problemName,
         'user_id': userId,
         'language': language.value,
         'source_code': sourceCode.getOrElse(() => ''),

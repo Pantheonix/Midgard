@@ -1,5 +1,6 @@
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/exceptions/eval_exception.dart';
 import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/services/hive_service.dart';
@@ -49,5 +50,20 @@ class SingleSubmissionViewModel extends FutureViewModel<SubmissionModel> {
         return submission;
       },
     );
+  }
+
+  Future<void> navigateToProblemPage({
+    required String problemId,
+    required bool isPublished,
+  }) async {
+    if (isPublished) {
+      await routerService.replaceWithSingleProblemView(
+        problemId: problemId,
+      );
+    } else {
+      await routerService.replaceWithSingleProblemProposalView(
+        problemId: problemId,
+      );
+    }
   }
 }

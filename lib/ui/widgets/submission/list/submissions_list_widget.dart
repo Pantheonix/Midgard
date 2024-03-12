@@ -4,9 +4,11 @@ import 'package:hive/hive.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
+import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
+import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/submission/list/submissions_list_viewmodel.dart';
 import 'package:pulsator/pulsator.dart';
 import 'package:stacked/stacked.dart';
@@ -24,19 +26,23 @@ class SubmissionsListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SubmissionsListViewModel>.reactive(
-      builder: (context, viewModel, child) => viewModel.isBusy
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _refreshButton(viewModel),
-                verticalSpaceSmall,
-                _buildSubmissionsList(context, viewModel),
-                verticalSpaceSmall,
-                _buildPaginationFooter(context, viewModel),
-              ],
-            ),
+      builder: (context, viewModel, child) => viewModel.hasError
+          ? AppErrorWidget(
+              message: viewModel.modelError.toString(),
+            )
+          : viewModel.isBusy
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _refreshButton(viewModel),
+                    verticalSpaceSmall,
+                    _buildSubmissionsList(context, viewModel, viewModel.data!),
+                    verticalSpaceSmall,
+                    _buildPaginationFooter(context, viewModel, viewModel.data!),
+                  ],
+                ),
       viewModelBuilder: () => SubmissionsListViewModel(
         userId: userId,
         problemId: problemId,
@@ -64,6 +70,7 @@ class SubmissionsListWidget extends StatelessWidget {
   Widget _buildSubmissionsList(
     BuildContext context,
     SubmissionsListViewModel viewModel,
+    PaginatedSubmissions data,
   ) {
     return LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
@@ -167,7 +174,7 @@ class SubmissionsListWidget extends StatelessWidget {
                 ),
               ),
             ],
-            rows: viewModel.data!.submissions
+            rows: data.submissions
                 .map(
                   (submission) => DataRow(
                     color: MaterialStateProperty.all(submission.statusColor),
@@ -264,10 +271,18 @@ class SubmissionsListWidget extends StatelessWidget {
                         ),
                       ),
                       DataCell(
-                        Text(
-                          submission.problemName,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                        InkWell(
+                          onTap: () async {
+                            await viewModel.navigateToProblemPage(
+                              problemId: submission.problemId,
+                              isPublished: submission.isPublished,
+                            );
+                          },
+                          child: Text(
+                            submission.problemName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -338,6 +353,7 @@ class SubmissionsListWidget extends StatelessWidget {
   Widget _buildPaginationFooter(
     BuildContext context,
     SubmissionsListViewModel viewModel,
+    PaginatedSubmissions data,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -356,7 +372,7 @@ class SubmissionsListWidget extends StatelessWidget {
         ),
         horizontalSpaceMedium,
         Text(
-          '${viewModel.pageValue} / ${viewModel.data!.totalPages}',
+          '${viewModel.pageValue} / ${data.totalPages}',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -365,7 +381,7 @@ class SubmissionsListWidget extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.arrow_forward_ios),
           onPressed: () {
-            if (viewModel.pageValue == viewModel.data!.totalPages) {
+            if (viewModel.pageValue == data.totalPages) {
               return;
             }
 
