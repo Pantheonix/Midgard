@@ -84,4 +84,14 @@ class SubmissionsListViewModel extends FutureViewModel<PaginatedSubmissions> {
       );
     }
   }
+
+  Future<void> navigateToSubmissionPage({
+    required String submissionId,
+    required String problemId,
+  }) async {
+    await routerService.replaceWithSingleSubmissionDetailsView(
+      submissionId: submissionId,
+      problemId: problemId,
+    );
+  }
 }

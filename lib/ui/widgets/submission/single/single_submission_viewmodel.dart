@@ -66,4 +66,14 @@ class SingleSubmissionViewModel extends FutureViewModel<SubmissionModel> {
       );
     }
   }
+
+  Future<void> navigateToSubmissionPage({
+    required String submissionId,
+    required String problemId,
+  }) async {
+    await routerService.replaceWithSingleSubmissionDetailsView(
+      submissionId: submissionId,
+      problemId: problemId,
+    );
+  }
 }

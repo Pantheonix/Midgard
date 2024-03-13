@@ -166,7 +166,16 @@ class SubmissionsListWidget extends StatelessWidget {
               ),
               DataColumn(
                 label: Text(
-                  'Created At',
+                  'Created at',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: kdSingleProblemViewDataColumnTitleFontSize,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Details',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: kdSingleProblemViewDataColumnTitleFontSize,
@@ -338,6 +347,17 @@ class SubmissionsListWidget extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ),
+                      DataCell(
+                        IconButton(
+                          icon: const Icon(Icons.remove_red_eye),
+                          onPressed: () async {
+                            await viewModel.navigateToSubmissionPage(
+                              submissionId: submission.id,
+                              problemId: submission.problemId,
+                            );
+                          },
                         ),
                       ),
                     ],
