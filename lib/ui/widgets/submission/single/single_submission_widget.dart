@@ -351,6 +351,7 @@ class SingleSubmissionWidget extends StatelessWidget {
                             await viewModel.navigateToSubmissionPage(
                               submissionId: data.id,
                               problemId: data.problemId,
+                              isPublished: data.isPublished,
                             );
                           },
                         ),
@@ -446,7 +447,7 @@ class SingleSubmissionWidget extends StatelessWidget {
                         fontSize: kdSingleProblemViewDataColumnTitleFontSize,
                       ),
                     ),
-                  )
+                  ),
                 ],
                 rows: data.testCases.getOrElse(() => []).map((testCase) {
                   return DataRow(

@@ -2,6 +2,7 @@ import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
+import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/ui_helpers.dart';
@@ -133,7 +134,7 @@ class SubmissionProposalWidget extends StatelessWidget {
   Widget _selectLanguageDropdown(SubmissionProposalViewModel viewModel) {
     return DropdownButton<LanguageTheme>(
       value: viewModel.selectedLanguageTheme,
-      items: viewModel.languageThemes
+      items: languageThemes
           .map<DropdownMenuItem<LanguageTheme>>(
             (LanguageTheme value) => DropdownMenuItem<LanguageTheme>(
               value: value,

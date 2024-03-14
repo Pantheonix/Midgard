@@ -25,13 +25,13 @@ class SingleSubmissionViewModel extends FutureViewModel<SubmissionModel> {
   RouterService get routerService => _routerService;
 
   @override
-  Future<SubmissionModel> futureToRun() => _getSubmission();
+  Future<SubmissionModel> futureToRun() => _getSubmission(submissionId);
 
   Future<void> refresh() async {
     await initialise();
   }
 
-  Future<SubmissionModel> _getSubmission() async {
+  Future<SubmissionModel> _getSubmission(String submissionId) async {
     _logger.i('Retrieving submission: $submissionId');
 
     final result = await _submissionService.getById(
@@ -70,10 +70,12 @@ class SingleSubmissionViewModel extends FutureViewModel<SubmissionModel> {
   Future<void> navigateToSubmissionPage({
     required String submissionId,
     required String problemId,
+    required bool isPublished,
   }) async {
     await routerService.replaceWithSingleSubmissionDetailsView(
       submissionId: submissionId,
       problemId: problemId,
+      isPublished: isPublished,
     );
   }
 }

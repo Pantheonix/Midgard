@@ -4,7 +4,6 @@ import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/views/about/about_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
-import 'package:pulsator/pulsator.dart';
 import 'package:stacked/stacked.dart';
 
 class AboutView extends StackedView<AboutViewModel> {

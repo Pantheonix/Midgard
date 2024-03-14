@@ -47,6 +47,7 @@ const String ksAppWarningToastTitle = 'Warning';
 const String ksAppProblemDescriptiveMetadataTitle =
     'Problem descriptive metadata';
 const String ksAppProblemTechnicalMetadataTitle = 'Problem technical metadata';
+const String ksAppProblemBriefTitle = 'Problem brief';
 const String ksAppProblemTestCasesTitle = 'Problem test cases';
 const String ksAppPublishTooltip = 'Publish';
 const String ksAppUnpublishTooltip = 'Unpublish';

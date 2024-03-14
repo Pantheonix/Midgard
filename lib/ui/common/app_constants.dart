@@ -273,6 +273,7 @@ const double kdSingleProblemViewProposerUsernameFontSize = 10;
 const double kdSingleProblemViewDataTableBorderRadius = 10;
 const double kdSingleProblemViewDataTableBorderWidth = 1.5;
 const double kdSingleProblemViewTitleFontSize = 20;
+const double kdSingleProblemViewBriefFontSize = 18;
 const double kdSingleProblemViewDescriptionPadding = 10;
 
 // problem proposals view
@@ -310,6 +311,9 @@ const double kdSubmissionProposalWidgetSubtitleFontSize = 14;
 
 // submissions view
 const int kiSubmissionsViewPageSize = 10;
+const String ksProblemDelayFuture = 'delayed-problem';
+const String ksSubmissionDelayFuture = 'delayed-submission';
+const double kdSubmissionsViewPadding = 20;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;
@@ -318,8 +322,9 @@ const int kiSidebarLoginMenuIndex = 2;
 const int kiSidebarRegisterMenuIndex = 3;
 const int kiSidebarProfilesMenuIndex = 3;
 const int kiSidebarProblemsMenuIndex = 4;
-const int kiSidebarProblemProposalsMenuIndex = 5;
-const int kiSidebarProposalDashboardMenuIndex = 6;
+const int kiSidebarSubmissionsMenuIndex = 5;
+const int kiSidebarProblemProposalsMenuIndex = 6;
+const int kiSidebarProposalDashboardMenuIndex = 7;
 
 const double kdSidebarPadding = 10;
 const double kdSidebarShapeRadius = 20;
@@ -342,6 +347,7 @@ const String ksSidebarRegisterMenuText = 'Register';
 const String ksSidebarLogoutMenuText = 'Logout';
 const String ksSidebarProfilesMenuText = 'Profiles';
 const String ksSidebarProblemsMenuText = 'Problems';
+const String ksSidebarSubmissionsMenuText = 'Submissions';
 const String kdSidebarProblemProposalsMenuText = 'Proposals';
 const String kdSidebarProposalDashboardMenuText = 'Dashboard';
 

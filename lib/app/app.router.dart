@@ -158,12 +158,20 @@ class StackedRouterWeb extends _i17.RootStackRouter {
       );
     },
     SingleSubmissionDetailsViewRoute.name: (routeData) {
-      final args = routeData.argsAs<SingleSubmissionDetailsViewArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<SingleSubmissionDetailsViewArgs>(
+          orElse: () => SingleSubmissionDetailsViewArgs(
+                submissionId: pathParams.getString('submissionId'),
+                problemId: queryParams.optString('problemId'),
+                isPublished: queryParams.optBool('isPublished'),
+              ));
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i14.SingleSubmissionDetailsView(
-          args.problemId,
           submissionId: args.submissionId,
+          problemId: args.problemId,
+          isPublished: args.isPublished,
           key: args.key,
         ),
       );
@@ -546,18 +554,24 @@ class UpdateProposalDashboardViewArgs {
 class SingleSubmissionDetailsViewRoute
     extends _i17.PageRouteInfo<SingleSubmissionDetailsViewArgs> {
   SingleSubmissionDetailsViewRoute({
-    required String problemId,
     required String submissionId,
+    String? problemId,
+    bool? isPublished,
     _i19.Key? key,
   }) : super(
           SingleSubmissionDetailsViewRoute.name,
           path: '/submissions/:submissionId',
           args: SingleSubmissionDetailsViewArgs(
-            problemId: problemId,
             submissionId: submissionId,
+            problemId: problemId,
+            isPublished: isPublished,
             key: key,
           ),
           rawPathParams: {'submissionId': submissionId},
+          rawQueryParams: {
+            'problemId': problemId,
+            'isPublished': isPublished,
+          },
         );
 
   static const String name = 'SingleSubmissionDetailsView';
@@ -565,20 +579,23 @@ class SingleSubmissionDetailsViewRoute
 
 class SingleSubmissionDetailsViewArgs {
   const SingleSubmissionDetailsViewArgs({
-    required this.problemId,
     required this.submissionId,
+    this.problemId,
+    this.isPublished,
     this.key,
   });
 
-  final String problemId;
-
   final String submissionId;
+
+  final String? problemId;
+
+  final bool? isPublished;
 
   final _i19.Key? key;
 
   @override
   String toString() {
-    return 'SingleSubmissionDetailsViewArgs{problemId: $problemId, submissionId: $submissionId, key: $key}';
+    return 'SingleSubmissionDetailsViewArgs{submissionId: $submissionId, problemId: $problemId, isPublished: $isPublished, key: $key}';
   }
 }
 
@@ -736,15 +753,17 @@ extension RouterStateExtension on _i16.RouterService {
   }
 
   Future<dynamic> navigateToSingleSubmissionDetailsView({
-    required String problemId,
     required String submissionId,
+    String? problemId,
+    bool? isPublished,
     _i19.Key? key,
     void Function(_i17.NavigationFailure)? onFailure,
   }) async {
     return navigateTo(
       SingleSubmissionDetailsViewRoute(
-        problemId: problemId,
         submissionId: submissionId,
+        problemId: problemId,
+        isPublished: isPublished,
         key: key,
       ),
       onFailure: onFailure,
@@ -900,15 +919,17 @@ extension RouterStateExtension on _i16.RouterService {
   }
 
   Future<dynamic> replaceWithSingleSubmissionDetailsView({
-    required String problemId,
     required String submissionId,
+    String? problemId,
+    bool? isPublished,
     _i19.Key? key,
     void Function(_i17.NavigationFailure)? onFailure,
   }) async {
     return replaceWith(
       SingleSubmissionDetailsViewRoute(
-        problemId: problemId,
         submissionId: submissionId,
+        problemId: problemId,
+        isPublished: isPublished,
         key: key,
       ),
       onFailure: onFailure,

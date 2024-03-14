@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/src/painting/text_style.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/darcula.dart';
 import 'package:flutter_highlight/themes/dark.dart';
@@ -11,17 +10,6 @@ import 'package:flutter_highlight/themes/ocean.dart';
 import 'package:flutter_highlight/themes/solarized-dark.dart';
 import 'package:flutter_highlight/themes/solarized-light.dart';
 import 'package:flutter_highlight/themes/xcode.dart';
-import 'package:highlight/highlight.dart';
-import 'package:highlight/languages/cpp.dart';
-import 'package:highlight/languages/cs.dart';
-import 'package:highlight/languages/go.dart';
-import 'package:highlight/languages/haskell.dart';
-import 'package:highlight/languages/java.dart';
-import 'package:highlight/languages/javascript.dart';
-import 'package:highlight/languages/kotlin.dart';
-import 'package:highlight/languages/lua.dart';
-import 'package:highlight/languages/ocaml.dart';
-import 'package:highlight/languages/python.dart';
 import 'package:highlight/languages/rust.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.logger.dart';
@@ -34,9 +22,6 @@ import 'package:midgard/ui/common/app_constants.dart';
 import 'package:sentry/sentry.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-
-typedef SourceCodeTheme = ({String name, Map<String, TextStyle> theme});
-typedef LanguageTheme = ({Language language, Mode highlight});
 
 class SubmissionProposalViewModel extends BaseViewModel {
   SubmissionProposalViewModel({
@@ -65,21 +50,6 @@ class SubmissionProposalViewModel extends BaseViewModel {
     (name: 'Solarized Light', theme: solarizedLightTheme),
     (name: 'Obsidian', theme: obsidianTheme),
     (name: 'XCode', theme: xcodeTheme),
-  ];
-
-  final List<LanguageTheme> languageThemes = [
-    (language: Language.rust, highlight: rust),
-    (language: Language.c, highlight: cpp),
-    (language: Language.cpp, highlight: cpp),
-    (language: Language.java, highlight: java),
-    (language: Language.csharp, highlight: cs),
-    (language: Language.python, highlight: python),
-    (language: Language.javascript, highlight: javascript),
-    (language: Language.kotlin, highlight: kotlin),
-    (language: Language.go, highlight: go),
-    (language: Language.lua, highlight: lua),
-    (language: Language.haskell, highlight: haskell),
-    (language: Language.ocaml, highlight: ocaml),
   ];
 
   late LanguageTheme _selectedLanguageTheme =

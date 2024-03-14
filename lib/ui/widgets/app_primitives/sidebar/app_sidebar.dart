@@ -175,6 +175,11 @@ class AppSidebar extends StatelessWidget {
                         await viewModel.routerService.replaceWithProblemsView();
                       },
                     ),
+                    SidebarXItem(
+                      icon: Icons.send,
+                      label: ksSidebarSubmissionsMenuText,
+                      onTap: () async {},
+                    ),
                     if (user.isProposer) ...[
                       SidebarXItem(
                         icon: Icons.add_circle,

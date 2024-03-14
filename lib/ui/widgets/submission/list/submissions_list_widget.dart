@@ -356,6 +356,7 @@ class SubmissionsListWidget extends StatelessWidget {
                             await viewModel.navigateToSubmissionPage(
                               submissionId: submission.id,
                               problemId: submission.problemId,
+                              isPublished: submission.isPublished,
                             );
                           },
                         ),

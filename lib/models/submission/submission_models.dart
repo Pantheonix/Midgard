@@ -1,5 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:highlight/highlight.dart';
+import 'package:highlight/languages/cpp.dart';
+import 'package:highlight/languages/cs.dart';
+import 'package:highlight/languages/go.dart';
+import 'package:highlight/languages/haskell.dart';
+import 'package:highlight/languages/java.dart';
+import 'package:highlight/languages/javascript.dart';
+import 'package:highlight/languages/kotlin.dart';
+import 'package:highlight/languages/lua.dart';
+import 'package:highlight/languages/ocaml.dart';
+import 'package:highlight/languages/python.dart';
+import 'package:highlight/languages/rust.dart';
 import 'package:hive/hive.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_strings.dart';
@@ -141,6 +153,24 @@ class SubmissionModel {
   bool get isEvaluating => status == SubmissionStatus.evaluating;
 }
 
+typedef SourceCodeTheme = ({String name, Map<String, TextStyle> theme});
+typedef LanguageTheme = ({Language language, Mode highlight});
+
+final List<LanguageTheme> languageThemes = [
+  (language: Language.rust, highlight: rust),
+  (language: Language.c, highlight: cpp),
+  (language: Language.cpp, highlight: cpp),
+  (language: Language.java, highlight: java),
+  (language: Language.csharp, highlight: cs),
+  (language: Language.python, highlight: python),
+  (language: Language.javascript, highlight: javascript),
+  (language: Language.kotlin, highlight: kotlin),
+  (language: Language.go, highlight: go),
+  (language: Language.lua, highlight: lua),
+  (language: Language.haskell, highlight: haskell),
+  (language: Language.ocaml, highlight: ocaml),
+];
+
 @HiveType(typeId: 7)
 enum Language {
   @HiveField(0)
@@ -232,6 +262,22 @@ enum Language {
         Language.haskell => ksAppHaskellPlaceholder,
         Language.ocaml => ksAppOCamlPlaceholder,
         _ => ksAppCPlaceholder,
+      };
+
+  Mode get theme => switch (this) {
+        Language.rust => languageThemes[0].highlight,
+        Language.c => languageThemes[1].highlight,
+        Language.cpp => languageThemes[2].highlight,
+        Language.java => languageThemes[3].highlight,
+        Language.csharp => languageThemes[4].highlight,
+        Language.python => languageThemes[5].highlight,
+        Language.javascript => languageThemes[6].highlight,
+        Language.kotlin => languageThemes[7].highlight,
+        Language.go => languageThemes[8].highlight,
+        Language.lua => languageThemes[9].highlight,
+        Language.haskell => languageThemes[10].highlight,
+        Language.ocaml => languageThemes[11].highlight,
+        _ => languageThemes[0].highlight,
       };
 }
 

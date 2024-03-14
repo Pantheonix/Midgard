@@ -88,10 +88,12 @@ class SubmissionsListViewModel extends FutureViewModel<PaginatedSubmissions> {
   Future<void> navigateToSubmissionPage({
     required String submissionId,
     required String problemId,
+    required bool isPublished,
   }) async {
     await routerService.replaceWithSingleSubmissionDetailsView(
       submissionId: submissionId,
       problemId: problemId,
+      isPublished: isPublished,
     );
   }
 }
