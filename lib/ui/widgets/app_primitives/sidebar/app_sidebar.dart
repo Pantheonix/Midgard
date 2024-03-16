@@ -178,7 +178,10 @@ class AppSidebar extends StatelessWidget {
                     SidebarXItem(
                       icon: Icons.send,
                       label: ksSidebarSubmissionsMenuText,
-                      onTap: () async {},
+                      onTap: () async {
+                        await viewModel.routerService
+                            .replaceWithSubmissionsView();
+                      },
                     ),
                     if (user.isProposer) ...[
                       SidebarXItem(

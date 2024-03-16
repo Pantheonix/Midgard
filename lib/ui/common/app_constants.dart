@@ -10,6 +10,9 @@ const double kdDesktopTitleTextSize = 24;
 // subtitle text font size for desktop
 const double kdDesktopSubtitleTextSize = 14;
 
+DateTime kMinDate = DateTime(2000, 1, 1);
+DateTime kMaxDate = DateTime(2100, 1, 1);
+
 // busy keys
 const String kbLoginKey = 'login';
 const String kbRegisterKey = 'register';
@@ -310,10 +313,12 @@ const double kdSubmissionProposalWidgetTitleFontSize = 20;
 const double kdSubmissionProposalWidgetSubtitleFontSize = 14;
 
 // submissions view
-const int kiSubmissionsViewPageSize = 10;
+const int kiSubmissionsViewLimitedPageSize = 10;
+const int kiSubmissionsViewPageSize = 20;
 const String ksProblemDelayFuture = 'delayed-problem';
 const String ksSubmissionDelayFuture = 'delayed-submission';
 const double kdSubmissionsViewPadding = 20;
+const double kdSubmissionsViewFilterTitleFontSize = 20;
 
 // sidebar
 const int kiSidebarHomeMenuIndex = 0;

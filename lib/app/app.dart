@@ -18,6 +18,7 @@ import 'package:midgard/ui/views/single_problem_proposal/single_problem_proposal
 import 'package:midgard/ui/views/single_profile/single_profile_view.dart';
 import 'package:midgard/ui/views/single_submission_details/single_submission_details_view.dart';
 import 'package:midgard/ui/views/startup/startup_view.dart';
+import 'package:midgard/ui/views/submissions/submissions_view.dart';
 import 'package:midgard/ui/views/unknown/unknown_view.dart';
 import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_view.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -47,6 +48,10 @@ import 'package:stacked_services/stacked_services.dart';
     MaterialRoute(
       page: UpdateProposalDashboardView,
       path: '/dashboard/update/:problemId',
+    ),
+    MaterialRoute(
+      page: SubmissionsView,
+      path: '/submissions',
     ),
     MaterialRoute(
       page: SingleSubmissionDetailsView,

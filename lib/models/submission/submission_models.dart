@@ -201,19 +201,19 @@ enum Language {
   unknown;
 
   String get value => switch (this) {
-        Language.c => 'C',
-        Language.cpp => 'C++',
-        Language.java => 'Java',
-        Language.lua => 'Lua',
-        Language.python => 'Python',
-        Language.rust => 'Rust',
-        Language.go => 'Go',
-        Language.csharp => 'C#',
-        Language.ocaml => 'OCaml',
-        Language.javascript => 'JavaScript',
-        Language.kotlin => 'Kotlin',
-        Language.haskell => 'Haskell',
-        _ => 'Unknown',
+        Language.c => 'c',
+        Language.cpp => 'cpp',
+        Language.java => 'java',
+        Language.lua => 'lua',
+        Language.python => 'py',
+        Language.rust => 'rs',
+        Language.go => 'go',
+        Language.csharp => 'cs',
+        Language.ocaml => 'ml',
+        Language.javascript => 'js',
+        Language.kotlin => 'kt',
+        Language.haskell => 'hs',
+        _ => '',
       };
 
   static Language fromString(String value) => switch (value) {
@@ -295,11 +295,11 @@ enum SubmissionStatus {
   unknown;
 
   String get value => switch (this) {
-        SubmissionStatus.evaluating => 'Evaluating',
-        SubmissionStatus.accepted => 'Accepted',
-        SubmissionStatus.rejected => 'Rejected',
-        SubmissionStatus.internalError => 'Internal Error',
-        _ => 'Unknown',
+        SubmissionStatus.evaluating => 'evaluating',
+        SubmissionStatus.accepted => 'accepted',
+        SubmissionStatus.rejected => 'rejected',
+        SubmissionStatus.internalError => 'internal_error',
+        _ => '',
       };
 
   static SubmissionStatus fromString(String value) => switch (value) {
@@ -308,6 +308,14 @@ enum SubmissionStatus {
         'Rejected' => SubmissionStatus.rejected,
         'Internal Error' => SubmissionStatus.internalError,
         _ => SubmissionStatus.unknown,
+      };
+
+  String get displayName => switch (this) {
+        SubmissionStatus.evaluating => 'Evaluating',
+        SubmissionStatus.accepted => 'Accepted',
+        SubmissionStatus.rejected => 'Rejected',
+        SubmissionStatus.internalError => 'Internal Error',
+        _ => 'Unknown',
       };
 }
 
@@ -504,5 +512,16 @@ enum SortSubmissionsBy {
         SortSubmissionsBy.executionTimeDesc => 'avg_time_desc',
         SortSubmissionsBy.memoryUsageAsc => 'avg_memory_asc',
         SortSubmissionsBy.memoryUsageDesc => 'avg_memory_desc',
+      };
+
+  String get pretty => switch (this) {
+        SortSubmissionsBy.scoreAsc => 'Score (Low to High)',
+        SortSubmissionsBy.scoreDesc => 'Score (High to Low)',
+        SortSubmissionsBy.createdAtAsc => 'Created At (Old to New)',
+        SortSubmissionsBy.createdAtDesc => 'Created At (New to Old)',
+        SortSubmissionsBy.executionTimeAsc => 'Execution Time (Low to High)',
+        SortSubmissionsBy.executionTimeDesc => 'Execution Time (High to Low)',
+        SortSubmissionsBy.memoryUsageAsc => 'Memory Usage (Low to High)',
+        SortSubmissionsBy.memoryUsageDesc => 'Memory Usage (High to Low)',
       };
 }
