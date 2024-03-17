@@ -198,9 +198,11 @@ enum Language {
   @HiveField(11)
   haskell,
   @HiveField(12)
-  unknown;
+  unknown,
+  @HiveField(13)
+  all;
 
-  String get extensionValue => switch (this) {
+  String? get extensionValue => switch (this) {
         Language.c => 'c',
         Language.cpp => 'cpp',
         Language.java => 'java',
@@ -213,6 +215,7 @@ enum Language {
         Language.javascript => 'js',
         Language.kotlin => 'kt',
         Language.haskell => 'hs',
+        Language.all => null,
         _ => '',
       };
 
@@ -261,6 +264,7 @@ enum Language {
         Language.javascript => 'JavaScript (Node.js 12.14.0)',
         Language.kotlin => 'Kotlin (1.3.70)',
         Language.haskell => 'Haskell (GHC 8.8.1)',
+        Language.all => 'All',
         _ => 'Unknown',
       };
 
@@ -308,13 +312,16 @@ enum SubmissionStatus {
   @HiveField(3)
   internalError,
   @HiveField(4)
-  unknown;
+  unknown,
+  @HiveField(5)
+  all;
 
-  String get value => switch (this) {
+  String? get value => switch (this) {
         SubmissionStatus.evaluating => 'evaluating',
         SubmissionStatus.accepted => 'accepted',
         SubmissionStatus.rejected => 'rejected',
         SubmissionStatus.internalError => 'internal_error',
+        SubmissionStatus.all => null,
         _ => '',
       };
 
@@ -331,6 +338,7 @@ enum SubmissionStatus {
         SubmissionStatus.accepted => 'Accepted',
         SubmissionStatus.rejected => 'Rejected',
         SubmissionStatus.internalError => 'Internal Error',
+        SubmissionStatus.all => 'All',
         _ => 'Unknown',
       };
 }

@@ -18,7 +18,7 @@ class SubmissionsViewModel extends FutureViewModel<PaginatedSubmissions>
   late Option<SortSubmissionsBy> _sortBy = some(
     SortSubmissionsBy.createdAtDesc,
   );
-  late Option<Language> _language = none();
+  late Option<Language> _language = some(Language.all);
   late Option<SubmissionStatus> _status = none();
   late Option<DateTime> _startDate = none();
   late Option<DateTime> _endDate = none();

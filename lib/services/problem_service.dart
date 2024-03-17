@@ -351,6 +351,24 @@ class ProblemService {
         final problem = ProblemModel.fromJson(problemJson);
 
         return right(problem);
+      } else if (response.statusCode == HttpStatus.forbidden) {
+        _logger.e(
+          'Problem is not unpublished: ${response.body}',
+        );
+        await Sentry.captureException(
+          Exception(
+            'Problem is not unpublished: ${response.body}',
+          ),
+          stackTrace: StackTrace.current,
+        );
+
+        return left(
+          ProblemException(
+            'Problem is not unpublished',
+            null,
+            [],
+          ),
+        );
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e(
           'Error while retrieving unpublished problem: ${response.body}',

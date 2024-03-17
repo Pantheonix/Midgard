@@ -167,6 +167,8 @@ class LanguageAdapter extends TypeAdapter<Language> {
         return Language.haskell;
       case 12:
         return Language.unknown;
+      case 13:
+        return Language.all;
       default:
         return Language.c;
     }
@@ -214,6 +216,9 @@ class LanguageAdapter extends TypeAdapter<Language> {
       case Language.unknown:
         writer.writeByte(12);
         break;
+      case Language.all:
+        writer.writeByte(13);
+        break;
     }
   }
 
@@ -245,6 +250,8 @@ class SubmissionStatusAdapter extends TypeAdapter<SubmissionStatus> {
         return SubmissionStatus.internalError;
       case 4:
         return SubmissionStatus.unknown;
+      case 5:
+        return SubmissionStatus.all;
       default:
         return SubmissionStatus.evaluating;
     }
@@ -267,6 +274,9 @@ class SubmissionStatusAdapter extends TypeAdapter<SubmissionStatus> {
         break;
       case SubmissionStatus.unknown:
         writer.writeByte(4);
+        break;
+      case SubmissionStatus.all:
+        writer.writeByte(5);
         break;
     }
   }

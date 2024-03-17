@@ -180,6 +180,9 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
   Widget _buildSortByDropdown(SubmissionsViewModel viewModel) {
     return Expanded(
       child: DropdownButtonFormField<SortSubmissionsBy>(
+        value: viewModel.sortByValue.getOrElse(
+          () => SortSubmissionsBy.createdAtDesc,
+        ),
         onChanged: (value) {
           if (value != null) {
             viewModel.sortByValue = some(value);
@@ -216,6 +219,7 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
   Widget _buildLanguageDropdown(SubmissionsViewModel viewModel) {
     return Expanded(
       child: DropdownButtonFormField<Language>(
+        value: viewModel.languageValue.getOrElse(() => Language.all),
         onChanged: (value) {
           if (value != null) {
             viewModel.languageValue = some(value);
@@ -253,6 +257,7 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
   Widget _buildStatusDropdown(SubmissionsViewModel viewModel) {
     return Expanded(
       child: DropdownButtonFormField<SubmissionStatus>(
+        value: viewModel.statusValue.getOrElse(() => SubmissionStatus.all),
         onChanged: (value) {
           if (value != null) {
             viewModel.statusValue = some(value);

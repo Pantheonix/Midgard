@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:highlight/languages/rust.dart';
 import 'package:midgard/app/app.locator.dart';
@@ -52,9 +53,10 @@ class SingleSubmissionDetailsViewModel extends MultipleFutureViewModel {
   CodeController get sourceCodeController => _sourceCodeController;
 
   SubmissionModel get submission =>
-      dataMap?[ksSubmissionDelayFuture] as SubmissionModel;
+      dataMap![ksSubmissionDelayFuture] as SubmissionModel;
 
-  ProblemModel get problem => dataMap?[ksProblemDelayFuture] as ProblemModel;
+  Option<ProblemModel> get problem =>
+      dataMap![ksProblemDelayFuture] as Option<ProblemModel>;
 
   bool get fetchingSubmission => busy(ksSubmissionDelayFuture);
 
@@ -95,7 +97,7 @@ class SingleSubmissionDetailsViewModel extends MultipleFutureViewModel {
     );
   }
 
-  Future<ProblemModel> _getProblem() async {
+  Future<Option<ProblemModel>> _getProblem() async {
     final problem = switch (isPublished) {
       true => await _problemService.getById(problemId: problemId),
       false => await _problemService.getByIdUnpublished(problemId: problemId),
@@ -109,13 +111,13 @@ class SingleSubmissionDetailsViewModel extends MultipleFutureViewModel {
           stackTrace: StackTrace.current,
         );
 
-        throw Exception('Unable to retrieve problem data: ${error.message}');
+        return none();
       },
       (ProblemModel problem) async {
         _logger.i('Problem retrieved: ${problem.toJson()}');
         await Sentry.captureMessage('Problem retrieved: ${problem.toJson()}');
 
-        return problem;
+        return some(problem);
       },
     );
   }
