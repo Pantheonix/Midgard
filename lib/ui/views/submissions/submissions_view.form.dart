@@ -17,8 +17,6 @@ const String LtExecutionTimeValueKey = 'ltExecutionTime';
 const String GtExecutionTimeValueKey = 'gtExecutionTime';
 const String LtMemoryUsageValueKey = 'ltMemoryUsage';
 const String GtMemoryUsageValueKey = 'gtMemoryUsage';
-const String StartDateValueKey = 'startDate';
-const String EndDateValueKey = 'endDate';
 
 final Map<String, TextEditingController>
     _SubmissionsViewTextEditingControllers = {};
@@ -173,9 +171,6 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap[LtMemoryUsageValueKey] as String?;
   String? get gtMemoryUsageValue =>
       this.formValueMap[GtMemoryUsageValueKey] as String?;
-  DateTime? get startDateValue =>
-      this.formValueMap[StartDateValueKey] as DateTime?;
-  DateTime? get endDateValue => this.formValueMap[EndDateValueKey] as DateTime?;
 
   set ltScoreValue(String? value) {
     this.setData(
@@ -265,8 +260,6 @@ extension ValueProperties on FormStateHelper {
   bool get hasGtMemoryUsage =>
       this.formValueMap.containsKey(GtMemoryUsageValueKey) &&
       (gtMemoryUsageValue?.isNotEmpty ?? false);
-  bool get hasStartDate => this.formValueMap.containsKey(StartDateValueKey);
-  bool get hasEndDate => this.formValueMap.containsKey(EndDateValueKey);
 
   bool get hasLtScoreValidationMessage =>
       this.fieldsValidationMessages[LtScoreValueKey]?.isNotEmpty ?? false;
@@ -282,10 +275,6 @@ extension ValueProperties on FormStateHelper {
       this.fieldsValidationMessages[LtMemoryUsageValueKey]?.isNotEmpty ?? false;
   bool get hasGtMemoryUsageValidationMessage =>
       this.fieldsValidationMessages[GtMemoryUsageValueKey]?.isNotEmpty ?? false;
-  bool get hasStartDateValidationMessage =>
-      this.fieldsValidationMessages[StartDateValueKey]?.isNotEmpty ?? false;
-  bool get hasEndDateValidationMessage =>
-      this.fieldsValidationMessages[EndDateValueKey]?.isNotEmpty ?? false;
 
   String? get ltScoreValidationMessage =>
       this.fieldsValidationMessages[LtScoreValueKey];
@@ -299,61 +288,9 @@ extension ValueProperties on FormStateHelper {
       this.fieldsValidationMessages[LtMemoryUsageValueKey];
   String? get gtMemoryUsageValidationMessage =>
       this.fieldsValidationMessages[GtMemoryUsageValueKey];
-  String? get startDateValidationMessage =>
-      this.fieldsValidationMessages[StartDateValueKey];
-  String? get endDateValidationMessage =>
-      this.fieldsValidationMessages[EndDateValueKey];
 }
 
 extension Methods on FormStateHelper {
-  Future<void> selectStartDate({
-    required BuildContext context,
-    required DateTime initialDate,
-    required DateTime firstDate,
-    required DateTime lastDate,
-  }) async {
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-
-    if (selectedDate != null) {
-      this.setData(
-        this.formValueMap..addAll({StartDateValueKey: selectedDate}),
-      );
-    }
-
-    if (_autoTextFieldValidation) {
-      this.validateForm();
-    }
-  }
-
-  Future<void> selectEndDate({
-    required BuildContext context,
-    required DateTime initialDate,
-    required DateTime firstDate,
-    required DateTime lastDate,
-  }) async {
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-
-    if (selectedDate != null) {
-      this.setData(
-        this.formValueMap..addAll({EndDateValueKey: selectedDate}),
-      );
-    }
-
-    if (_autoTextFieldValidation) {
-      this.validateForm();
-    }
-  }
-
   setLtScoreValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[LtScoreValueKey] = validationMessage;
   setGtScoreValidationMessage(String? validationMessage) =>
@@ -368,10 +305,6 @@ extension Methods on FormStateHelper {
       this.fieldsValidationMessages[LtMemoryUsageValueKey] = validationMessage;
   setGtMemoryUsageValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[GtMemoryUsageValueKey] = validationMessage;
-  setStartDateValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[StartDateValueKey] = validationMessage;
-  setEndDateValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[EndDateValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {

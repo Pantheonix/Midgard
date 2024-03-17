@@ -7,6 +7,7 @@ import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
+import 'package:midgard/ui/common/app_strings.dart';
 import 'package:midgard/ui/views/submissions/submissions_view.form.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
@@ -14,11 +15,13 @@ import 'package:stacked_services/stacked_services.dart';
 
 class SubmissionsViewModel extends FutureViewModel<PaginatedSubmissions>
     with FormStateHelper {
-  late SortSubmissionsBy? _sortBy = SortSubmissionsBy.createdAtDesc;
+  late Option<SortSubmissionsBy> _sortBy = some(
+    SortSubmissionsBy.createdAtDesc,
+  );
   late Option<Language> _language = none();
   late Option<SubmissionStatus> _status = none();
-  late DateTime? _startDate = kMinDate;
-  late DateTime? _endDate = kMaxDate;
+  late Option<DateTime> _startDate = none();
+  late Option<DateTime> _endDate = none();
   late int _pageValue = 1;
 
   final _logger = getLogger('SubmissionsViewModel');
@@ -33,15 +36,15 @@ class SubmissionsViewModel extends FutureViewModel<PaginatedSubmissions>
 
   int get pageValue => _pageValue;
 
-  SortSubmissionsBy? get sortByValue => _sortBy;
+  Option<SortSubmissionsBy> get sortByValue => _sortBy;
 
   Option<Language> get languageValue => _language;
 
   Option<SubmissionStatus> get statusValue => _status;
 
-  DateTime? get startDate => _startDate;
+  Option<DateTime> get startDate => _startDate;
 
-  DateTime? get endDate => _endDate;
+  Option<DateTime> get endDate => _endDate;
 
   HiveService get hiveService => _hiveService;
 
@@ -49,17 +52,17 @@ class SubmissionsViewModel extends FutureViewModel<PaginatedSubmissions>
 
   SidebarXController get sidebarController => _sidebarController;
 
-  set startDate(DateTime? date) {
+  set startDate(Option<DateTime> date) {
     _startDate = date;
     rebuildUi();
   }
 
-  set endDate(DateTime? date) {
+  set endDate(Option<DateTime> date) {
     _endDate = date;
     rebuildUi();
   }
 
-  set sortByValue(SortSubmissionsBy? sortBy) {
+  set sortByValue(Option<SortSubmissionsBy> sortBy) {
     _sortBy = sortBy;
     rebuildUi();
   }
@@ -91,9 +94,17 @@ class SubmissionsViewModel extends FutureViewModel<PaginatedSubmissions>
       'Retrieving submissions',
     );
 
+    // check if user is logged in
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    if (_hiveService.getCurrentUserProfile(userProfileBox).isNone()) {
+      await _routerService.replaceWithHomeView(
+        warningMessage: ksAppNotAuthenticatedRedirectMessage,
+      );
+    }
+
     final result = await _submissionService.getAll(
-      sortBy: _sortBy?.value ?? '',
-      language: _language.fold(() => null, (a) => a.value),
+      sortBy: _sortBy.fold(() => null, (a) => a.value),
+      language: _language.fold(() => null, (a) => a.extensionValue),
       status: _status.fold(() => null, (a) => a.value),
       ltScore: switch (ltScoreValue) {
         final data? => data.isEmpty ? null : int.parse(data),
@@ -111,8 +122,8 @@ class SubmissionsViewModel extends FutureViewModel<PaginatedSubmissions>
         final data? => data.isEmpty ? null : double.parse(data),
         null => null,
       },
-      startDate: _startDate,
-      endDate: _endDate,
+      startDate: _startDate.fold(() => null, (a) => a),
+      endDate: _endDate.fold(() => null, (a) => a),
       page: _pageValue,
       pageSize: kiSubmissionsViewPageSize,
     );

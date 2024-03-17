@@ -126,7 +126,7 @@ class SubmissionModel {
 
   String get languagePretty => language.displayName;
 
-  String get statusPretty => status.value;
+  String get statusPretty => status.displayName;
 
   String get scorePretty => score.toString();
 
@@ -200,7 +200,7 @@ enum Language {
   @HiveField(12)
   unknown;
 
-  String get value => switch (this) {
+  String get extensionValue => switch (this) {
         Language.c => 'c',
         Language.cpp => 'cpp',
         Language.java => 'java',
@@ -214,6 +214,22 @@ enum Language {
         Language.kotlin => 'kt',
         Language.haskell => 'hs',
         _ => '',
+      };
+
+  String get value => switch (this) {
+        Language.c => 'C',
+        Language.cpp => 'C++',
+        Language.java => 'Java',
+        Language.lua => 'Lua',
+        Language.python => 'Python',
+        Language.rust => 'Rust',
+        Language.go => 'Go',
+        Language.csharp => 'C#',
+        Language.ocaml => 'OCaml',
+        Language.javascript => 'JavaScript',
+        Language.kotlin => 'Kotlin',
+        Language.haskell => 'Haskell',
+        _ => 'Unknown',
       };
 
   static Language fromString(String value) => switch (value) {

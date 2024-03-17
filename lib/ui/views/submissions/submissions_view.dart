@@ -58,35 +58,39 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
               padding: const EdgeInsets.all(
                 kdSubmissionsViewPadding,
               ),
-              child: viewModel.hasError
-                  ? AppErrorWidget(
-                      message: viewModel.modelError.toString(),
-                    )
-                  : viewModel.isBusy
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildMenu(context, viewModel),
-                              verticalSpaceSmall,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildMenu(context, viewModel),
+                    verticalSpaceMedium,
+                    if (viewModel.hasError)
+                      AppErrorWidget(
+                        message: viewModel.modelError.toString(),
+                      )
+                    else
+                      ...viewModel.isBusy
+                          ? [
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ]
+                          : [
                               _buildSubmissionsList(
                                 context,
                                 viewModel,
                                 viewModel.data!,
                               ),
-                              verticalSpaceSmall,
+                              verticalSpaceMedium,
                               _buildPaginationFooter(
                                 context,
                                 viewModel,
                                 viewModel.data!,
                               ),
                             ],
-                          ),
-                        ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -109,6 +113,7 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
           fontWeight: FontWeight.bold,
         ),
       ),
+      initiallyExpanded: true,
       childrenPadding: const EdgeInsets.symmetric(
         horizontal: kdSubmissionsViewPadding,
       ),
@@ -127,56 +132,80 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
       controlAffinity: ListTileControlAffinity.leading,
       children: [
         verticalSpaceMedium,
-        _buildSortByDropdown(viewModel),
+        Row(
+          children: [
+            _buildSortByDropdown(viewModel),
+            horizontalSpaceMedium,
+            _buildLanguageDropdown(viewModel),
+            horizontalSpaceMedium,
+            _buildStatusDropdown(viewModel),
+          ],
+        ),
         verticalSpaceMedium,
-        _buildLanguageDropdown(viewModel),
+        Row(
+          children: [
+            _buildGtScoreTextField(viewModel),
+            horizontalSpaceMedium,
+            _buildLtScoreTextField(viewModel),
+          ],
+        ),
         verticalSpaceMedium,
-        _buildStatusDropdown(viewModel),
+        Row(
+          children: [
+            _buildGtExecutionTimeTextField(viewModel),
+            horizontalSpaceMedium,
+            _buildLtExecutionTimeTextField(viewModel),
+          ],
+        ),
         verticalSpaceMedium,
-        _buildLtScoreTextField(viewModel),
+        Row(
+          children: [
+            _buildGtMemoryUsageTextField(viewModel),
+            horizontalSpaceMedium,
+            _buildLtMemoryUsageTextField(viewModel),
+          ],
+        ),
         verticalSpaceMedium,
-        _buildGtScoreTextField(viewModel),
-        verticalSpaceMedium,
-        _buildLtExecutionTimeTextField(viewModel),
-        verticalSpaceMedium,
-        _buildGtExecutionTimeTextField(viewModel),
-        verticalSpaceMedium,
-        _buildLtMemoryUsageTextField(viewModel),
-        verticalSpaceMedium,
-        _buildGtMemoryUsageTextField(viewModel),
-        verticalSpaceMedium,
-        _buildStartDateTextField(viewModel),
-        verticalSpaceMedium,
-        _buildEndDateTextField(viewModel),
+        Row(
+          children: [
+            _buildStartDateTextField(viewModel),
+            horizontalSpaceMedium,
+            _buildEndDateTextField(viewModel),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildSortByDropdown(SubmissionsViewModel viewModel) {
-    return DropdownButtonFormField<SortSubmissionsBy>(
-      onChanged: (value) {
-        viewModel.sortByValue = value;
-      },
-      items: SortSubmissionsBy.values
-          .map(
-            (sortBy) => DropdownMenuItem(
-              value: sortBy,
-              child: Text(sortBy.pretty),
-            ),
-          )
-          .toList(),
-      decoration: const InputDecoration(
-        labelText: 'Sort by',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: DropdownButtonFormField<SortSubmissionsBy>(
+        onChanged: (value) {
+          if (value != null) {
+            viewModel.sortByValue = some(value);
+          }
+        },
+        items: SortSubmissionsBy.values
+            .map(
+              (sortBy) => DropdownMenuItem(
+                value: sortBy,
+                child: Text(sortBy.pretty),
+              ),
+            )
+            .toList(),
+        decoration: const InputDecoration(
+          labelText: 'Sort by',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
@@ -185,33 +214,35 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
   }
 
   Widget _buildLanguageDropdown(SubmissionsViewModel viewModel) {
-    return DropdownButtonFormField<Language>(
-      onChanged: (value) {
-        if (value != null) {
-          viewModel.languageValue = some(value);
-        }
-      },
-      items: Language.values
-          .where((language) => language != Language.unknown)
-          .map(
-            (language) => DropdownMenuItem(
-              value: language,
-              child: Text(language.displayName),
-            ),
-          )
-          .toList(),
-      decoration: const InputDecoration(
-        labelText: 'Language',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: DropdownButtonFormField<Language>(
+        onChanged: (value) {
+          if (value != null) {
+            viewModel.languageValue = some(value);
+          }
+        },
+        items: Language.values
+            .where((language) => language != Language.unknown)
+            .map(
+              (language) => DropdownMenuItem(
+                value: language,
+                child: Text(language.displayName),
+              ),
+            )
+            .toList(),
+        decoration: const InputDecoration(
+          labelText: 'Language',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
@@ -220,33 +251,35 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
   }
 
   Widget _buildStatusDropdown(SubmissionsViewModel viewModel) {
-    return DropdownButtonFormField<SubmissionStatus>(
-      onChanged: (value) {
-        if (value != null) {
-          viewModel.statusValue = some(value);
-        }
-      },
-      items: SubmissionStatus.values
-          .where((status) => status != SubmissionStatus.unknown)
-          .map(
-            (status) => DropdownMenuItem(
-              value: status,
-              child: Text(status.displayName),
-            ),
-          )
-          .toList(),
-      decoration: const InputDecoration(
-        labelText: 'Status',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: DropdownButtonFormField<SubmissionStatus>(
+        onChanged: (value) {
+          if (value != null) {
+            viewModel.statusValue = some(value);
+          }
+        },
+        items: SubmissionStatus.values
+            .where((status) => status != SubmissionStatus.unknown)
+            .map(
+              (status) => DropdownMenuItem(
+                value: status,
+                child: Text(status.displayName),
+              ),
+            )
+            .toList(),
+        decoration: const InputDecoration(
+          labelText: 'Status',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
@@ -255,206 +288,224 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
   }
 
   Widget _buildLtScoreTextField(SubmissionsViewModel viewModel) {
-    return TextFormField(
-      controller: ltScoreController,
-      focusNode: ltScoreFocusNode,
-      decoration: const InputDecoration(
-        labelText: 'Less than score',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: TextFormField(
+        controller: ltScoreController,
+        focusNode: ltScoreFocusNode,
+        decoration: const InputDecoration(
+          labelText: 'Ending score',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+        ],
       ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
-      ],
     );
   }
 
   Widget _buildGtScoreTextField(SubmissionsViewModel viewModel) {
-    return TextFormField(
-      controller: gtScoreController,
-      focusNode: gtScoreFocusNode,
-      decoration: const InputDecoration(
-        labelText: 'Greater than score',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: TextFormField(
+        controller: gtScoreController,
+        focusNode: gtScoreFocusNode,
+        decoration: const InputDecoration(
+          labelText: 'Starting score',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+        ],
       ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
-      ],
     );
   }
 
   Widget _buildLtExecutionTimeTextField(SubmissionsViewModel viewModel) {
-    return TextFormField(
-      controller: ltExecutionTimeController,
-      focusNode: ltExecutionTimeFocusNode,
-      decoration: const InputDecoration(
-        labelText: 'Less than execution time',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: TextFormField(
+        controller: ltExecutionTimeController,
+        focusNode: ltExecutionTimeFocusNode,
+        decoration: const InputDecoration(
+          labelText: 'Ending execution time',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+        ],
       ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
-      ],
     );
   }
 
   Widget _buildGtExecutionTimeTextField(SubmissionsViewModel viewModel) {
-    return TextFormField(
-      controller: gtExecutionTimeController,
-      focusNode: gtExecutionTimeFocusNode,
-      decoration: const InputDecoration(
-        labelText: 'Greater than execution time',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: TextFormField(
+        controller: gtExecutionTimeController,
+        focusNode: gtExecutionTimeFocusNode,
+        decoration: const InputDecoration(
+          labelText: 'Starting execution time',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+        ],
       ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
-      ],
     );
   }
 
   Widget _buildLtMemoryUsageTextField(SubmissionsViewModel viewModel) {
-    return TextFormField(
-      controller: ltMemoryUsageController,
-      focusNode: ltMemoryUsageFocusNode,
-      decoration: const InputDecoration(
-        labelText: 'Less than memory usage',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: TextFormField(
+        controller: ltMemoryUsageController,
+        focusNode: ltMemoryUsageFocusNode,
+        decoration: const InputDecoration(
+          labelText: 'Ending memory usage',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+        ],
       ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
-      ],
     );
   }
 
   Widget _buildGtMemoryUsageTextField(SubmissionsViewModel viewModel) {
-    return TextFormField(
-      controller: gtMemoryUsageController,
-      focusNode: gtMemoryUsageFocusNode,
-      decoration: const InputDecoration(
-        labelText: 'Greater than memory usage',
-        contentPadding: EdgeInsets.all(
-          kdCreateProposalDashboardViewFieldPadding,
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusedBorder: OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kcLightGrey),
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              kdCreateProposalDashboardViewFieldBorderRadius,
+    return Expanded(
+      child: TextFormField(
+        controller: gtMemoryUsageController,
+        focusNode: gtMemoryUsageFocusNode,
+        decoration: const InputDecoration(
+          labelText: 'Starting memory usage',
+          contentPadding: EdgeInsets.all(
+            kdCreateProposalDashboardViewFieldPadding,
+          ),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          focusedBorder: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: kcLightGrey),
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                kdCreateProposalDashboardViewFieldBorderRadius,
+              ),
             ),
           ),
         ),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
+        ],
       ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(kLimitDecimalRegex)),
-      ],
     );
   }
 
   Widget _buildStartDateTextField(SubmissionsViewModel viewModel) {
-    return Column(
-      children: [
-        const Text(
-          'Start date',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: kdSubmissionProposalWidgetTitleFontSize,
+    return Expanded(
+      child: Column(
+        children: [
+          const Text(
+            'Start date',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: kdSubmissionProposalWidgetTitleFontSize,
+            ),
           ),
-        ),
-        DatePicker(
-          minDate: kMinDate,
-          maxDate: kMaxDate,
-          onDateSelected: (value) {
-            viewModel.startDate = value;
-          },
-        ),
-      ],
+          DatePicker(
+            minDate: kMinDate,
+            maxDate: kMaxDate,
+            selectedDate: viewModel.startDate.getOrElse(DateTime.now),
+            onDateSelected: (value) {
+              viewModel.startDate = some(value);
+            },
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildEndDateTextField(SubmissionsViewModel viewModel) {
-    return Column(
-      children: [
-        const Text(
-          'End date',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: kdSubmissionProposalWidgetTitleFontSize,
+    return Expanded(
+      child: Column(
+        children: [
+          const Text(
+            'End date',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: kdSubmissionProposalWidgetTitleFontSize,
+            ),
           ),
-        ),
-        DatePicker(
-          minDate: kMinDate,
-          maxDate: kMaxDate,
-          onDateSelected: (value) {
-            viewModel.endDate = value;
-          },
-        ),
-      ],
+          DatePicker(
+            minDate: kMinDate,
+            maxDate: kMaxDate,
+            selectedDate: viewModel.endDate.getOrElse(DateTime.now),
+            onDateSelected: (value) {
+              viewModel.endDate = some(value);
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -844,11 +895,4 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
     BuildContext context,
   ) =>
       SubmissionsViewModel();
-
-  @override
-  void onDispose(SubmissionsViewModel viewModel) {
-    super.onDispose(viewModel);
-
-    viewModel.dispose();
-  }
 }
