@@ -83,12 +83,19 @@ class SingleSubmissionDetailsView
                                 viewModel.submission,
                               ),
                               verticalSpaceMedium,
-                              _buildSubmissionSourceCode(
-                                context,
-                                viewModel,
-                                viewModel.submission,
+                              ...viewModel.submission.sourceCode.fold(
+                                () => [
+                                  const SizedBox.shrink(),
+                                ],
+                                (sourceCode) => [
+                                  _buildSubmissionSourceCode(
+                                    context,
+                                    viewModel,
+                                    viewModel.submission,
+                                  ),
+                                  verticalSpaceMedium,
+                                ],
                               ),
-                              verticalSpaceMedium,
                               _buildSubmissionTestCasesDetails(
                                 context,
                                 viewModel,
