@@ -105,11 +105,11 @@ class AppSidebar extends StatelessWidget {
                               (data) => data.profilePictureUrl,
                             )
                         : '',
-                    placeholder: (context, url) => const FlutterLogo(
-                      size: kdSidebarAvatarShapeRadius,
+                    placeholder: (context, url) => Image.asset(
+                      ksAppLogoPath,
                     ),
-                    errorWidget: (context, url, error) => const FlutterLogo(
-                      size: kdSidebarAvatarShapeRadius,
+                    errorWidget: (context, url, error) => Image.asset(
+                      ksAppLogoPath,
                     ),
                     imageBuilder: (context, imageProvider) => CircleAvatar(
                       radius: kdSidebarAvatarShapeRadius,

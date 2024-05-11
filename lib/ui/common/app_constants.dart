@@ -198,6 +198,10 @@ const double kdHomeViewWarningBadgeIconSize = 10;
 const double kdHomeViewWarningIconPadding = 8;
 const int kiHomeViewWarningBadgeAnimationDurationSec = 2;
 const int kiHomeViewWarningBadgeColorChangeAnimationDurationSec = 1;
+const int kiHomeViewGridCrossAxisCount = 2;
+const double kdHomeViewGridCrossAxisSpacing = 20;
+const double kdHomeViewGridMainAxisSpacing = 20;
+const double kdHomeViewGridChildAspectRatio = 4 / 3;
 
 // about view
 const double kdAboutViewPadding = 20;
@@ -358,3 +362,4 @@ const String kdSidebarProposalDashboardMenuText = 'Dashboard';
 
 // general
 const double kdFabDistance = 100;
+const String ksAppLogoPath = 'assets/images/pantheonix_logo.png';

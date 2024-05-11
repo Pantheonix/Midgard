@@ -110,11 +110,31 @@ class HomeView extends StackedView<HomeViewModel> {
                         fontSize: kdHomeViewSubtitleTextSize,
                       ),
                     ),
-                    for (final asset in viewModel.assetCardsList)
-                      AssetCard(
-                        assetPath: asset.path,
-                        assetText: asset.text,
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: kiHomeViewGridCrossAxisCount,
+                        crossAxisSpacing: kdHomeViewGridCrossAxisSpacing,
+                        mainAxisSpacing: kdHomeViewGridMainAxisSpacing,
+                        childAspectRatio: kdHomeViewGridChildAspectRatio,
                       ),
+                      itemCount: viewModel.assetCardsList.length,
+                      itemBuilder: (context, index) {
+                        final asset = viewModel.assetCardsList[index];
+                        return AssetCard(
+                          assetPath: asset.path,
+                          assetText: asset.text,
+                        );
+                      },
+                    ),
+                    // Enable this code snippet to allow the parallax effect
+                    // for (final asset in viewModel.assetCardsList)
+                    //   AssetCard(
+                    //     assetPath: asset.path,
+                    //     assetText: asset.text,
+                    //   ),
                   ],
                 ),
               ),

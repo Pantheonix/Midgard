@@ -17,13 +17,27 @@ class HomeViewModel extends BaseViewModel {
   );
 
   HiveService get hiveService => _hiveService;
+
   RouterService get routerService => _routerService;
+
   SidebarXController get sidebarController => _sidebarController;
 
   List<({String path, String text})> get assetCardsList => [
-        (path: 'assets/images/quetzalcoatl.jpg', text: 'Quetzalcoatl'),
-        (path: 'assets/images/anubis.jpg', text: 'Anubis'),
-        (path: 'assets/images/enki.jpg', text: 'Enki'),
-        (path: 'assets/images/hermes.jpg', text: 'Hermes'),
+        (
+          path: 'assets/images/programming_languages.png',
+          text: '10+ programming languages supported'
+        ),
+        (
+          path: 'assets/images/challenges.png',
+          text: 'plenty of programming challenges'
+        ),
+        (
+          path: 'assets/images/evaluation.png',
+          text: 'instant evaluation feedback'
+        ),
+        (
+          path: 'assets/images/proposer.png',
+          text: 'propose your own challenges'
+        ),
       ];
 }

@@ -17,7 +17,6 @@ import 'package:midgard/ui/views/submissions/submissions_view.form.dart';
 import 'package:midgard/ui/views/submissions/submissions_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
-import 'package:pulsator/pulsator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -518,12 +517,9 @@ class SubmissionsView extends StackedView<SubmissionsViewModel>
     return Tooltip(
       message: 'Refresh submissions list',
       triggerMode: TooltipTriggerMode.tap,
-      child: IconButton(
+      child: IconButton.outlined(
         color: kcBlueAccent,
-        icon: const PulseIcon(
-          icon: Icons.refresh,
-          pulseColor: kcBlueAccent,
-        ),
+        icon: const Icon(Icons.refresh),
         onPressed: () async {
           await viewModel.refresh();
         },

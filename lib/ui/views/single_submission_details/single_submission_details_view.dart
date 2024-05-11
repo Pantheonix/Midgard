@@ -16,7 +16,6 @@ import 'package:midgard/ui/common/ui_helpers.dart';
 import 'package:midgard/ui/views/single_submission_details/single_submission_details_viewmodel.dart';
 import 'package:midgard/ui/widgets/app_primitives/app_error_widget.dart';
 import 'package:midgard/ui/widgets/app_primitives/sidebar/app_sidebar.dart';
-import 'package:pulsator/pulsator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
@@ -517,12 +516,9 @@ class SingleSubmissionDetailsView
     return Tooltip(
       message: 'Refresh submission details',
       triggerMode: TooltipTriggerMode.tap,
-      child: IconButton(
+      child: IconButton.outlined(
         color: kcBlueAccent,
-        icon: const PulseIcon(
-          icon: Icons.refresh,
-          pulseColor: kcBlueAccent,
-        ),
+        icon: const Icon(Icons.refresh),
         onPressed: () async {
           await viewModel.refresh();
         },
