@@ -8,7 +8,6 @@ import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -53,12 +52,6 @@ class SingleProblemProposalViewModel extends FutureViewModel<ProblemModel> {
         _logger.e(
           'Error getting unpublished problem: ${error.toJson()}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error getting unpublished problem: ${error.toJson()}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception(
           'Unable to retrieve unpublished problem data: ${error.message}',
@@ -66,7 +59,6 @@ class SingleProblemProposalViewModel extends FutureViewModel<ProblemModel> {
       },
       (ProblemModel problem) async {
         _logger.i('Problem retrieved: ${problem.toJson()}');
-        await Sentry.captureMessage('Problem retrieved: ${problem.toJson()}');
 
         return problem;
       },
@@ -85,18 +77,11 @@ class SingleProblemProposalViewModel extends FutureViewModel<ProblemModel> {
         _logger.e(
           'Error while publishing problem: ${error.toJson()}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while publishing problem: ${error.toJson()}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception(error.message);
       },
       (_) async {
         _logger.i('Problem published successfully');
-        await Sentry.captureMessage('Problem published successfully');
         await _routerService.replaceWithSingleProblemView(
           problemId: problemId,
         );

@@ -18,7 +18,6 @@ import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:sentry/sentry.dart';
 
 class ProblemService {
   final _hiveService = locator<HiveService>();
@@ -77,10 +76,6 @@ class ProblemService {
         );
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while retrieving problems: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving problems: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -110,10 +105,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while retrieving problems: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving problems: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -123,10 +114,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while retrieving problems: $e');
-      await Sentry.captureException(
-        Exception('Error while retrieving problems: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -156,10 +143,6 @@ class ProblemService {
         return right(problem);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while retrieving problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -184,10 +167,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while retrieving problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -197,10 +176,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while retrieving problem: $e');
-      await Sentry.captureException(
-        Exception('Error while retrieving problem: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -265,12 +240,6 @@ class ProblemService {
         _logger.e(
           'Error while retrieving unpublished problems: ${response.body}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while retrieving unpublished problems: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -302,12 +271,6 @@ class ProblemService {
         _logger.e(
           'Error while retrieving unpublished problems: ${response.body}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while retrieving unpublished problems: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -317,10 +280,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while retrieving unpublished problems: $e');
-      await Sentry.captureException(
-        Exception('Error while retrieving unpublished problems: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -355,12 +314,6 @@ class ProblemService {
         _logger.e(
           'Problem is not unpublished: ${response.body}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Problem is not unpublished: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException(
@@ -372,12 +325,6 @@ class ProblemService {
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e(
           'Error while retrieving unpublished problem: ${response.body}',
-        );
-        await Sentry.captureException(
-          Exception(
-            'Error while retrieving unpublished problem: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
         );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
@@ -405,12 +352,6 @@ class ProblemService {
         _logger.e(
           'Error while retrieving unpublished problem: ${response.body}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while retrieving unpublished problem: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -421,12 +362,6 @@ class ProblemService {
     } catch (e) {
       _logger.e(
         'Error while retrieving unpublished problem: $e',
-      );
-      await Sentry.captureException(
-        Exception(
-          'Error while retrieving unpublished problem: $e',
-        ),
-        stackTrace: StackTrace.current,
       );
 
       return left(
@@ -461,10 +396,6 @@ class ProblemService {
         return right(problem);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while creating problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while creating problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -489,10 +420,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while creating problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while creating problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -502,10 +429,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while creating problem: $e');
-      await Sentry.captureException(
-        Exception('Error while creating problem: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -550,10 +473,6 @@ class ProblemService {
         return right(problem);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while adding test: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while adding test: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -581,10 +500,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while adding test: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while adding test: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -594,10 +509,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while adding test: $e');
-      await Sentry.captureException(
-        Exception('Error while adding test: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -632,10 +543,6 @@ class ProblemService {
         return right(problem);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while updating problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -663,10 +570,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while updating problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -676,10 +579,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while updating problem: $e');
-      await Sentry.captureException(
-        Exception('Error while updating problem: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -740,10 +639,6 @@ class ProblemService {
         return right(problem);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while updating test: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating test: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -772,10 +667,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while updating test: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating test: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -785,10 +676,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while updating test: $e');
-      await Sentry.captureException(
-        Exception('Error while updating test: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -819,10 +706,6 @@ class ProblemService {
         return right(problem);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while deleting test: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while deleting test: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -850,10 +733,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while deleting test: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while deleting test: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -863,10 +742,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while deleting test: $e');
-      await Sentry.captureException(
-        Exception('Error while deleting test: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(
@@ -916,10 +791,6 @@ class ProblemService {
         return right(unit);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while updating problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -947,10 +818,6 @@ class ProblemService {
         );
       } else {
         _logger.e('Error while updating problem: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating problem: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           ProblemException.fromJson(
@@ -960,10 +827,6 @@ class ProblemService {
       }
     } catch (e) {
       _logger.e('Error while updating problem: $e');
-      await Sentry.captureException(
-        Exception('Error while updating problem: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         ProblemException(

@@ -8,39 +8,19 @@ import 'package:midgard/app/app.dialogs.dart';
 import 'package:midgard/app/app.locator.dart';
 import 'package:midgard/app/app.router.dart';
 import 'package:midgard/services/hive_service.dart';
-import 'package:midgard/services/services_constants.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
-  await runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      setPathUrlStrategy();
-      await setupLocator(stackedRouter: stackedRouter);
-      setupDialogUi();
-      setupBottomSheetUi();
+  WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
+  await setupLocator(stackedRouter: stackedRouter);
+  setupDialogUi();
+  setupBottomSheetUi();
 
-      await HiveService.init();
-      await SentryFlutter.init(
-        (options) {
-          options
-            ..dsn = ApiConstants.sentryDsn
-            ..environment = ApiConstants.environment
-            ..tracesSampleRate = 1.0;
-        },
-      );
+  await HiveService.init();
 
-      runApp(const MainApp());
-    },
-    (error, stack) async {
-      await Sentry.captureException(
-        error,
-        stackTrace: stack,
-      );
-    },
-  );
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {

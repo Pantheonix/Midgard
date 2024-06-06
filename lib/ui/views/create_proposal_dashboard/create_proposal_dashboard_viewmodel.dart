@@ -8,7 +8,6 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/create_proposal_dashboard/create_proposal_dashboard_view.form.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -85,10 +84,6 @@ class CreateProposalDashboardViewModel extends FormViewModel {
     await result.fold(
       (ProblemException error) async {
         _logger.e('Error while creating problem: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while creating problem: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception('Error while creating problem: ${error.message}');
       },

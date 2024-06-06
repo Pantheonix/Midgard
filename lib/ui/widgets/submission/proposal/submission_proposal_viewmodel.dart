@@ -19,7 +19,6 @@ import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:sentry/sentry.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -127,12 +126,6 @@ class SubmissionProposalViewModel extends BaseViewModel {
     await result.fold(
       (EvalException error) async {
         _logger.e('Error while submitting solution: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception(
-            'Error while submitting solution: ${error.toJson()}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception(
           'Error while submitting solution: ${error.message}',

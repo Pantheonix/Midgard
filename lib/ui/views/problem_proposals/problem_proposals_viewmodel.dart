@@ -6,7 +6,6 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/problem_proposals/problem_proposals_view.form.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -77,20 +76,11 @@ class ProblemProposalsViewModel extends FormViewModel {
         _logger.e(
           'Error while retrieving unpublished problems: ${error.toJson()}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while retrieving unpublished problems: ${error.toJson()}',
-          ),
-          stackTrace: StackTrace.current,
-        );
         return [];
       },
       (data) async {
         final (:problems, :count) = data;
         _logger.i(
-          'Retrieved ${problems.length} unpublished problems',
-        );
-        await Sentry.captureMessage(
           'Retrieved ${problems.length} unpublished problems',
         );
 
@@ -102,7 +92,6 @@ class ProblemProposalsViewModel extends FormViewModel {
 
   Future<void> init() async {
     _logger.i('Unpublished problems list updated');
-    await Sentry.captureMessage('Unpublished problems list updated');
 
     _problems
       ..clear()

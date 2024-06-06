@@ -13,7 +13,6 @@ import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/single_profile/single_profile_view.form.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -85,17 +84,11 @@ class SingleProfileViewModel extends FormViewModel {
     return await result.fold(
       (EvalException error) async {
         _logger.e('Error while retrieving solved problems: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception(
-              'Error while retrieving solved problems: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         return none();
       },
       (List<HighestScoreSubmissionModel> submissions) async {
         _logger.i('Solved problems retrieved successfully');
-        await Sentry.captureMessage('Solved problems retrieved successfully');
 
         return some(submissions);
       },
@@ -108,16 +101,11 @@ class SingleProfileViewModel extends FormViewModel {
     return await result.fold(
       (IdentityException error) async {
         _logger.e('Error while retrieving user: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while retrieving user: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         return none();
       },
       (UserProfileModel user) async {
         _logger.i('User retrieved successfully');
-        await Sentry.captureMessage('User retrieved successfully');
 
         return some(user);
       },
@@ -185,10 +173,6 @@ class SingleProfileViewModel extends FormViewModel {
     await result.fold(
       (IdentityException error) async {
         _logger.e('Error while updating user: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while updating user: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception(
           'Unable to update user profile: ${error.errors.asString}',
@@ -229,10 +213,6 @@ class SingleProfileViewModel extends FormViewModel {
     await result.fold(
       (IdentityException error) async {
         _logger.e('Error while adding role: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while adding role: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception('Unable to add role: ${error.errors.asString}');
       },
@@ -269,10 +249,6 @@ class SingleProfileViewModel extends FormViewModel {
     await result.fold(
       (IdentityException error) async {
         _logger.e('Error while removing role: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while removing role: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception('Unable to remove role: ${error.errors.asString}');
       },

@@ -12,7 +12,6 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/update_proposal_dashboard/update_proposal_dashboard_view.form.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -84,18 +83,11 @@ class UpdateProposalDashboardViewModel extends FormViewModel {
         _logger.e(
           'Error getting unpublished problem: ${error.toJson()}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error getting unpublished problem: ${error.toJson()}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         return none();
       },
       (ProblemModel problem) async {
         _logger.i('Problem retrieved: ${problem.toJson()}');
-        await Sentry.captureMessage('Problem retrieved: ${problem.toJson()}');
 
         return some(problem);
       },
@@ -160,16 +152,11 @@ class UpdateProposalDashboardViewModel extends FormViewModel {
     await result.fold(
       (ProblemException error) async {
         _logger.e('Error while updating problem: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while updating problem: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception('Error while updating problem: ${error.message}');
       },
       (ProblemModel data) async {
         _logger.i('Problem updated successfully');
-        await Sentry.captureMessage('Problem updated successfully');
 
         await init();
       },
@@ -345,16 +332,11 @@ class UpdateProposalDashboardViewModel extends FormViewModel {
     await result.fold(
       (ProblemException error) async {
         _logger.e('Error while adding test: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while adding test: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception('Error while adding test: ${error.message}');
       },
       (ProblemModel data) async {
         _logger.i('Test added successfully');
-        await Sentry.captureMessage('Test added successfully');
 
         resetTestForm();
         problem = some(data);
@@ -380,16 +362,11 @@ class UpdateProposalDashboardViewModel extends FormViewModel {
     await result.fold(
       (ProblemException error) async {
         _logger.e('Error while deleting test: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while deleting test: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception('Error while deleting test: ${error.message}');
       },
       (ProblemModel data) async {
         _logger.i('Test deleted successfully');
-        await Sentry.captureMessage('Test deleted successfully');
 
         problem = some(data);
       },
@@ -417,18 +394,11 @@ class UpdateProposalDashboardViewModel extends FormViewModel {
         _logger.e(
           'Error while publishing problem: ${error.toJson()}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while publishing problem: ${error.toJson()}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         throw Exception(error.message);
       },
       (_) async {
         _logger.i('Problem published successfully');
-        await Sentry.captureMessage('Problem published successfully');
         await _routerService.replaceWithSingleProblemView(
           problemId: problemId,
         );

@@ -14,7 +14,6 @@ import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
-import 'package:sentry/sentry.dart';
 
 typedef PaginatedSubmissions = ({
   List<SubmissionModel> submissions,
@@ -141,10 +140,6 @@ class SubmissionService {
         );
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while getting submissions: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while getting submissions: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -181,10 +176,6 @@ class SubmissionService {
         );
       } else {
         _logger.e('Error getting submissions: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error getting submissions: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           EvalException.fromJson(
@@ -194,10 +185,6 @@ class SubmissionService {
       }
     } catch (e) {
       _logger.e('Error getting submissions: $e');
-      await Sentry.captureException(
-        Exception('Error getting submissions: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         EvalException(
@@ -226,10 +213,6 @@ class SubmissionService {
         return right(submission);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while getting submission: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while getting submission: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -254,10 +237,6 @@ class SubmissionService {
         );
       } else {
         _logger.e('Error getting submission: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error getting submission: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           EvalException.fromJson(
@@ -267,10 +246,6 @@ class SubmissionService {
       }
     } catch (e) {
       _logger.e('Error getting submission: $e');
-      await Sentry.captureException(
-        Exception('Error getting submission: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         EvalException(
@@ -305,10 +280,6 @@ class SubmissionService {
         );
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while creating submission: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while creating submission: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -333,10 +304,6 @@ class SubmissionService {
         );
       } else {
         _logger.e('Error creating submission: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error creating submission: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           EvalException.fromJson(
@@ -346,10 +313,6 @@ class SubmissionService {
       }
     } catch (e) {
       _logger.e('Error creating submission: $e');
-      await Sentry.captureException(
-        Exception('Error creating submission: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         EvalException(
@@ -388,12 +351,6 @@ class SubmissionService {
         _logger.e(
           'Error while getting highest score submissions: ${response.body}',
         );
-        await Sentry.captureException(
-          Exception(
-            'Error while getting highest score submissions: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -418,12 +375,6 @@ class SubmissionService {
         );
       } else {
         _logger.e('Error getting highest score submissions: ${response.body}');
-        await Sentry.captureException(
-          Exception(
-            'Error getting highest score submissions: ${response.body}',
-          ),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           EvalException.fromJson(
@@ -433,10 +384,6 @@ class SubmissionService {
       }
     } catch (e) {
       _logger.e('Error getting highest score submissions: $e');
-      await Sentry.captureException(
-        Exception('Error getting highest score submissions: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         EvalException(

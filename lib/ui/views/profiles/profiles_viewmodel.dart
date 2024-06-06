@@ -6,7 +6,6 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.form.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -76,16 +75,11 @@ class ProfilesViewModel extends FormViewModel {
     return result.fold(
       (IdentityException error) async {
         _logger.e('Error while retrieving users: ${error.toJson()}');
-        await Sentry.captureException(
-          'Error while retrieving users: ${error.toJson()}',
-          stackTrace: StackTrace.current,
-        );
         return [];
       },
       (data) async {
         final (:users, :count) = data;
         _logger.i('Users retrieved: ${users.length}');
-        await Sentry.captureMessage('Users retrieved: ${users.length}');
 
         _count = count;
         return users;
@@ -95,7 +89,6 @@ class ProfilesViewModel extends FormViewModel {
 
   Future<void> init() async {
     _logger.i('Users list updated');
-    await Sentry.captureMessage('Users list updated');
 
     _users
       ..clear()

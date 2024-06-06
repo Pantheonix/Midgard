@@ -17,7 +17,6 @@ import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:sentry/sentry.dart';
 
 class UserService {
   final _hiveService = locator<HiveService>();
@@ -74,10 +73,6 @@ class UserService {
         );
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while retrieving users: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving users: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -107,10 +102,6 @@ class UserService {
         );
       } else {
         _logger.e('Error while retrieving users: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving users: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           IdentityException.fromJson(
@@ -120,10 +111,6 @@ class UserService {
       }
     } catch (e) {
       _logger.e('Error while retrieving users: $e');
-      await Sentry.captureException(
-        Exception('Error while retrieving users: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         IdentityException(
@@ -153,10 +140,6 @@ class UserService {
         return right(user);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while retrieving user: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving user: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -181,10 +164,6 @@ class UserService {
         );
       } else {
         _logger.e('Error while retrieving user: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while retrieving user: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           IdentityException.fromJson(
@@ -194,10 +173,6 @@ class UserService {
       }
     } catch (e) {
       _logger.e('Error while retrieving user: $e');
-      await Sentry.captureException(
-        Exception('Error while retrieving user: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         IdentityException(
@@ -273,10 +248,6 @@ class UserService {
         return right(user);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while updating user: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating user: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -304,10 +275,6 @@ class UserService {
         );
       } else {
         _logger.e('Error while updating user: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while updating user: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           IdentityException.fromJson(
@@ -317,10 +284,6 @@ class UserService {
       }
     } catch (e) {
       _logger.e('Error while updating user: $e');
-      await Sentry.captureException(
-        Exception('Error while updating user: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         IdentityException(
@@ -355,10 +318,6 @@ class UserService {
         return right(user);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while adding role: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while adding role: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -386,10 +345,6 @@ class UserService {
         );
       } else {
         _logger.e('Error while adding role: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while adding role: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           IdentityException.fromJson(
@@ -399,10 +354,6 @@ class UserService {
       }
     } catch (e) {
       _logger.e('Error while adding role: $e');
-      await Sentry.captureException(
-        Exception('Error while adding role: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         IdentityException(
@@ -437,10 +388,6 @@ class UserService {
         return right(user);
       } else if (response.statusCode == HttpStatus.unauthorized) {
         _logger.e('Error while removing role: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while removing role: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         final userProfileBox = await HiveService.userProfileBoxAsync;
         final currentUserId = _hiveService
@@ -468,10 +415,6 @@ class UserService {
         );
       } else {
         _logger.e('Error while removing role: ${response.body}');
-        await Sentry.captureException(
-          Exception('Error while removing role: ${response.body}'),
-          stackTrace: StackTrace.current,
-        );
 
         return left(
           IdentityException.fromJson(
@@ -481,10 +424,6 @@ class UserService {
       }
     } catch (e) {
       _logger.e('Error while removing role: $e');
-      await Sentry.captureException(
-        Exception('Error while removing role: $e'),
-        stackTrace: StackTrace.current,
-      );
 
       return left(
         IdentityException(

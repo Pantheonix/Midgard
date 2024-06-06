@@ -8,7 +8,6 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/problems/problems_view.form.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -77,16 +76,11 @@ class ProblemsViewModel extends FormViewModel {
     return result.fold(
       (ProblemException error) async {
         _logger.e('Error while retrieving problems: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error while retrieving problems: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
         return [];
       },
       (data) async {
         final (:problems, :count) = data;
         _logger.i('Retrieved ${problems.length} problems');
-        await Sentry.captureMessage('Retrieved ${problems.length} problems');
 
         _count = count;
         return problems;
@@ -96,7 +90,6 @@ class ProblemsViewModel extends FormViewModel {
 
   Future<void> init() async {
     _logger.i('Problems list updated');
-    await Sentry.captureMessage('Problems list updated');
 
     _problems
       ..clear()

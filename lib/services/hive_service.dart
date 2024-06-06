@@ -11,7 +11,6 @@ import 'package:midgard/models/submission/submission_models.dart';
 import 'package:midgard/models/user/user_models.dart';
 import 'package:midgard/services/services_constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:sentry/sentry.dart';
 
 class HiveService {
   final _logger = getLogger('HiveService');
@@ -86,7 +85,6 @@ class HiveService {
       ),
     );
     _logger.i('Avatar response: ${response.statusCode}');
-    await Sentry.captureMessage('Avatar response: ${response.statusCode}');
 
     if (response.statusCode != HttpStatus.ok) return;
 
@@ -133,7 +131,6 @@ class HiveService {
       ),
     );
     _logger.i('Avatar response: ${response.statusCode}');
-    await Sentry.captureMessage('Avatar response: ${response.statusCode}');
 
     if (response.statusCode != HttpStatus.ok) return;
 

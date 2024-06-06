@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   rive_common
-  sentry_flutter
   url_launcher_windows
 )
 

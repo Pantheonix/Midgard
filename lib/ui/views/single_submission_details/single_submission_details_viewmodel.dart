@@ -12,7 +12,6 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/problem_service.dart';
 import 'package:midgard/services/submission_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
-import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -106,16 +105,11 @@ class SingleSubmissionDetailsViewModel extends MultipleFutureViewModel {
     return problem.fold(
       (ProblemException error) async {
         _logger.e('Error getting problem: ${error.toJson()}');
-        await Sentry.captureException(
-          Exception('Error getting problem: ${error.toJson()}'),
-          stackTrace: StackTrace.current,
-        );
 
         return none();
       },
       (ProblemModel problem) async {
         _logger.i('Problem retrieved: ${problem.toJson()}');
-        await Sentry.captureMessage('Problem retrieved: ${problem.toJson()}');
 
         return some(problem);
       },
