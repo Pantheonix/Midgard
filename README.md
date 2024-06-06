@@ -13,29 +13,29 @@ The Pantheonix fronted, called Midgard as the Earth name in the Germanic cosmolo
 
 **Auth**:
 
-- login based on credentials
-- bear Rive animation on login screen
-- register based on credentials
-- bear Rive animation on register screen
+- [x] login based on credentials
+- [x] bear Rive animation on login screen
+- [ ] register based on credentials
+- [ ] bear Rive animation on register screen
 
 ![Login Screen](assets/LoginScreen.png)
 
 **Users**:
 
-- user profile screen
-- all users screen
+- [ ] user profile screen
+- [ ] all users screen
 
 **Problems**:
 
-- full problem screen
-- problem proposal screen with widgets for tweaking the problem description as markdown and uploading tests as zip archives
-- all problems screen with support for pagination, filtering and sorting
+- [ ] full problem screen
+- [ ] problem proposal screen with widgets for tweaking the problem description as markdown and uploading tests as zip archives
+- [ ] all problems screen with support for pagination, filtering and sorting
 
 **Submissions**:
 
-- send submission widget/screen with support for tweaking the source code in an embedded code editor with syntax highlighting and choosing the programming language
-- all submissions screen with support for pagination, filtering and sorting
-- single submission screen with all test cases widget
+- [ ] send submission widget/screen with support for tweaking the source code in an embedded code editor with syntax highlighting and choosing the programming language
+- [ ] all submissions screen with support for pagination, filtering and sorting
+- [ ] single submission screen with all test cases widget
 
 ## Architectures
 
