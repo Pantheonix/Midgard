@@ -10,8 +10,9 @@ RUN flutter config --enable-web
 
 ENV API_BASE_URL=localhost
 ENV ENVIRONMENT=prod
+ENV SENTRY_DSN=""
 
-RUN flutter build web --release --web-renderer=auto -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
+RUN flutter build web --release --web-renderer=auto -t lib/main.dart --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT --dart-define=SENTRY_DSN=$SENTRY_DSN
 
 # once here the app will be compiled and ready to deploy
 

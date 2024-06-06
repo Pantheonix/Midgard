@@ -4,15 +4,29 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:typed_data' as _i14;
+import 'dart:typed_data' as _i15;
 import 'dart:ui' as _i9;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:flutter/material.dart' as _i6;
-import 'package:midgard/models/exceptions/identity_exception.dart' as _i16;
+import 'package:hive_flutter/adapters.dart' as _i14;
+import 'package:midgard/models/exceptions/eval_exception.dart' as _i25;
+import 'package:midgard/models/exceptions/identity_exception.dart' as _i18;
+import 'package:midgard/models/exceptions/problem_exception.dart' as _i21;
+import 'package:midgard/models/problem/create_problem_models.dart' as _i22;
+import 'package:midgard/models/problem/problem_models.dart' as _i16;
+import 'package:midgard/models/problem/update_problem_models.dart' as _i23;
+import 'package:midgard/models/submission/create_submission_models.dart'
+    as _i27;
+import 'package:midgard/models/submission/highest_score_submission_models.dart'
+    as _i28;
+import 'package:midgard/models/submission/submission_models.dart' as _i26;
+import 'package:midgard/models/user/update_user_models.dart' as _i19;
 import 'package:midgard/models/user/user_models.dart' as _i13;
 import 'package:midgard/services/hive_service.dart' as _i12;
-import 'package:midgard/services/user_service.dart' as _i15;
+import 'package:midgard/services/problem_service.dart' as _i20;
+import 'package:midgard/services/submission_service.dart' as _i24;
+import 'package:midgard/services/user_service.dart' as _i17;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked/stacked.dart' as _i2;
 import 'package:stacked_services/src/bottom_sheet/bottom_sheet_service.dart'
@@ -344,6 +358,7 @@ class MockBottomSheetService extends _i1.Mock
     Duration? enterBottomSheetDuration,
     bool? ignoreSafeArea,
     bool? useRootNavigator = false,
+    double? elevation = 1.0,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -361,6 +376,7 @@ class MockBottomSheetService extends _i1.Mock
             #enterBottomSheetDuration: enterBottomSheetDuration,
             #ignoreSafeArea: ignoreSafeArea,
             #useRootNavigator: useRootNavigator,
+            #elevation: elevation,
           },
         ),
         returnValue: _i5.Future<_i8.SheetResponse<dynamic>?>.value(),
@@ -383,6 +399,7 @@ class MockBottomSheetService extends _i1.Mock
     String? additionalButtonTitle,
     bool? takesInput = false,
     _i9.Color? barrierColor = const _i9.Color(2315255808),
+    double? elevation = 1.0,
     bool? barrierDismissible = true,
     bool? isScrollControlled = false,
     String? barrierLabel = r'',
@@ -412,6 +429,7 @@ class MockBottomSheetService extends _i1.Mock
             #additionalButtonTitle: additionalButtonTitle,
             #takesInput: takesInput,
             #barrierColor: barrierColor,
+            #elevation: elevation,
             #barrierDismissible: barrierDismissible,
             #isScrollControlled: isScrollControlled,
             #barrierLabel: barrierLabel,
@@ -614,49 +632,50 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i5.Future<void>);
 
   @override
-  _i3.Option<_i13.UserProfileModel> getCurrentUserProfile() =>
+  _i3.Option<_i13.UserProfileModel> getCurrentUserProfile(
+          [_i14.Box<_i13.UserProfileModel>? box]) =>
       (super.noSuchMethod(
         Invocation.method(
           #getCurrentUserProfile,
-          [],
+          [box],
         ),
         returnValue: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getCurrentUserProfile,
-            [],
+            [box],
           ),
         ),
         returnValueForMissingStub: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getCurrentUserProfile,
-            [],
+            [box],
           ),
         ),
       ) as _i3.Option<_i13.UserProfileModel>);
 
   @override
-  _i3.Option<_i14.Uint8List> getCurrentUserAvatarBlob() => (super.noSuchMethod(
+  _i3.Option<_i15.Uint8List> getCurrentUserAvatarBlob() => (super.noSuchMethod(
         Invocation.method(
           #getCurrentUserAvatarBlob,
           [],
         ),
-        returnValue: _FakeOption_3<_i14.Uint8List>(
+        returnValue: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getCurrentUserAvatarBlob,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeOption_3<_i14.Uint8List>(
+        returnValueForMissingStub: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getCurrentUserAvatarBlob,
             [],
           ),
         ),
-      ) as _i3.Option<_i14.Uint8List>);
+      ) as _i3.Option<_i15.Uint8List>);
 
   @override
   _i5.Future<void> saveUserProfile(_i13.UserProfileModel? userProfile) =>
@@ -670,50 +689,126 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
       ) as _i5.Future<void>);
 
   @override
-  _i3.Option<_i13.UserProfileModel> getUserProfile(String? userId) =>
+  _i3.Option<_i13.UserProfileModel> getUserProfile(
+    String? userId, [
+    _i14.Box<_i13.UserProfileModel>? box,
+  ]) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserProfile,
-          [userId],
+          [
+            userId,
+            box,
+          ],
         ),
         returnValue: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getUserProfile,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
         returnValueForMissingStub: _FakeOption_3<_i13.UserProfileModel>(
           this,
           Invocation.method(
             #getUserProfile,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
       ) as _i3.Option<_i13.UserProfileModel>);
 
   @override
-  _i3.Option<_i14.Uint8List> getUserAvatarBlob(String? userId) =>
+  _i3.Option<_i15.Uint8List> getUserAvatarBlob(
+    String? userId, [
+    _i14.Box<_i15.Uint8List>? box,
+  ]) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserAvatarBlob,
-          [userId],
+          [
+            userId,
+            box,
+          ],
         ),
-        returnValue: _FakeOption_3<_i14.Uint8List>(
+        returnValue: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getUserAvatarBlob,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
-        returnValueForMissingStub: _FakeOption_3<_i14.Uint8List>(
+        returnValueForMissingStub: _FakeOption_3<_i15.Uint8List>(
           this,
           Invocation.method(
             #getUserAvatarBlob,
-            [userId],
+            [
+              userId,
+              box,
+            ],
           ),
         ),
-      ) as _i3.Option<_i14.Uint8List>);
+      ) as _i3.Option<_i15.Uint8List>);
+
+  @override
+  _i5.Future<void> saveProblem(
+    _i16.ProblemModel? problem, [
+    _i14.Box<_i16.ProblemModel>? box,
+  ]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveProblem,
+          [
+            problem,
+            box,
+          ],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i3.Option<_i16.ProblemModel> getProblem(
+    String? problemId, [
+    _i14.Box<_i16.ProblemModel>? box,
+  ]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getProblem,
+          [
+            problemId,
+            box,
+          ],
+        ),
+        returnValue: _FakeOption_3<_i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getProblem,
+            [
+              problemId,
+              box,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeOption_3<_i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getProblem,
+            [
+              problemId,
+              box,
+            ],
+          ),
+        ),
+      ) as _i3.Option<_i16.ProblemModel>);
 
   @override
   _i5.Future<void> clearCurrentUserProfile() => (super.noSuchMethod(
@@ -729,12 +824,12 @@ class MockHiveService extends _i1.Mock implements _i12.HiveService {
 /// A class which mocks [UserService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserService extends _i1.Mock implements _i15.UserService {
+class MockUserService extends _i1.Mock implements _i17.UserService {
   @override
   _i5.Future<
-      _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>> getAll({
-    String? name,
-    String? email,
+      _i3.Either<_i18.IdentityException,
+          ({int count, List<_i13.UserProfileModel> users})>> getAll({
+    String? username,
     String? sortBy,
     int? page,
     int? pageSize,
@@ -744,24 +839,23 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           #getAll,
           [],
           {
-            #name: name,
-            #email: email,
+            #username: username,
             #sortBy: sortBy,
             #page: page,
             #pageSize: pageSize,
           },
         ),
         returnValue: _i5.Future<
-                _i3.Either<_i16.IdentityException,
-                    List<_i13.UserProfileModel>>>.value(
-            _FakeEither_4<_i16.IdentityException, List<_i13.UserProfileModel>>(
+                _i3.Either<_i18.IdentityException,
+                    ({int count, List<_i13.UserProfileModel> users})>>.value(
+            _FakeEither_4<_i18.IdentityException,
+                ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
             #getAll,
             [],
             {
-              #name: name,
-              #email: email,
+              #username: username,
               #sortBy: sortBy,
               #page: page,
               #pageSize: pageSize,
@@ -769,16 +863,16 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           ),
         )),
         returnValueForMissingStub: _i5.Future<
-                _i3.Either<_i16.IdentityException,
-                    List<_i13.UserProfileModel>>>.value(
-            _FakeEither_4<_i16.IdentityException, List<_i13.UserProfileModel>>(
+                _i3.Either<_i18.IdentityException,
+                    ({int count, List<_i13.UserProfileModel> users})>>.value(
+            _FakeEither_4<_i18.IdentityException,
+                ({int count, List<_i13.UserProfileModel> users})>(
           this,
           Invocation.method(
             #getAll,
             [],
             {
-              #name: name,
-              #email: email,
+              #username: username,
               #sortBy: sortBy,
               #page: page,
               #pageSize: pageSize,
@@ -786,5 +880,862 @@ class MockUserService extends _i1.Mock implements _i15.UserService {
           ),
         )),
       ) as _i5.Future<
-          _i3.Either<_i16.IdentityException, List<_i13.UserProfileModel>>>);
+          _i3.Either<_i18.IdentityException,
+              ({int count, List<_i13.UserProfileModel> users})>>);
+
+  @override
+  _i5.Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>> getById(
+          {required String? userId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [],
+          {#userId: userId},
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#userId: userId},
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#userId: userId},
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>> update({
+    required String? userId,
+    required _i19.UpdateUserRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #update,
+          [],
+          {
+            #userId: userId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #update,
+            [],
+            {
+              #userId: userId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #update,
+            [],
+            {
+              #userId: userId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i18.IdentityException, _i13.UserProfileModel>> addRole({
+    required String? userId,
+    required _i13.UserRole? role,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addRole,
+          [],
+          {
+            #userId: userId,
+            #role: role,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #addRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #addRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i18.IdentityException, _i13.UserProfileModel>> removeRole({
+    required String? userId,
+    required _i13.UserRole? role,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeRole,
+          [],
+          {
+            #userId: userId,
+            #role: role,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #removeRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3
+                .Either<_i18.IdentityException, _i13.UserProfileModel>>.value(
+            _FakeEither_4<_i18.IdentityException, _i13.UserProfileModel>(
+          this,
+          Invocation.method(
+            #removeRole,
+            [],
+            {
+              #userId: userId,
+              #role: role,
+            },
+          ),
+        )),
+      ) as _i5
+          .Future<_i3.Either<_i18.IdentityException, _i13.UserProfileModel>>);
+}
+
+/// A class which mocks [ProblemService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockProblemService extends _i1.Mock implements _i20.ProblemService {
+  @override
+  _i5.Future<
+      _i3.Either<_i21.ProblemException,
+          ({int count, List<_i16.ProblemModel> problems})>> getAll({
+    String? name,
+    String? difficulty,
+    int? page,
+    int? pageSize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+          {
+            #name: name,
+            #difficulty: difficulty,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<_i21.ProblemException,
+              ({int count, List<_i16.ProblemModel> problems})>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> getById(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i21.ProblemException,
+          ({int count, List<_i16.ProblemModel> problems})>> getAllUnpublished({
+    String? name,
+    String? difficulty,
+    int? page,
+    int? pageSize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllUnpublished,
+          [],
+          {
+            #name: name,
+            #difficulty: difficulty,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAllUnpublished,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i21.ProblemException,
+                    ({int count, List<_i16.ProblemModel> problems})>>.value(
+            _FakeEither_4<_i21.ProblemException,
+                ({int count, List<_i16.ProblemModel> problems})>(
+          this,
+          Invocation.method(
+            #getAllUnpublished,
+            [],
+            {
+              #name: name,
+              #difficulty: difficulty,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<_i21.ProblemException,
+              ({int count, List<_i16.ProblemModel> problems})>>);
+
+  @override
+  _i5.Future<
+      _i3.Either<_i21.ProblemException, _i16.ProblemModel>> getByIdUnpublished(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getByIdUnpublished,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getByIdUnpublished,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #getByIdUnpublished,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> create(
+          {required _i22.CreateProblemRequest? request}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [],
+          {#request: request},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> addTest({
+    required String? problemId,
+    required _i22.AddTestRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addTest,
+          [],
+          {
+            #problemId: problemId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #addTest,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #addTest,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> update({
+    required String? problemId,
+    required _i23.UpdateProblemRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #update,
+          [],
+          {
+            #problemId: problemId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #update,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #update,
+            [],
+            {
+              #problemId: problemId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> updateTest({
+    required String? problemId,
+    required int? testId,
+    required _i23.UpdateTestRequest? request,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateTest,
+          [],
+          {
+            #problemId: problemId,
+            #testId: testId,
+            #request: request,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #updateTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+              #request: request,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #updateTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+              #request: request,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>> deleteTest({
+    required String? problemId,
+    required int? testId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteTest,
+          [],
+          {
+            #problemId: problemId,
+            #testId: testId,
+          },
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #deleteTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>.value(
+            _FakeEither_4<_i21.ProblemException, _i16.ProblemModel>(
+          this,
+          Invocation.method(
+            #deleteTest,
+            [],
+            {
+              #problemId: problemId,
+              #testId: testId,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i16.ProblemModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>> publish(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #publish,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #publish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #publish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>);
+
+  @override
+  _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>> unpublish(
+          {required String? problemId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unpublish,
+          [],
+          {#problemId: problemId},
+        ),
+        returnValue:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #unpublish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>.value(
+                _FakeEither_4<_i21.ProblemException, _i3.Unit>(
+          this,
+          Invocation.method(
+            #unpublish,
+            [],
+            {#problemId: problemId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i21.ProblemException, _i3.Unit>>);
+}
+
+/// A class which mocks [SubmissionService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSubmissionService extends _i1.Mock implements _i24.SubmissionService {
+  @override
+  _i5.Future<
+      _i3.Either<
+          _i25.EvalException,
+          ({
+            int count,
+            List<_i26.SubmissionModel> submissions,
+            int totalPages
+          })>> getAll({
+    String? userId,
+    String? problemId,
+    String? sortBy,
+    String? language,
+    String? status,
+    int? ltScore,
+    int? gtScore,
+    double? ltExecutionTime,
+    double? gtExecutionTime,
+    double? ltMemoryUsage,
+    double? gtMemoryUsage,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? page,
+    int? pageSize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+          {
+            #userId: userId,
+            #problemId: problemId,
+            #sortBy: sortBy,
+            #language: language,
+            #status: status,
+            #ltScore: ltScore,
+            #gtScore: gtScore,
+            #ltExecutionTime: ltExecutionTime,
+            #gtExecutionTime: gtExecutionTime,
+            #ltMemoryUsage: ltMemoryUsage,
+            #gtMemoryUsage: gtMemoryUsage,
+            #startDate: startDate,
+            #endDate: endDate,
+            #page: page,
+            #pageSize: pageSize,
+          },
+        ),
+        returnValue: _i5.Future<
+            _i3.Either<
+                _i25.EvalException,
+                ({
+                  int count,
+                  List<_i26.SubmissionModel> submissions,
+                  int totalPages
+                })>>.value(_FakeEither_4<
+            _i25.EvalException,
+            ({
+              int count,
+              List<_i26.SubmissionModel> submissions,
+              int totalPages
+            })>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #userId: userId,
+              #problemId: problemId,
+              #sortBy: sortBy,
+              #language: language,
+              #status: status,
+              #ltScore: ltScore,
+              #gtScore: gtScore,
+              #ltExecutionTime: ltExecutionTime,
+              #gtExecutionTime: gtExecutionTime,
+              #ltMemoryUsage: ltMemoryUsage,
+              #gtMemoryUsage: gtMemoryUsage,
+              #startDate: startDate,
+              #endDate: endDate,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+            _i3.Either<
+                _i25.EvalException,
+                ({
+                  int count,
+                  List<_i26.SubmissionModel> submissions,
+                  int totalPages
+                })>>.value(_FakeEither_4<
+            _i25.EvalException,
+            ({
+              int count,
+              List<_i26.SubmissionModel> submissions,
+              int totalPages
+            })>(
+          this,
+          Invocation.method(
+            #getAll,
+            [],
+            {
+              #userId: userId,
+              #problemId: problemId,
+              #sortBy: sortBy,
+              #language: language,
+              #status: status,
+              #ltScore: ltScore,
+              #gtScore: gtScore,
+              #ltExecutionTime: ltExecutionTime,
+              #gtExecutionTime: gtExecutionTime,
+              #ltMemoryUsage: ltMemoryUsage,
+              #gtMemoryUsage: gtMemoryUsage,
+              #startDate: startDate,
+              #endDate: endDate,
+              #page: page,
+              #pageSize: pageSize,
+            },
+          ),
+        )),
+      ) as _i5.Future<
+          _i3.Either<
+              _i25.EvalException,
+              ({
+                int count,
+                List<_i26.SubmissionModel> submissions,
+                int totalPages
+              })>>);
+
+  @override
+  _i5.Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>> getById(
+          {required String? submissionId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [],
+          {#submissionId: submissionId},
+        ),
+        returnValue: _i5
+            .Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>>.value(
+            _FakeEither_4<_i25.EvalException, _i26.SubmissionModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#submissionId: submissionId},
+          ),
+        )),
+        returnValueForMissingStub: _i5
+            .Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>>.value(
+            _FakeEither_4<_i25.EvalException, _i26.SubmissionModel>(
+          this,
+          Invocation.method(
+            #getById,
+            [],
+            {#submissionId: submissionId},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i25.EvalException, _i26.SubmissionModel>>);
+
+  @override
+  _i5.Future<_i3.Either<_i25.EvalException, ({String submissionId})>> create(
+          {required _i27.CreateSubmissionRequest? request}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #create,
+          [],
+          {#request: request},
+        ),
+        returnValue: _i5.Future<
+                _i3.Either<_i25.EvalException, ({String submissionId})>>.value(
+            _FakeEither_4<_i25.EvalException, ({String submissionId})>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+        returnValueForMissingStub: _i5.Future<
+                _i3.Either<_i25.EvalException, ({String submissionId})>>.value(
+            _FakeEither_4<_i25.EvalException, ({String submissionId})>(
+          this,
+          Invocation.method(
+            #create,
+            [],
+            {#request: request},
+          ),
+        )),
+      ) as _i5.Future<_i3.Either<_i25.EvalException, ({String submissionId})>>);
+
+  @override
+  _i5.Future<
+          _i3
+          .Either<_i25.EvalException, List<_i28.HighestScoreSubmissionModel>>>
+      getHighestScoreSubmissionsByUserId({required String? userId}) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #getHighestScoreSubmissionsByUserId,
+              [],
+              {#userId: userId},
+            ),
+            returnValue: _i5.Future<
+                    _i3.Either<_i25.EvalException,
+                        List<_i28.HighestScoreSubmissionModel>>>.value(
+                _FakeEither_4<_i25.EvalException,
+                    List<_i28.HighestScoreSubmissionModel>>(
+              this,
+              Invocation.method(
+                #getHighestScoreSubmissionsByUserId,
+                [],
+                {#userId: userId},
+              ),
+            )),
+            returnValueForMissingStub: _i5.Future<
+                    _i3.Either<_i25.EvalException,
+                        List<_i28.HighestScoreSubmissionModel>>>.value(
+                _FakeEither_4<_i25.EvalException,
+                    List<_i28.HighestScoreSubmissionModel>>(
+              this,
+              Invocation.method(
+                #getHighestScoreSubmissionsByUserId,
+                [],
+                {#userId: userId},
+              ),
+            )),
+          ) as _i5.Future<
+              _i3.Either<_i25.EvalException,
+                  List<_i28.HighestScoreSubmissionModel>>>);
 }

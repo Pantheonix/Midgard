@@ -1,5 +1,9 @@
 class IdentityException implements Exception {
-  IdentityException(this.statusCode, this.message, this.errors);
+  IdentityException(
+    this.statusCode,
+    this.message,
+    this.errors,
+  );
 
   IdentityException.fromJson(Map<String, dynamic> json)
       : statusCode = json['statusCode'] as int,
@@ -18,7 +22,9 @@ class IdentityException implements Exception {
 }
 
 class Errors {
-  Errors(this.generalErrors);
+  Errors(
+    this.generalErrors,
+  );
 
   Errors.fromJson(Map<String, dynamic> json)
       : generalErrors = json['GeneralErrors'] as List<dynamic>;

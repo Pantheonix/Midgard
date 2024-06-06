@@ -11,18 +11,7 @@ import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;
 
-const String NameValueKey = 'name';
-const String EmailValueKey = 'email';
-const String SortByValueKey = 'sortBy';
-const String PageValueKey = 'page';
-const String PageSizeValueKey = 'pageSize';
-
-final Map<String, String> SortByValueToTitleMap = {
-  'NameAsc': 'Name Asc',
-  'NameDesc': 'Name Desc',
-  'EmailAsc': 'Email Asc',
-  'EmailDesc': 'Email Desc',
-};
+const String UsernameValueKey = 'username';
 
 final Map<String, TextEditingController> _ProfilesViewTextEditingControllers =
     {};
@@ -30,26 +19,14 @@ final Map<String, TextEditingController> _ProfilesViewTextEditingControllers =
 final Map<String, FocusNode> _ProfilesViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?> _ProfilesViewTextValidations = {
-  NameValueKey: null,
-  EmailValueKey: null,
-  PageValueKey: null,
-  PageSizeValueKey: null,
+  UsernameValueKey: null,
 };
 
 mixin $ProfilesView {
-  TextEditingController get nameController =>
-      _getFormTextEditingController(NameValueKey);
-  TextEditingController get emailController =>
-      _getFormTextEditingController(EmailValueKey);
-  TextEditingController get pageController =>
-      _getFormTextEditingController(PageValueKey);
-  TextEditingController get pageSizeController =>
-      _getFormTextEditingController(PageSizeValueKey);
+  TextEditingController get usernameController =>
+      _getFormTextEditingController(UsernameValueKey);
 
-  FocusNode get nameFocusNode => _getFormFocusNode(NameValueKey);
-  FocusNode get emailFocusNode => _getFormFocusNode(EmailValueKey);
-  FocusNode get pageFocusNode => _getFormFocusNode(PageValueKey);
-  FocusNode get pageSizeFocusNode => _getFormFocusNode(PageSizeValueKey);
+  FocusNode get usernameFocusNode => _getFormFocusNode(UsernameValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
@@ -75,10 +52,7 @@ mixin $ProfilesView {
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
   void syncFormWithViewModel(FormStateHelper model) {
-    nameController.addListener(() => _updateFormData(model));
-    emailController.addListener(() => _updateFormData(model));
-    pageController.addListener(() => _updateFormData(model));
-    pageSizeController.addListener(() => _updateFormData(model));
+    usernameController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -90,10 +64,7 @@ mixin $ProfilesView {
     'This feature was deprecated after 3.1.0.',
   )
   void listenToFormUpdated(FormViewModel model) {
-    nameController.addListener(() => _updateFormData(model));
-    emailController.addListener(() => _updateFormData(model));
-    pageController.addListener(() => _updateFormData(model));
-    pageSizeController.addListener(() => _updateFormData(model));
+    usernameController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -103,10 +74,7 @@ mixin $ProfilesView {
     model.setData(
       model.formValueMap
         ..addAll({
-          NameValueKey: nameController.text,
-          EmailValueKey: emailController.text,
-          PageValueKey: pageController.text,
-          PageSizeValueKey: pageSizeController.text,
+          UsernameValueKey: usernameController.text,
         }),
     );
 
@@ -148,126 +116,42 @@ extension ValueProperties on FormStateHelper {
     return !hasAnyValidationMessage;
   }
 
-  String? get nameValue => this.formValueMap[NameValueKey] as String?;
-  String? get emailValue => this.formValueMap[EmailValueKey] as String?;
-  String? get sortByValue => this.formValueMap[SortByValueKey] as String?;
-  String? get pageValue => this.formValueMap[PageValueKey] as String?;
-  String? get pageSizeValue => this.formValueMap[PageSizeValueKey] as String?;
+  String? get usernameValue => this.formValueMap[UsernameValueKey] as String?;
 
-  set nameValue(String? value) {
+  set usernameValue(String? value) {
     this.setData(
-      this.formValueMap..addAll({NameValueKey: value}),
+      this.formValueMap..addAll({UsernameValueKey: value}),
     );
 
-    if (_ProfilesViewTextEditingControllers.containsKey(NameValueKey)) {
-      _ProfilesViewTextEditingControllers[NameValueKey]?.text = value ?? '';
+    if (_ProfilesViewTextEditingControllers.containsKey(UsernameValueKey)) {
+      _ProfilesViewTextEditingControllers[UsernameValueKey]?.text = value ?? '';
     }
   }
 
-  set emailValue(String? value) {
-    this.setData(
-      this.formValueMap..addAll({EmailValueKey: value}),
-    );
+  bool get hasUsername =>
+      this.formValueMap.containsKey(UsernameValueKey) &&
+      (usernameValue?.isNotEmpty ?? false);
 
-    if (_ProfilesViewTextEditingControllers.containsKey(EmailValueKey)) {
-      _ProfilesViewTextEditingControllers[EmailValueKey]?.text = value ?? '';
-    }
-  }
+  bool get hasUsernameValidationMessage =>
+      this.fieldsValidationMessages[UsernameValueKey]?.isNotEmpty ?? false;
 
-  set pageValue(String? value) {
-    this.setData(
-      this.formValueMap..addAll({PageValueKey: value}),
-    );
-
-    if (_ProfilesViewTextEditingControllers.containsKey(PageValueKey)) {
-      _ProfilesViewTextEditingControllers[PageValueKey]?.text = value ?? '';
-    }
-  }
-
-  set pageSizeValue(String? value) {
-    this.setData(
-      this.formValueMap..addAll({PageSizeValueKey: value}),
-    );
-
-    if (_ProfilesViewTextEditingControllers.containsKey(PageSizeValueKey)) {
-      _ProfilesViewTextEditingControllers[PageSizeValueKey]?.text = value ?? '';
-    }
-  }
-
-  bool get hasName =>
-      this.formValueMap.containsKey(NameValueKey) &&
-      (nameValue?.isNotEmpty ?? false);
-  bool get hasEmail =>
-      this.formValueMap.containsKey(EmailValueKey) &&
-      (emailValue?.isNotEmpty ?? false);
-  bool get hasSortBy => this.formValueMap.containsKey(SortByValueKey);
-  bool get hasPage =>
-      this.formValueMap.containsKey(PageValueKey) &&
-      (pageValue?.isNotEmpty ?? false);
-  bool get hasPageSize =>
-      this.formValueMap.containsKey(PageSizeValueKey) &&
-      (pageSizeValue?.isNotEmpty ?? false);
-
-  bool get hasNameValidationMessage =>
-      this.fieldsValidationMessages[NameValueKey]?.isNotEmpty ?? false;
-  bool get hasEmailValidationMessage =>
-      this.fieldsValidationMessages[EmailValueKey]?.isNotEmpty ?? false;
-  bool get hasSortByValidationMessage =>
-      this.fieldsValidationMessages[SortByValueKey]?.isNotEmpty ?? false;
-  bool get hasPageValidationMessage =>
-      this.fieldsValidationMessages[PageValueKey]?.isNotEmpty ?? false;
-  bool get hasPageSizeValidationMessage =>
-      this.fieldsValidationMessages[PageSizeValueKey]?.isNotEmpty ?? false;
-
-  String? get nameValidationMessage =>
-      this.fieldsValidationMessages[NameValueKey];
-  String? get emailValidationMessage =>
-      this.fieldsValidationMessages[EmailValueKey];
-  String? get sortByValidationMessage =>
-      this.fieldsValidationMessages[SortByValueKey];
-  String? get pageValidationMessage =>
-      this.fieldsValidationMessages[PageValueKey];
-  String? get pageSizeValidationMessage =>
-      this.fieldsValidationMessages[PageSizeValueKey];
+  String? get usernameValidationMessage =>
+      this.fieldsValidationMessages[UsernameValueKey];
 }
 
 extension Methods on FormStateHelper {
-  void setSortBy(String sortBy) {
-    this.setData(
-      this.formValueMap..addAll({SortByValueKey: sortBy}),
-    );
-
-    if (_autoTextFieldValidation) {
-      this.validateForm();
-    }
-  }
-
-  setNameValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[NameValueKey] = validationMessage;
-  setEmailValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[EmailValueKey] = validationMessage;
-  setSortByValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[SortByValueKey] = validationMessage;
-  setPageValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[PageValueKey] = validationMessage;
-  setPageSizeValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[PageSizeValueKey] = validationMessage;
+  setUsernameValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[UsernameValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
-    nameValue = '';
-    emailValue = '';
-    pageValue = '';
-    pageSizeValue = '';
+    usernameValue = '';
   }
 
   /// Validates text input fields on the Form
   void validateForm() {
     this.setValidationMessages({
-      NameValueKey: getValidationMessage(NameValueKey),
-      EmailValueKey: getValidationMessage(EmailValueKey),
-      PageValueKey: getValidationMessage(PageValueKey),
-      PageSizeValueKey: getValidationMessage(PageSizeValueKey),
+      UsernameValueKey: getValidationMessage(UsernameValueKey),
     });
   }
 }
@@ -287,8 +171,5 @@ String? getValidationMessage(String key) {
 /// Updates the fieldsValidationMessages on the FormViewModel
 void updateValidationData(FormStateHelper model) =>
     model.setValidationMessages({
-      NameValueKey: getValidationMessage(NameValueKey),
-      EmailValueKey: getValidationMessage(EmailValueKey),
-      PageValueKey: getValidationMessage(PageValueKey),
-      PageSizeValueKey: getValidationMessage(PageSizeValueKey),
+      UsernameValueKey: getValidationMessage(UsernameValueKey),
     });

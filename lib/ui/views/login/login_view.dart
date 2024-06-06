@@ -1,6 +1,8 @@
 import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:midgard/app/app.router.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_colors.dart';
 import 'package:midgard/ui/common/app_constants.dart';
@@ -35,6 +37,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
       ),
       backgroundColor: kcWhite,
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSidebar(
             controller: viewModel.sidebarController,
@@ -63,7 +66,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                                 kdLoginViewRiveAnimationHeightPercentage,
                             child: _buildRiveAnimation(viewModel),
                           ),
-                          verticalSpaceLarge,
+                          verticalSpaceMassive,
                           Container(
                             padding: const EdgeInsets.all(
                               kdLoginViewFormContainerPadding,
@@ -291,55 +294,16 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
         if (!context.mounted) return;
 
         if (viewModel.hasErrorForKey(kbLoginKey)) {
-          await showFlash(
-            context: context,
-            duration: const Duration(seconds: kiLoginViewSnackbarDuration),
-            builder: (context, controller) {
-              return FlashBar(
-                controller: controller,
-                primaryAction: TextButton(
-                  onPressed: () {
-                    controller.dismiss();
-                  },
-                  child: const Text(
-                    ksLoginViewSnackbarDismissText,
-                    style: TextStyle(
-                      color: kcWhite,
-                      fontSize: kdLoginViewSnackbarDismissTextSize,
-                    ),
-                  ),
-                ),
-                backgroundColor: Colors.redAccent,
-                position: FlashPosition.top,
-                forwardAnimationCurve: Curves.easeIn,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    kdLoginViewSnackbarShapeRadius,
-                  ),
-                ),
-                shadowColor: kcBlack,
-                titleTextStyle: const TextStyle(
-                  color: kcWhite,
-                  fontSize: kdLoginViewSnackbarTitleTextSize,
-                  fontWeight: FontWeight.bold,
-                ),
-                contentTextStyle: const TextStyle(
-                  color: kcWhite,
-                  fontSize: 16,
-                ),
-                title: const Text(
-                  ksLoginViewSnackbarTitleText,
-                ),
-                content: Text(
-                  viewModel.error(kbLoginKey).message as String,
-                ),
-                iconColor: kcWhite,
-                icon: const Icon(
-                  Icons.error_outline,
-                  color: kcWhite,
-                ),
-                showProgressIndicator: true,
-                indicatorColor: kcLightGrey,
+          await context.showErrorBar(
+            position: FlashPosition.top,
+            indicatorColor: kcRed,
+            content: Text(
+              viewModel.error(kbLoginKey).message as String,
+            ),
+            primaryActionBuilder: (context, controller) {
+              return IconButton(
+                onPressed: controller.dismiss,
+                icon: const Icon(Icons.close),
               );
             },
           );
@@ -397,7 +361,7 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
-                await viewModel.navigateToRegister();
+                await viewModel.routerService.replaceWithRegisterView();
               },
           ),
         ],
@@ -407,9 +371,13 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
 
   @override
   Future<void> onViewModelReady(LoginViewModel viewModel) async {
-    await HiveService.userProfileBox;
-    if (viewModel.currentUser.isSome()) {
-      await viewModel.navigateToHome();
+    super.onViewModelReady(viewModel);
+
+    final userProfileBox = await HiveService.userProfileBoxAsync;
+    if (viewModel.hiveService.getCurrentUserProfile(userProfileBox).isSome()) {
+      await viewModel.routerService.replaceWithHomeView(
+        warningMessage: ksAppAlreadyAuthenticatedRedirectMessage,
+      );
     }
 
     syncFormWithViewModel(viewModel);

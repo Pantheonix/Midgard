@@ -3,6 +3,8 @@ include: package:very_good_analysis/analysis_options.5.1.0.yaml
 analyzer:
   exclude:
     - "**/*.form.dart"
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"
     - "**/*.dialogs.dart"
     - "**/*.locator.dart"
     - "**/*.bottomsheets.dart"

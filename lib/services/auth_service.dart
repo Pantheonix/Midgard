@@ -17,9 +17,9 @@ class AuthService {
   final _logger = getLogger('AuthService');
   final _httpClient = BrowserClient()..withCredentials = true;
 
-  Future<Either<IdentityException, Unit>> refreshToken(
-    RefreshTokenRequest request,
-  ) async {
+  Future<Either<IdentityException, Unit>> refreshToken({
+    required RefreshTokenRequest request,
+  }) async {
     try {
       final response = await _httpClient.post(
         uriFromEnv(
@@ -27,7 +27,7 @@ class AuthService {
           ApiConstants.refreshTokenUrl,
         ),
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
         },
         body: jsonEncode(request.toJson()),
       );
@@ -60,9 +60,9 @@ class AuthService {
     }
   }
 
-  Future<Either<IdentityException, UserProfileModel>> login(
-    LoginRequest request,
-  ) async {
+  Future<Either<IdentityException, UserProfileModel>> login({
+    required LoginRequest request,
+  }) async {
     try {
       final response = await _httpClient.post(
         uriFromEnv(
@@ -70,7 +70,7 @@ class AuthService {
           ApiConstants.loginUrl,
         ),
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
         },
         body: jsonEncode(request.toJson()),
       );
@@ -102,9 +102,9 @@ class AuthService {
     }
   }
 
-  Future<Either<IdentityException, UserProfileModel>> register(
-    RegisterRequest request,
-  ) async {
+  Future<Either<IdentityException, UserProfileModel>> register({
+    required RegisterRequest request,
+  }) async {
     try {
       final streamedResponse = await _httpClient.send(
         MultipartRequest(

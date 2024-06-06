@@ -10,6 +10,7 @@ import 'package:midgard/services/auth_service.dart';
 import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/login/login_view.form.dart';
+import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -25,9 +26,6 @@ class LoginViewModel extends FormViewModel with RiveBear {
     extended: true,
   );
 
-  Option<UserProfileModel> get currentUser =>
-      _hiveService.getCurrentUserProfile();
-
   HiveService get hiveService => _hiveService;
 
   RouterService get routerService => _routerService;
@@ -39,13 +37,14 @@ class LoginViewModel extends FormViewModel with RiveBear {
   //on click event
   Future<void> login() async {
     _logger.i('Start login...');
+    await Sentry.captureMessage('Start login...');
 
     isChecking?.change(false);
     isHandsUp?.change(false);
 
     final res = await runBusyFuture(
       _authService.login(
-        LoginRequest(
+        request: LoginRequest(
           email: emailValue ?? '',
           password: passwordValue ?? '',
         ),
@@ -70,12 +69,17 @@ class LoginViewModel extends FormViewModel with RiveBear {
     await response.fold(
       (IdentityException error) async {
         _logger.e('Error while login: ${error.toJson()}');
-      
+        await Sentry.captureException(
+          Exception('Error while login: ${error.toJson()}'),
+          stackTrace: StackTrace.current,
+        );
+
         failTrigger?.fire();
         throw Exception('Invalid credentials!');
       },
       (UserProfileModel data) async {
         _logger.i('Login success: ${data.toJson()}');
+        await Sentry.captureMessage('Login success: ${data.toJson()}');
 
         // save user data to hive
         await _hiveService.saveCurrentUserProfile(data);
@@ -93,13 +97,5 @@ class LoginViewModel extends FormViewModel with RiveBear {
   void togglePasswordVisibility() {
     isPasswordObscured = !isPasswordObscured;
     rebuildUi();
-  }
-
-  Future<void> navigateToRegister() async {
-    await _routerService.replaceWithRegisterView();
-  }
-
-  Future<void> navigateToHome() async {
-    await _routerService.replaceWithHomeView();
   }
 }

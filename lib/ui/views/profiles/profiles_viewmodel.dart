@@ -6,6 +6,7 @@ import 'package:midgard/services/hive_service.dart';
 import 'package:midgard/services/user_service.dart';
 import 'package:midgard/ui/common/app_constants.dart';
 import 'package:midgard/ui/views/profiles/profiles_view.form.dart';
+import 'package:sentry/sentry.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -22,6 +23,10 @@ class ProfilesViewModel extends FormViewModel {
   );
 
   final _users = <UserProfileModel>[];
+  late int _selectedIndex = -1;
+  late int _count = 0;
+  late int _page = 1;
+  late SortUsersBy _sortBy = SortUsersBy.nameAsc;
 
   HiveService get hiveService => _hiveService;
 
@@ -31,6 +36,29 @@ class ProfilesViewModel extends FormViewModel {
 
   List<UserProfileModel> get users => _users;
 
+  int get selectedIndex => _selectedIndex;
+
+  int get count => _count;
+
+  int get pageValue => _page;
+
+  SortUsersBy get sortByValue => _sortBy;
+
+  set selectedIndex(int index) {
+    _selectedIndex = index;
+    rebuildUi();
+  }
+
+  set pageValue(int page) {
+    _page = page;
+    rebuildUi();
+  }
+
+  set sortByValue(SortUsersBy sortBy) {
+    _sortBy = sortBy;
+    rebuildUi();
+  }
+
   Future<List<UserProfileModel>> getUsers({
     String? name,
     String? email,
@@ -39,42 +67,45 @@ class ProfilesViewModel extends FormViewModel {
     int? pageSize,
   }) async {
     final result = await _userService.getAll(
-      name: name,
-      email: email,
+      username: name,
       sortBy: sortBy,
       page: page,
       pageSize: pageSize,
     );
 
     return result.fold(
-      (IdentityException error) {
-        _logger.e('Error while retrieving users: ${error.message}');
+      (IdentityException error) async {
+        _logger.e('Error while retrieving users: ${error.toJson()}');
+        await Sentry.captureException(
+          'Error while retrieving users: ${error.toJson()}',
+          stackTrace: StackTrace.current,
+        );
         return [];
       },
-      (List<UserProfileModel> users) {
+      (data) async {
+        final (:users, :count) = data;
         _logger.i('Users retrieved: ${users.length}');
+        await Sentry.captureMessage('Users retrieved: ${users.length}');
+
+        _count = count;
         return users;
       },
     );
   }
 
-  Future<void> reinitialize() async {
-    _logger.i('Users list reinitialized');
+  Future<void> init() async {
+    _logger.i('Users list updated');
+    await Sentry.captureMessage('Users list updated');
 
     _users
       ..clear()
       ..addAll(
         await runBusyFuture(
           getUsers(
-            name: nameValue,
-            email: emailValue,
-            sortBy: sortByValue,
-            page: pageValue == null || pageValue!.isEmpty
-                ? null
-                : int.parse(pageValue!),
-            pageSize: pageSizeValue == null || pageSizeValue!.isEmpty
-                ? null
-                : int.parse(pageSizeValue!),
+            name: usernameValue,
+            sortBy: sortByValue.value,
+            page: pageValue == 0 ? null : pageValue,
+            pageSize: kiProfilesViewPageSize,
           ),
           busyObject: kbProfilesKey,
         ),

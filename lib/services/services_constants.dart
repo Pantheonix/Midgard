@@ -3,6 +3,9 @@ abstract class ApiConstants {
     'API_BASE_URL',
   );
 
+  static const String sentryDsn = String.fromEnvironment(
+    'SENTRY_DSN',
+  );
   static const String environment = String.fromEnvironment(
     'ENVIRONMENT',
   );
@@ -12,11 +15,23 @@ abstract class ApiConstants {
   static const String refreshTokenUrl = '/api/identity/auth/refresh-token';
   static const String imageUrl = '/api/identity/images';
   static const String usersUrl = '/api/identity/users';
+  static const String rolesUrl = '/api/identity/users/:id/role';
+
+  static const String problemsUrl = '/api/problems';
+  static const String unpublishedProblemsUrl = '/api/problems/unpublished';
+  static const String unpublishedProblemUrl = '/api/problems/:id/unpublished';
+  static const String testsUrl = '/api/problems/:id/test';
+
+  static const String submissionsUrl = '/api/eval/submissions';
+  static const String highestScoreSubmissionsPerUserUrl =
+      '/api/eval/submissions/user';
 }
 
 abstract class HiveConstants {
   static const String userProfileBox = 'userProfileBox';
   static const String userAvatarBox = 'userAvatarBox';
+  static const String problemBox = 'problemBox';
+
   static const String currentUserProfile = 'currentUserProfile';
   static const String currentUserAvatarData = 'currentUserAvatarData';
 }
