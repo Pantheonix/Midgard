@@ -40,7 +40,7 @@ class SingleSubmissionDetailsViewModel extends MultipleFutureViewModel {
   );
 
   final _sourceCodeController = CodeController(
-    text: Language.rust.placeholder,
+    text: '',
     language: rust,
   );
 
